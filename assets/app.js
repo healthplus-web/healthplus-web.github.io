@@ -1,15 +1,17 @@
 /* ══════════════════════════════════════════════════════════════
    HealthPlus Web — comportamento da página
 
-   Quatro coisas:
      1. a abertura animada
      2. a revelação dos blocos ao rolar
      3. os contadores que sobem
-     4. a calculadora de escore-z, que é o coração da página
+     4. a calculadora de z-score, que é o coração da página
+     5. os cartões da equipe
 
-   A calculadora NÃO é maquete: ela usa as mesmas curvas da OMS que
-   o aplicativo usa (assets/oms-imc.js, gerado dos JSON oficiais) e
-   repete a mesma matemática de app/utilitarios/oms/calculoLms.js.
+   A calculadora NÃO é maquete: usa as mesmas curvas da OMS que o
+   aplicativo usa (assets/oms-imc.js, gerado dos JSON oficiais) e
+   repete a matemática de app/utilitarios/oms/calculoLms.js.
+   Acima de 19 anos não existe curva da OMS, e aí ela cai na
+   classificação de IMC para adultos — exatamente como o app faz.
    Nada do que o visitante digita sai do navegador dele.
    ══════════════════════════════════════════════════════════════ */
 
@@ -152,14 +154,14 @@
     return null;
   }
 
-  //   Z = ((X/M)^L - 1) / (L*S)     quando L != 0
-  //   Z = ln(X/M) / S               quando L == 0
+  //   z = ((X/M)^L - 1) / (L*S)     quando L != 0
+  //   z = ln(X/M) / S               quando L == 0
   function zScore(x, lms) {
     if (Math.abs(lms.L) < 1e-9) return Math.log(x / lms.M) / lms.S;
     return (Math.pow(x / lms.M, lms.L) - 1) / (lms.L * lms.S);
   }
 
-  // A fórmula invertida: a medida que corresponde a um escore-z.
+  // A fórmula invertida: a medida que corresponde a um z-score.
   function medidaNoZ(z, lms) {
     if (Math.abs(lms.L) < 1e-9) return lms.M * Math.exp(lms.S * z);
     return lms.M * Math.pow(1 + lms.L * lms.S * z, 1 / lms.L);
@@ -191,13 +193,27 @@
 
   // Pontos de corte da OMS para IMC por idade. Até 5 anos existe
   // "risco de sobrepeso" entre +1 e +2; de 5 a 19 não existe.
-  function classificar(z, meses) {
+  function classificarCrianca(z, meses) {
     var faixas = meses <= 60
       ? [[-3, 'Magreza acentuada', 'risco'], [-2, 'Magreza', 'atencao'], [1, 'Eutrofia', 'adequado'],
          [2, 'Risco de sobrepeso', 'atencao'], [3, 'Sobrepeso', 'atencao'], [Infinity, 'Obesidade', 'risco']]
       : [[-3, 'Magreza acentuada', 'risco'], [-2, 'Magreza', 'atencao'], [1, 'Eutrofia', 'adequado'],
          [2, 'Sobrepeso', 'atencao'], [3, 'Obesidade', 'risco'], [Infinity, 'Obesidade grave', 'risco']];
     for (var i = 0; i < faixas.length; i++) if (z < faixas[i][0]) return { nome: faixas[i][1], tom: faixas[i][2] };
+    return { nome: '—', tom: 'vazio' };
+  }
+
+  // Acima de 19 anos a OMS não publica curva de crescimento: entra a
+  // tabela de IMC para adultos. É a mesma de faixasOms.js, que cita
+  // WHO, Obesity: preventing and managing the global epidemic (2000).
+  function classificarAdulto(imc) {
+    var faixas = [
+      [16, 'Magreza grave', 'risco'], [17, 'Magreza moderada', 'atencao'],
+      [18.5, 'Magreza leve', 'atencao'], [25, 'Eutrofia', 'adequado'],
+      [30, 'Sobrepeso', 'atencao'], [35, 'Obesidade grau I', 'risco'],
+      [40, 'Obesidade grau II', 'risco'], [Infinity, 'Obesidade grau III', 'risco']
+    ];
+    for (var i = 0; i < faixas.length; i++) if (imc < faixas[i][0]) return { nome: faixas[i][1], tom: faixas[i][2] };
     return { nome: '—', tom: 'vazio' };
   }
 
@@ -211,26 +227,9 @@
 
     var sexo = 'meninos';
     var anos = $('#anos'), meses = $('#meses'), peso = $('#peso'), altura = $('#altura');
-    var vImc = $('#v-imc'), vZ = $('#v-z'), vP = $('#v-p'), selo = $('#v-classe');
-    var svg = $('#curvas-svg');
+    var vImc = $('#v-imc'), vZ = $('#v-z'), vP = $('#v-p');
+    var selo = $('#v-classe'), nota = $('#v-nota');
     var prog = $('#progresso'), progBarra = $('#prog-barra'), progTexto = $('#prog-texto');
-
-    // [ZEIGARNIK] + [GRADIENTE DE META]
-    // Quatro medidas: sexo (sempre escolhido), idade, peso e altura.
-    // Enquanto falta uma, a barra fica curta e o contador mostra o
-    // buraco — tarefa inacabada incomoda e puxa para terminar. Quando
-    // fecha, vira coral, a mesma cor do resultado.
-    function atualizarProgresso() {
-      if (!prog) return;
-      var feitas = 1;                                   // o sexo já vem escolhido
-      if (isFinite(parseFloat(anos.value))) feitas++;
-      if (parseFloat(peso.value) > 0) feitas++;
-      if (parseFloat(altura.value) > 0) feitas++;
-
-      progBarra.style.transform = 'scaleX(' + (feitas / 4) + ')';
-      progTexto.textContent = feitas + '/4 medidas';
-      prog.classList.toggle('completo', feitas === 4);
-    }
 
     $$('.alternador button', raiz).forEach(function (b) {
       b.addEventListener('click', function () {
@@ -245,69 +244,30 @@
       if (c) c.addEventListener('input', recalcular);
     });
 
-    // ── geometria do gráfico ──
-    var L = 34, R = 20, T = 12, B = 26, W = 330, H = 196;
-    var X0 = 0, X1 = 228;                 // meses no eixo horizontal
-    var px = function (m) { return L + (m - X0) / (X1 - X0) * (W - L - R); };
-    var yMin = 11, yMax = 32;             // IMC no eixo vertical
-    var py = function (v) { return T + (yMax - v) / (yMax - yMin) * (H - T - B); };
+    // [ZEIGARNIK] + [GRADIENTE DE META]
+    // Quatro medidas: sexo (já escolhido), idade, peso e altura.
+    // Enquanto falta uma, a barra fica curta e o contador mostra o
+    // buraco. Quando fecha, vira coral, a cor do resultado.
+    function atualizarProgresso() {
+      if (!prog) return;
+      var feitas = 1;
+      if (isFinite(parseFloat(anos.value))) feitas++;
+      if (parseFloat(peso.value) > 0) feitas++;
+      if (parseFloat(altura.value) > 0) feitas++;
 
-    function caminhoDoZ(z) {
-      var pts = window.OMS_IMC[sexo], d = '';
-      for (var m = X0; m <= X1; m += 3) {
-        var lms = lmsNaIdade(pts, m);
-        if (!lms) continue;
-        var v = medidaNoZ(z, lms);
-        d += (d ? ' L' : 'M') + px(m).toFixed(1) + ' ' + py(v).toFixed(1);
-      }
-      return d;
+      progBarra.style.transform = 'scaleX(' + (feitas / 4) + ')';
+      progTexto.textContent = feitas + '/4 medidas';
+      prog.classList.toggle('completo', feitas === 4);
     }
 
-    function desenharCurvas() {
-      if (!svg) return;
-      var partes = [], v, a, x;
-
-      // grade e eixos
-      for (v = 12; v <= 32; v += 4) {
-        partes.push('<line class="eixo" x1="' + L + '" y1="' + py(v) + '" x2="' + (W - R) + '" y2="' + py(v) + '"/>');
-        partes.push('<text class="eixo-txt" x="' + (L - 6) + '" y="' + (py(v) + 3) + '" text-anchor="end">' + v + '</text>');
-      }
-      for (a = 0; a <= 18; a += 3) {
-        x = px(a * 12);
-        partes.push('<text class="eixo-txt" x="' + x + '" y="' + (H - B + 15) + '" text-anchor="middle">' + a + '</text>');
-      }
-      partes.push('<text class="eixo-txt" x="' + (W - R) + '" y="' + (H - 3) + '" text-anchor="end">idade (anos)</text>');
-      partes.push('<text class="eixo-txt" x="' + (L - 6) + '" y="' + (T - 2) + '" text-anchor="end">IMC</text>');
-
-      // as curvas de referência da OMS
-      var ultima = lmsNaIdade(window.OMS_IMC[sexo], X1);
-      [[-2, '-2'], [-1, '-1'], [0, 'M'], [1, '+1'], [2, '+2'], [3, '+3']].forEach(function (par) {
-        var z = par[0];
-        partes.push('<path class="linha' + (z === 0 ? ' mediana' : '') + '" d="' + caminhoDoZ(z) + '"/>');
-        partes.push('<text class="rotulo-curva" x="' + (W - R + 3) + '" y="' +
-          (py(medidaNoZ(z, ultima)) + 2.5) + '">' + par[1] + '</text>');
-      });
-
-      svg.innerHTML = partes.join('');
-    }
-
-    function marcarPonto(mesesTot, imc) {
-      if (!svg) return;
-      var x = px(Math.max(X0, Math.min(X1, mesesTot)));
-      var y = py(Math.max(yMin, Math.min(yMax, imc)));
-      svg.insertAdjacentHTML('beforeend',
-        '<circle class="halo" cx="' + x + '" cy="' + y + '" r="9"/>' +
-        '<circle class="marca-ponto" cx="' + x + '" cy="' + y + '" r="4.5"/>');
-    }
-
-    function vazio(motivo) {
+    function vazio(motivo, explicacao) {
       vImc.textContent = '—'; vZ.textContent = '—'; vP.textContent = '—';
       selo.className = 'selo-classe vazio';
       selo.textContent = motivo;
+      if (nota) nota.textContent = explicacao || 'A referência usada aparece aqui depois do cálculo.';
     }
 
     function recalcular() {
-      desenharCurvas();
       atualizarProgresso();
 
       var a = parseFloat(anos.value), mm = parseFloat(meses.value || '0');
@@ -316,29 +276,47 @@
       if (!isFinite(a) || !isFinite(p) || !isFinite(h) || p <= 0 || h <= 0) {
         return vazio('Preencha os campos');
       }
-
-      var total = a * 12 + (isFinite(mm) ? mm : 0);
-      if (total < 0 || total > 228) {
-        return vazio('A OMS vai de 0 a 19 anos');
-      }
+      if (a < 0 || a > 120) return vazio('Idade fora do possível');
 
       var imc = p / Math.pow(h / 100, 2);
       if (!isFinite(imc) || imc <= 0) return vazio('Medidas improváveis');
 
+      vImc.textContent = imc.toFixed(1).replace('.', ',');
+
+      var total = a * 12 + (isFinite(mm) ? mm : 0);
+
+      // ── 20 anos ou mais: não há curva de crescimento ──
+      if (total > 228) {
+        var adulto = classificarAdulto(imc);
+        vZ.textContent = '—';
+        vP.textContent = '—';
+        selo.className = 'selo-classe ' + adulto.tom;
+        selo.textContent = adulto.nome;
+        if (nota) nota.textContent =
+          'A OMS só publica curva de crescimento até 19 anos, então aqui não ' +
+          'existe z-score nem percentil: a classificação vem da tabela de IMC ' +
+          'para adultos (WHO, 2000). É o mesmo caminho que o aplicativo segue.';
+        return;
+      }
+
+      // ── de 0 a 19 anos: curva da OMS ──
       var lms = lmsNaIdade(window.OMS_IMC[sexo], total);
       if (!lms) return vazio('Sem curva para esta idade');
 
       var z = Math.round(zAjustado(imc, lms) * 100) / 100;   // a OMS publica com 2 casas
       var pc = percentil(z);
-      var cls = classificar(z, total);
+      var cls = classificarCrianca(z, total);
 
-      vImc.textContent = imc.toFixed(1).replace('.', ',');
       vZ.textContent = (z > 0 ? '+' : '') + z.toFixed(2).replace('.', ',');
       vP.textContent = (pc < 0.1 ? '<0,1' : pc > 99.9 ? '>99,9' : pc.toFixed(1).replace('.', ',')) + '%';
       selo.className = 'selo-classe ' + cls.tom;
       selo.textContent = cls.nome;
 
-      marcarPonto(total, imc);
+      if (nota) nota.textContent =
+        'Referência: ' +
+        (total <= 60 ? 'WHO Child Growth Standards 2006 (0 a 5 anos)'
+                     : 'WHO Growth Reference 2007 (5 a 19 anos)') +
+        ' · IMC por idade · ' + (sexo === 'meninos' ? 'masculino' : 'feminino') + '.';
     }
 
     recalcular();
@@ -346,9 +324,9 @@
 
   /* ═══════════════════════════════════════════════════════════
      6. CARDS DA EQUIPE
-     No computador o painel abre no :hover, só com CSS. No celular
-     não existe hover: sem isto, o cartão nunca abriria. O botão
-     também responde a teclado, porque é um <button> de verdade.
+     No computador o painel abre no :hover do botão, só com CSS. No
+     celular não existe hover: sem isto, o cartão nunca abriria. O
+     botão também responde a teclado, porque é um <button>.
      ═══════════════════════════════════════════════════════════ */
 
   (function cardsEquipe() {
@@ -362,7 +340,11 @@
       botao.addEventListener('click', function (e) {
         e.preventDefault();
         var abrindo = !card.classList.contains('aberta');
-        cards.forEach(function (o) { o.classList.remove('aberta'); });  // um por vez
+        cards.forEach(function (o) {
+          o.classList.remove('aberta');
+          var b = $('.pessoa__clip', o);
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
         card.classList.toggle('aberta', abrindo);
         botao.setAttribute('aria-expanded', String(abrindo));
       });
