@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HealthPlus — Avaliação nutricional infantojuvenil no padrão da OMS</title>
 <meta name="description" content="Escore-z, percentil e evolução antropométrica de 0 a 19 anos pelas curvas oficiais da OMS, no celular do nutricionista. Calcule aqui mesmo.">
-<meta name="theme-color" content="#0A1C14">
+<meta name="theme-color" content="#13120E">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="HealthPlus — Avaliação nutricional no padrão da OMS">
@@ -16,13 +16,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css">
+<link rel="stylesheet" href="assets/estilo.css?v=e8sv8">
 </head>
 <body>
 
-<!-- ══════════════ ABERTURA ══════════════
-     A marca sendo desenhada: o anel, as três curvas de crescimento
-     e o ponto caindo sobre elas. Sai sozinha; clicar pula. -->
+<!-- ══════════════ ABERTURA ══════════════ -->
 <div class="abertura" id="abertura" role="status" aria-label="Carregando">
   <div class="abertura-caixa">
     <svg class="marca-anim" viewBox="0 0 200 200" aria-hidden="true">
@@ -33,19 +31,15 @@
           <stop offset="100%" stop-color="#0B2A1E"/>
         </radialGradient>
       </defs>
-
       <circle cx="100" cy="100" r="96" fill="url(#miolo)"/>
-
       <g clip-path="url(#recorte)" fill="none" stroke="#3E8F68" stroke-width="3.4" stroke-linecap="round">
         <path class="curva c1" d="M-10 182 C 46 164, 104 118, 214 28"/>
         <path class="curva c2" d="M-10 206 C 50 188, 112 140, 214 54"/>
         <path class="curva c3" d="M-10 230 C 54 212, 120 162, 214 80"/>
       </g>
-
       <circle class="anel" cx="100" cy="100" r="88" fill="none" stroke="#3E8F68" stroke-width="2.6"/>
       <circle class="ponto" cx="100" cy="100" r="13" fill="#FF7452"/>
     </svg>
-
     <div style="display:grid;justify-items:center;gap:7px">
       <div class="abertura-nome">Health<span>Plus</span></div>
       <div class="abertura-passo">CARREGANDO CURVAS DA OMS</div>
@@ -53,11 +47,13 @@
   </div>
 </div>
 
-<!-- ══════════════ TOPO ══════════════ -->
+<!-- ══════════════ TOPO ══════════════
+     [JAKOB] marca à esquerda que leva ao topo, navegação à direita,
+     barra presa no alto. É onde todo mundo já sabe procurar. -->
 <header class="topo">
   <div class="env">
     <a class="marca" href="#"><img src="assets/logo-marca.png" alt=""><span>Health<b>Plus</b></span></a>
-    <nav>
+    <nav aria-label="Seções do site">
       <a href="#calcular">Calculadora</a>
       <a href="#produto">O aplicativo</a>
       <a href="#precisao">Precisão</a>
@@ -86,6 +82,8 @@
       resultado que o WHO AnthroPlus entrega — em menos de um segundo,
       durante a consulta.
     </p>
+    <!-- [HICK] uma ação principal e uma alternativa. Três botões aqui
+         só fariam a pessoa parar para escolher. -->
     <div class="acoes">
       <a class="btn btn-1" href="#calcular">Calcular agora
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -97,7 +95,8 @@
   <div class="rolar" aria-hidden="true"><span>ROLE</span><i></i></div>
 </section>
 
-<!-- ══════════════ MÉTRICAS ══════════════ -->
+<!-- ══════════════ MÉTRICAS ══════════════
+     [MILLER] quatro, não oito. -->
 <section class="metricas">
   <div class="env">
     <ul>
@@ -111,7 +110,7 @@
 
 <!-- ══════════════ O PROBLEMA ══════════════ -->
 <section class="secao">
-  <div class="env reveal">
+  <div class="env reveal" data-rev="baixo">
     <h2>Avaliar uma criança direito dá trabalho demais.</h2>
     <p style="max-width:60ch;margin-bottom:16px">
       Classificar o estado nutricional de uma criança exige cruzar peso,
@@ -131,7 +130,7 @@
 <!-- ══════════════ CALCULADORA ══════════════ -->
 <section class="secao alt linha-topo" id="calcular">
   <div class="env">
-    <div class="reveal">
+    <div class="reveal" data-rev="baixo">
       <h2>Não acredite na gente. Calcule.</h2>
       <p style="max-width:60ch">
         Isto aqui não é maquete. É o mesmo cálculo do aplicativo, com as
@@ -140,13 +139,23 @@
       </p>
     </div>
 
-    <div class="demo reveal" id="demo" data-atraso="1">
+    <div class="demo reveal" id="demo" data-rev="baixo" data-atraso="1">
       <div class="demo-cabeca">
         <span class="ponto-vivo" aria-hidden="true"></span>
-        <span class="mono">IMC POR IDADE · 0 A 19 ANOS · CÁLCULO LOCAL</span>
+        <span class="mono">IMC POR IDADE · CÁLCULO LOCAL</span>
+
+        <!-- [ZEIGARNIK] + [GRADIENTE DE META]
+             Mostra o quanto falta. Campo vazio = tarefa inacabada. -->
+        <div class="progresso" id="progresso" aria-live="polite">
+          <span id="prog-texto">4/4 medidas</span>
+          <span class="trilho" aria-hidden="true"><i id="prog-barra"></i></span>
+        </div>
       </div>
 
       <div class="demo-corpo">
+        <!-- [HICK] quatro campos e um indicador. O aplicativo calcula
+             nove indicadores; pedir os doze campos deles aqui faria a
+             pessoa desistir antes de ver o resultado. -->
         <div class="controles">
           <div class="campo">
             <span class="rotulo" id="rot-sexo">Sexo</span>
@@ -186,6 +195,8 @@
               <div><div class="rot">Escore-z</div><div class="val" id="v-z">—</div></div>
               <div><div class="rot">Percentil</div><div class="val" id="v-p">—</div></div>
             </div>
+            <!-- [VON RESTORFF] o único elemento colorido do painel é a
+                 resposta. É nela que o olho cai primeiro. -->
             <span class="selo-classe vazio" id="v-classe" aria-live="polite">Preencha os campos</span>
           </div>
 
@@ -205,10 +216,11 @@
   </div>
 </section>
 
-<!-- ══════════════ O APLICATIVO ══════════════ -->
+<!-- ══════════════ O APLICATIVO ══════════════
+     Cada aparelho entra de um lado e o texto do outro. -->
 <section class="secao linha-topo" id="produto">
   <div class="env">
-    <div class="reveal">
+    <div class="reveal" data-rev="baixo">
       <h2>Da medida ao diagnóstico nutricional, numa tela.</h2>
       <p style="max-width:60ch">
         Dois perfis, um banco de dados. O nutricionista cadastra, avalia e
@@ -218,8 +230,8 @@
 
     <div class="telas">
 
-      <div class="tela-bloco reveal">
-        <div>
+      <div class="tela-bloco">
+        <div class="reveal" data-rev="esq">
           <div class="fone">
             <div class="fone-tela">
               <div class="fone-topo"><div class="mini">Resultado</div><div class="tit">Avaliação de hoje</div></div>
@@ -233,7 +245,7 @@
           </div>
           <p class="legenda">tela de resultado da avaliação</p>
         </div>
-        <div>
+        <div class="reveal" data-rev="dir" data-atraso="1">
           <h3>Escore-z e percentil na hora</h3>
           <p>
             A nutricionista digita peso, estatura e a data de nascimento. O
@@ -250,8 +262,8 @@
         </div>
       </div>
 
-      <div class="tela-bloco espelho reveal">
-        <div>
+      <div class="tela-bloco espelho">
+        <div class="reveal" data-rev="esq">
           <h3>A evolução, consulta a consulta</h3>
           <p>
             Cada avaliação entra no histórico do paciente e vira gráfico. Dá
@@ -264,7 +276,7 @@
             que o nutricionista vê e o que o paciente vê nunca divergem.
           </p>
         </div>
-        <div>
+        <div class="reveal" data-rev="dir" data-atraso="1">
           <div class="fone">
             <div class="fone-tela">
               <div class="fone-topo"><div class="mini">Paciente</div><div class="tit">Minha evolução</div></div>
@@ -292,8 +304,8 @@
         </div>
       </div>
 
-      <div class="tela-bloco reveal">
-        <div>
+      <div class="tela-bloco">
+        <div class="reveal" data-rev="esq">
           <div class="fone">
             <div class="fone-tela">
               <div class="fone-topo"><div class="mini">Nutricionista</div><div class="tit">Ficha do paciente</div></div>
@@ -312,7 +324,7 @@
           </div>
           <p class="legenda">ficha do paciente, com o cartão de LGPD</p>
         </div>
-        <div>
+        <div class="reveal" data-rev="dir" data-atraso="1">
           <h3>O paciente inteiro num lugar só</h3>
           <p>
             Cadastro, agenda de consultas, histórico de avaliações e os
@@ -334,7 +346,7 @@
 <!-- ══════════════ PRECISÃO ══════════════ -->
 <section class="secao alt linha-topo" id="precisao">
   <div class="env">
-    <div class="reveal">
+    <div class="reveal" data-rev="baixo">
       <h2>Não acreditamos na nossa conta. Conferimos.</h2>
       <p style="max-width:60ch">
         Um cálculo nutricional que erra é pior do que cálculo nenhum. Por
@@ -344,7 +356,7 @@
     </div>
 
     <div class="cartoes">
-      <div class="cartao reveal">
+      <div class="cartao reveal" data-rev="esq">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
         <h3>Curvas oficiais</h3>
         <p>
@@ -353,7 +365,7 @@
           publicadas pela OMS. São 17 tabelas de referência.
         </p>
       </div>
-      <div class="cartao reveal" data-atraso="1">
+      <div class="cartao reveal" data-rev="baixo" data-atraso="1">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
         <h3>10.234 valores reconstruídos</h3>
         <p>
@@ -362,7 +374,7 @@
           ela os divulga.
         </p>
       </div>
-      <div class="cartao reveal" data-atraso="2">
+      <div class="cartao reveal" data-rev="dir" data-atraso="2">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg></div>
         <h3>933 casos do WHO AnthroPlus</h3>
         <p>
@@ -375,10 +387,11 @@
   </div>
 </section>
 
-<!-- ══════════════ PRIVACIDADE ══════════════ -->
+<!-- ══════════════ PRIVACIDADE ══════════════
+     [MILLER] seis itens. Sete é o teto; acima disso vira parede. -->
 <section class="secao linha-topo" id="privacidade">
   <div class="env">
-    <div class="reveal">
+    <div class="reveal" data-rev="baixo">
       <h2>Dado de saúde de criança é dado sensível.</h2>
       <p style="max-width:60ch">
         A LGPD trata dado de saúde como categoria especial, e a maior parte
@@ -387,7 +400,7 @@
       </p>
     </div>
 
-    <ul class="lista reveal" data-atraso="1">
+    <ul class="lista reveal" data-rev="esq" data-atraso="1">
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 118 0v3"/></svg>
         <span><strong>Nenhuma senha em texto simples.</strong> Todas passam por hash com bcrypt, e a sessão usa JSON Web Token sobre HTTPS/TLS.</span>
@@ -416,56 +429,126 @@
   </div>
 </section>
 
-<!-- ══════════════ EQUIPE ══════════════ -->
+<!-- ══════════════ EQUIPE ══════════════
+     Cartão com abertura em clip-path, do protótipo do Bruno.
+     O botão redondo é <button> de verdade: abre no toque e no
+     teclado, não só no hover. -->
 <section class="secao alt linha-topo" id="equipe">
   <div class="env">
-    <div class="reveal">
+    <div class="reveal" data-rev="baixo">
       <h2>Quatro pessoas, um aplicativo inteiro.</h2>
       <p style="max-width:60ch">
         Da modelagem do banco à conferência das curvas da OMS, tudo aqui foi
-        desenhado, escrito e revisado por nós.
+        desenhado, escrito e revisado por nós. Toque no botão de cada cartão
+        para ver mais.
       </p>
     </div>
 
     <div class="time">
 
-      <!-- ─────────────────────────────────────────────────────
-           TROCAR AS FOTOS: ponha os arquivos em site/fotos/ e
-           substitua  <div class="retrato-vazio">B</div>  por
-           <img class="retrato" src="fotos/bruno.jpg" alt="Bruno Fernandes">
-           ───────────────────────────────────────────────────── -->
+      <!-- ─────────────────────────────────────────────────────────
+           TROCAR AS FOTOS: ponha o arquivo em fotos/ e substitua
+             <div class="pessoa__vazio" aria-hidden="true">B</div>
+           por
+             <img class="pessoa__img" src="fotos/bruno.jpg" alt="Bruno Fernandes">
 
-      <div class="pessoa reveal">
-        <div class="retrato-vazio">B</div>
-        <h3>Bruno Fernandes</h3>
-        <div class="papel">Design e gestão</div>
-        <p>
-          Dirigiu o projeto e distribuiu as tarefas. Fez o design do
-          aplicativo, a identidade visual e as logos, os cartões de visita,
-          a apresentação e o marketing.
-        </p>
-      </div>
+           TROCAR AS REDES: substitua
+             <span class="info__link vazio" title="...">…</span>
+           por
+             <a class="info__link" href="URL" target="_blank" rel="noopener" aria-label="Instagram de Fulano">…</a>
+           ───────────────────────────────────────────────────────── -->
 
-      <div class="pessoa reveal" data-atraso="1">
-        <div class="retrato-vazio">K</div>
-        <h3>Kaio Felipe</h3>
-        <div class="papel">Função a definir</div>
-        <p>Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
-      </div>
+      <article class="pessoa reveal" data-rev="esq">
+        <div class="pessoa__vazio" aria-hidden="true">B</div>
+        <div class="pessoa__sombra"></div>
+        <div class="pessoa__dados">
+          <h3 class="pessoa__nome">Bruno Fernandes</h3>
+          <span class="pessoa__papel">Design e gestão</span>
+        </div>
+        <button class="pessoa__clip" type="button" aria-expanded="false" aria-label="Ver mais sobre Bruno Fernandes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <div class="info">
+          <div class="info__nome">Bruno Fernandes</div>
+          <span class="info__papel">Design e gestão</span>
+          <p class="info__descricao">
+            Dirigiu o projeto e distribuiu as tarefas. Fez o design do
+            aplicativo, a identidade visual e as logos, os cartões de
+            visita, a apresentação e o marketing.
+          </p>
+          <div class="info__redes">
+            <span class="info__link vazio" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+            <span class="info__link vazio" title="LinkedIn — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg></span>
+            <span class="info__link vazio" title="GitHub — a definir"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg></span>
+          </div>
+        </div>
+      </article>
 
-      <div class="pessoa reveal" data-atraso="2">
-        <div class="retrato-vazio">C</div>
-        <h3>Caio Fernandes</h3>
-        <div class="papel">Função a definir</div>
-        <p>Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
-      </div>
+      <article class="pessoa reveal" data-rev="baixo" data-atraso="1">
+        <div class="pessoa__vazio" aria-hidden="true">K</div>
+        <div class="pessoa__sombra"></div>
+        <div class="pessoa__dados">
+          <h3 class="pessoa__nome">Kaio Felipe</h3>
+          <span class="pessoa__papel">Função a definir</span>
+        </div>
+        <button class="pessoa__clip" type="button" aria-expanded="false" aria-label="Ver mais sobre Kaio Felipe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <div class="info">
+          <div class="info__nome">Kaio Felipe</div>
+          <span class="info__papel">Função a definir</span>
+          <p class="info__descricao">Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
+          <div class="info__redes">
+            <span class="info__link vazio" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+            <span class="info__link vazio" title="LinkedIn — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg></span>
+            <span class="info__link vazio" title="GitHub — a definir"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg></span>
+          </div>
+        </div>
+      </article>
 
-      <div class="pessoa reveal" data-atraso="3">
-        <div class="retrato-vazio">A</div>
-        <h3>Ayck</h3>
-        <div class="papel">Função a definir</div>
-        <p>Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
-      </div>
+      <article class="pessoa reveal" data-rev="baixo" data-atraso="2">
+        <div class="pessoa__vazio" aria-hidden="true">C</div>
+        <div class="pessoa__sombra"></div>
+        <div class="pessoa__dados">
+          <h3 class="pessoa__nome">Caio Fernandes</h3>
+          <span class="pessoa__papel">Função a definir</span>
+        </div>
+        <button class="pessoa__clip" type="button" aria-expanded="false" aria-label="Ver mais sobre Caio Fernandes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <div class="info">
+          <div class="info__nome">Caio Fernandes</div>
+          <span class="info__papel">Função a definir</span>
+          <p class="info__descricao">Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
+          <div class="info__redes">
+            <span class="info__link vazio" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+            <span class="info__link vazio" title="LinkedIn — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg></span>
+            <span class="info__link vazio" title="GitHub — a definir"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pessoa reveal" data-rev="dir" data-atraso="3">
+        <div class="pessoa__vazio" aria-hidden="true">A</div>
+        <div class="pessoa__sombra"></div>
+        <div class="pessoa__dados">
+          <h3 class="pessoa__nome">Ayck</h3>
+          <span class="pessoa__papel">Função a definir</span>
+        </div>
+        <button class="pessoa__clip" type="button" aria-expanded="false" aria-label="Ver mais sobre Ayck">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <div class="info">
+          <div class="info__nome">Ayck</div>
+          <span class="info__papel">Função a definir</span>
+          <p class="info__descricao">Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
+          <div class="info__redes">
+            <span class="info__link vazio" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+            <span class="info__link vazio" title="LinkedIn — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg></span>
+            <span class="info__link vazio" title="GitHub — a definir"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg></span>
+          </div>
+        </div>
+      </article>
 
     </div>
   </div>
@@ -501,7 +584,7 @@
   </div>
 </footer>
 
-<script src="assets/oms-imc.js"></script>
-<script src="assets/app.js" defer></script>
+<script src="assets/oms-imc.js?v=e8sv8"></script>
+<script src="assets/app.js?v=e8sv8" defer></script>
 </body>
 </html>

@@ -213,6 +213,24 @@
     var anos = $('#anos'), meses = $('#meses'), peso = $('#peso'), altura = $('#altura');
     var vImc = $('#v-imc'), vZ = $('#v-z'), vP = $('#v-p'), selo = $('#v-classe');
     var svg = $('#curvas-svg');
+    var prog = $('#progresso'), progBarra = $('#prog-barra'), progTexto = $('#prog-texto');
+
+    // [ZEIGARNIK] + [GRADIENTE DE META]
+    // Quatro medidas: sexo (sempre escolhido), idade, peso e altura.
+    // Enquanto falta uma, a barra fica curta e o contador mostra o
+    // buraco — tarefa inacabada incomoda e puxa para terminar. Quando
+    // fecha, vira coral, a mesma cor do resultado.
+    function atualizarProgresso() {
+      if (!prog) return;
+      var feitas = 1;                                   // o sexo já vem escolhido
+      if (isFinite(parseFloat(anos.value))) feitas++;
+      if (parseFloat(peso.value) > 0) feitas++;
+      if (parseFloat(altura.value) > 0) feitas++;
+
+      progBarra.style.transform = 'scaleX(' + (feitas / 4) + ')';
+      progTexto.textContent = feitas + '/4 medidas';
+      prog.classList.toggle('completo', feitas === 4);
+    }
 
     $$('.alternador button', raiz).forEach(function (b) {
       b.addEventListener('click', function () {
@@ -290,6 +308,7 @@
 
     function recalcular() {
       desenharCurvas();
+      atualizarProgresso();
 
       var a = parseFloat(anos.value), mm = parseFloat(meses.value || '0');
       var p = parseFloat(peso.value), h = parseFloat(altura.value);
@@ -323,5 +342,40 @@
     }
 
     recalcular();
+  })();
+
+  /* ═══════════════════════════════════════════════════════════
+     6. CARDS DA EQUIPE
+     No computador o painel abre no :hover, só com CSS. No celular
+     não existe hover: sem isto, o cartão nunca abriria. O botão
+     também responde a teclado, porque é um <button> de verdade.
+     ═══════════════════════════════════════════════════════════ */
+
+  (function cardsEquipe() {
+    var cards = $$('.pessoa');
+    if (!cards.length) return;
+
+    cards.forEach(function (card) {
+      var botao = $('.pessoa__clip', card);
+      if (!botao) return;
+
+      botao.addEventListener('click', function (e) {
+        e.preventDefault();
+        var abrindo = !card.classList.contains('aberta');
+        cards.forEach(function (o) { o.classList.remove('aberta'); });  // um por vez
+        card.classList.toggle('aberta', abrindo);
+        botao.setAttribute('aria-expanded', String(abrindo));
+      });
+    });
+
+    // tocar fora fecha
+    document.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('.pessoa')) return;
+      cards.forEach(function (o) {
+        o.classList.remove('aberta');
+        var b = $('.pessoa__clip', o);
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+    });
   })();
 })();

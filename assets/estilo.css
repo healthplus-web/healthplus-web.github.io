@@ -1,32 +1,38 @@
 /* ══════════════════════════════════════════════════════════════
    HealthPlus Web — folha de estilo
 
-   Mobile first. Tema escuro de painel de instrumentos: o verde da
-   marca (app/tema/index.js) sobre fundo quase preto, com os números
-   em fonte monoespaçada.
+   Mobile first. A cor que manda é o creme #FFF8C9, o mesmo fundo
+   das telas do aplicativo (app/tema/index.js), sobre uma tinta
+   quente quase preta. O verde virou acento, não base. O coral é
+   reservado: só o que o visitante precisa achar primeiro.
 
-   Toda animação respeita prefers-reduced-motion — quem pediu menos
-   movimento no sistema recebe a página inteira, parada.
+   Toda animação respeita prefers-reduced-motion.
+
+   As leis de usabilidade aplicadas estão marcadas no código como
+   [FITTS], [HICK], [ZEIGARNIK], [JAKOB], [META], [RESTORFF] e
+   [MILLER]. O mapa completo está no LEIA-ME.md.
    ══════════════════════════════════════════════════════════════ */
 
 :root{
-  /* marca */
+  /* a cor da marca, no comando */
+  --creme:#FFF8C9;
+  --creme-2:#C9C0A0;
+
+  /* tinta quente: quase preta, mas do lado quente, para o creme
+     não parecer sujo em cima dela */
+  --tinta:#13120E;
+  --tinta-2:#1A1813;
+  --superficie:#232019;
+  --borda:#38342A;
+  --borda-forte:#544C3B;
+
+  --texto:#FFF8C9;
+  --texto-2:#C9C0A0;
+  --texto-3:#9A9279;
+
+  /* acentos, usados com parcimônia */
   --verde:#5DB582;
-  --verde-claro:#8FE3B4;
   --coral:#FF7452;
-
-  /* superfícies */
-  --preto:#07140E;
-  --fundo:#0A1C14;
-  --fundo-2:#0D2419;
-  --superficie:#102E20;
-  --borda:#1C4632;
-  --borda-forte:#2A6246;
-
-  /* texto */
-  --texto:#E9F3ED;
-  --texto-2:#A7C0B2;
-  --texto-3:#8BA698;
 
   --gutter:20px;
   --max:1100px;
@@ -34,14 +40,20 @@
 
   --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:'IBM Plex Sans',"Segoe UI",system-ui,-apple-system,sans-serif;
+
+  /* [FITTS] altura mínima de qualquer alvo tocável */
+  --alvo:48px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
+/* clip, não hidden: hidden no html cria um container de rolagem e
+   quebra o position:sticky do cabeçalho. O clip corta o que as
+   animações de entrada jogam para fora sem esse efeito colateral. */
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
 
 body{
   font-family:var(--sans);
-  background:var(--fundo);
+  background:var(--tinta);
   color:var(--texto);
   line-height:1.6;
   font-size:16px;
@@ -51,22 +63,22 @@ body.travado{overflow:hidden}
 
 .env{width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
 
-h1,h2,h3{line-height:1.15;letter-spacing:-.022em;font-weight:600}
+h1,h2,h3{line-height:1.15;letter-spacing:-.022em;font-weight:600;color:var(--creme)}
 h2{font-size:1.7rem;margin-bottom:14px}
 h3{font-size:1.06rem;margin-bottom:6px}
 p{color:var(--texto-2)}
-strong{color:var(--texto);font-weight:600}
+strong{color:var(--creme);font-weight:600}
 
-a{color:var(--verde-claro);text-decoration:none}
+/* [JAKOB] link sublinha ao passar o mouse, como em qualquer site */
+a{color:var(--creme);text-decoration:none}
 a:hover{text-decoration:underline}
 
-:focus-visible{outline:2px solid var(--verde-claro);outline-offset:3px;border-radius:4px}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px;border-radius:4px}
 
 .secao{padding:60px 0;position:relative}
-.secao.alt{background:var(--fundo-2)}
+.secao.alt{background:var(--tinta-2)}
 .linha-topo{border-top:1px solid var(--borda)}
 
-/* etiqueta monoespaçada usada como rótulo de dado, não como enfeite */
 .mono{
   font-family:var(--mono);font-size:.78rem;font-weight:500;
   letter-spacing:.06em;color:var(--texto-3);
@@ -74,19 +86,15 @@ a:hover{text-decoration:underline}
 
 /* ══════════════════════════════════════════════════════════════
    1. Abertura animada
-   O traço da marca sendo desenhado: o anel, as três curvas de
-   crescimento e o ponto. É a metáfora do produto — uma curva sendo
-   plotada e um valor caindo sobre ela.
    ══════════════════════════════════════════════════════════════ */
 
 .abertura{
   position:fixed;inset:0;z-index:999;
-  background:var(--preto);
+  background:var(--tinta);
   display:grid;place-items:center;
   transition:opacity .7s ease,visibility .7s ease;
 }
 .abertura.saiu{opacity:0;visibility:hidden;pointer-events:none}
-
 .abertura-caixa{display:grid;justify-items:center;gap:22px}
 .marca-anim{width:132px;height:132px;display:block}
 
@@ -101,8 +109,6 @@ a:hover{text-decoration:underline}
 .marca-anim .c1{animation-delay:.34s}
 .marca-anim .c2{animation-delay:.46s}
 .marca-anim .c3{animation-delay:.58s}
-/* Desaceleração exponencial, sem repique: o ponto pousa na curva,
-   não quica nela. */
 .marca-anim .ponto{
   transform-origin:100px 100px;transform:scale(0);
   animation:brota .62s cubic-bezier(.16,1,.3,1) 1.02s forwards;
@@ -111,37 +117,46 @@ a:hover{text-decoration:underline}
 @keyframes brota{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 
 .abertura-nome{
-  font-size:1.4rem;font-weight:600;letter-spacing:-.02em;
+  font-size:1.4rem;font-weight:600;letter-spacing:-.02em;color:var(--creme);
   opacity:0;animation:sobe .6s ease 1.25s forwards;
 }
 .abertura-nome span{color:var(--verde);font-weight:400}
 .abertura-passo{
   font-family:var(--mono);font-size:.74rem;color:var(--texto-3);
-  opacity:0;animation:sobe .6s ease 1.45s forwards;
-  letter-spacing:.08em;
+  opacity:0;animation:sobe .6s ease 1.45s forwards;letter-spacing:.08em;
 }
 @keyframes sobe{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* ══════════════════════════════════════════════════════════════
    2. Topo
+   [JAKOB] marca à esquerda, navegação à direita, presa no topo
+   [HICK]  três itens, não seis
    ══════════════════════════════════════════════════════════════ */
 
 .topo{
   position:sticky;top:0;z-index:60;
-  background:rgba(10,28,20,.82);
+  background:rgba(19,18,14,.86);
   backdrop-filter:saturate(160%) blur(14px);
   border-bottom:1px solid transparent;
   transition:border-color .3s ease;
 }
 .topo.rolou{border-bottom-color:var(--borda)}
-.topo .env{display:flex;align-items:center;gap:10px;height:62px}
-.topo .marca{display:flex;align-items:center;gap:9px;color:var(--texto);text-decoration:none}
+.topo .env{display:flex;align-items:center;gap:10px;height:64px}
+.topo .marca{
+  display:flex;align-items:center;gap:9px;color:var(--creme);
+  text-decoration:none;padding:6px 4px;
+}
+.topo .marca:hover{text-decoration:none}
 .topo .marca img{width:28px;height:28px}
 .topo .marca span{font-size:1.1rem;font-weight:600;letter-spacing:-.02em}
 .topo .marca b{font-weight:400;color:var(--verde)}
-.topo nav{margin-left:auto;display:none;gap:24px}
-.topo nav a{font-size:.9rem;color:var(--texto-2);text-decoration:none;transition:color .2s}
-.topo nav a:hover{color:var(--verde-claro)}
+.topo nav{margin-left:auto;display:none;gap:4px}
+/* [FITTS] área clicável generosa, não só o texto */
+.topo nav a{
+  font-size:.9rem;color:var(--texto-2);text-decoration:none;
+  padding:10px 14px;border-radius:8px;transition:color .2s,background .2s;
+}
+.topo nav a:hover{color:var(--creme);background:var(--superficie);text-decoration:none}
 
 /* ══════════════════════════════════════════════════════════════
    3. Herói
@@ -149,168 +164,210 @@ a:hover{text-decoration:underline}
 
 .heroi{
   position:relative;overflow:hidden;
-  padding:64px 0 76px;
+  padding:60px 0 78px;
   background:
-    radial-gradient(90% 70% at 76% 8%, rgba(93,181,130,.15), transparent 62%),
-    radial-gradient(70% 60% at 6% 94%, rgba(255,116,82,.09), transparent 60%),
-    var(--fundo);
+    radial-gradient(92% 72% at 78% 6%, rgba(255,248,201,.09), transparent 62%),
+    radial-gradient(70% 60% at 4% 96%, rgba(255,116,82,.08), transparent 60%),
+    var(--tinta);
 }
-/* O fundo são as próprias curvas de crescimento da OMS sendo
-   desenhadas. A malha quadriculada que estava aqui é o papel de
-   parede de qualquer site "de tecnologia"; estas curvas dizem o
-   que o produto faz. */
-.heroi .curvas{
-  position:absolute;inset:0;width:100%;height:100%;
-  opacity:.62;pointer-events:none;
-}
+.heroi .curvas{position:absolute;inset:0;width:100%;height:100%;opacity:.5;pointer-events:none}
 .heroi .curvas path{
-  fill:none;stroke:var(--verde);stroke-width:1.1;stroke-linecap:round;
+  fill:none;stroke:var(--creme);stroke-width:1.1;stroke-linecap:round;
   stroke-dasharray:1200;stroke-dashoffset:1200;
   animation:desenha 2.6s ease .4s forwards;
 }
-.heroi .curvas path:nth-child(2){animation-delay:.55s;opacity:.75}
-.heroi .curvas path:nth-child(3){animation-delay:.7s;opacity:.55}
-.heroi .curvas path:nth-child(4){animation-delay:.85s;opacity:.4}
+.heroi .curvas path:nth-child(2){animation-delay:.55s;opacity:.7}
+.heroi .curvas path:nth-child(3){animation-delay:.7s;opacity:.5}
+.heroi .curvas path:nth-child(4){animation-delay:.85s;opacity:.34}
 
 .heroi .env{position:relative;z-index:1}
 .heroi .mono{display:block;margin-bottom:16px}
-.heroi h1{font-size:2.3rem;margin-bottom:18px;max-width:17ch}
+.heroi h1{font-size:2.25rem;margin-bottom:18px;max-width:17ch}
 .heroi h1 em{font-style:normal;color:var(--verde)}
 .heroi .lede{font-size:1.04rem;max-width:54ch}
 
+/* [HICK] uma ação principal e uma secundária. Nunca três. */
 .acoes{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
 .btn{
-  display:inline-flex;align-items:center;gap:8px;
-  font-weight:600;font-size:.95rem;padding:13px 22px;border-radius:999px;
-  border:1px solid transparent;cursor:pointer;text-decoration:none;
-  font-family:inherit;
-  transition:transform .14s ease,box-shadow .25s ease,background .2s ease;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:600;font-size:.97rem;
+  min-height:var(--alvo);padding:0 24px;      /* [FITTS] */
+  border-radius:999px;border:1px solid transparent;cursor:pointer;
+  text-decoration:none;font-family:inherit;
+  transition:transform .14s ease,background .2s ease,border-color .2s ease;
 }
 .btn:hover{text-decoration:none}
 .btn:active{transform:translateY(1px)}
-.btn-1{background:var(--verde);color:#06160F}
-.btn-1:hover{background:var(--verde-claro)}
-.btn-2{border-color:var(--borda-forte);color:var(--texto)}
+/* [RESTORFF] o coral aparece em pouquíssimos lugares: a ação
+   principal e o resultado do cálculo. É o que faz o olho ir neles. */
+.btn-1{background:var(--coral);color:var(--tinta)}
+.btn-1:hover{background:#FF8D70}
+.btn-2{border-color:var(--borda-forte);color:var(--creme)}
 .btn-2:hover{background:var(--superficie)}
 
 .rolar{
-  position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
+  position:absolute;left:50%;bottom:16px;transform:translateX(-50%);
   display:grid;place-items:center;gap:7px;
   font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;
   color:var(--texto-3);z-index:1;
 }
 .rolar i{
   display:block;width:1px;height:26px;
-  background:linear-gradient(var(--verde),transparent);
+  background:linear-gradient(var(--creme),transparent);
   animation:desce 1.8s ease-in-out infinite;
 }
 @keyframes desce{0%,100%{opacity:.25;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
 
 /* ══════════════════════════════════════════════════════════════
    4. Métricas
+   [MILLER] quatro números, não oito. Acima de sete a pessoa para
+   de reter e passa a só rolar.
    ══════════════════════════════════════════════════════════════ */
 
-.metricas{background:var(--fundo-2);border-block:1px solid var(--borda);padding:30px 0}
-.metricas ul{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:24px 16px}
+.metricas{background:var(--tinta-2);border-block:1px solid var(--borda);padding:30px 0}
+.metricas ul{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}
+.metricas li{min-width:0}
 .metricas .num{
-  display:block;font-family:var(--mono);font-size:1.7rem;font-weight:600;
-  color:var(--verde-claro);line-height:1;font-variant-numeric:tabular-nums;
+  display:block;font-family:var(--mono);font-weight:600;
+  font-size:clamp(1.3rem,6vw,1.7rem);
+  color:var(--creme);line-height:1.1;font-variant-numeric:tabular-nums;
 }
 .metricas .rot{display:block;font-size:.82rem;color:var(--texto-3);line-height:1.35;margin-top:7px}
 
 /* ══════════════════════════════════════════════════════════════
-   5. Calculadora ao vivo
+   5. Calculadora
    ══════════════════════════════════════════════════════════════ */
 
 .demo{
-  margin-top:28px;
+  margin-top:26px;
   background:var(--superficie);border:1px solid var(--borda);
   border-radius:var(--r);overflow:hidden;
 }
 .demo-cabeca{
-  display:flex;align-items:center;gap:9px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
   padding:12px 16px;border-bottom:1px solid var(--borda);
-  background:rgba(7,20,14,.45);
+  background:rgba(19,18,14,.5);
 }
-/* Ponto parado. O pontinho pulsando de "ao vivo" é clichê, e o
-   texto ao lado já diz que o cálculo roda aqui. */
-.demo-cabeca .ponto-vivo{
-  width:7px;height:7px;border-radius:50%;background:var(--verde);
+.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--verde);flex:none}
+.demo-cabeca .mono{min-width:0}
+
+/* [ZEIGARNIK] + [META] — a barra mostra o que falta para o
+   resultado ficar pronto. Campo vazio deixa a tarefa visivelmente
+   inacabada; a barra enchendo puxa para terminar. */
+.progresso{
+  margin-left:auto;display:flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:.7rem;color:var(--texto-3);white-space:nowrap;
 }
+.progresso .trilho{width:58px;height:4px;border-radius:999px;background:var(--borda);overflow:hidden}
+/* scaleX em vez de width: animar largura obriga o navegador a
+   recalcular layout a cada quadro; transform roda na composição. */
+.progresso .trilho i{
+  display:block;height:100%;width:100%;border-radius:999px;
+  background:var(--verde);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+}
+.progresso.completo{color:var(--coral)}
+.progresso.completo .trilho i{background:var(--coral)}
 
 .demo-corpo{display:grid}
-.controles{padding:18px 16px;display:grid;gap:16px;border-bottom:1px solid var(--borda)}
 
-.campo{display:grid;gap:7px}
+.controles{
+  padding:16px;display:grid;gap:13px;align-content:start;
+  border-bottom:1px solid var(--borda);
+}
+
+.campo{display:grid;gap:6px;min-width:0}
 .campo > label,.campo > .rotulo{
-  font-family:var(--mono);font-size:.74rem;letter-spacing:.07em;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
   color:var(--texto-3);text-transform:uppercase;
 }
 .campo input[type=number]{
-  width:100%;padding:11px 13px;font-size:1rem;font-family:var(--mono);
-  background:var(--fundo);color:var(--texto);
+  width:100%;min-width:0;
+  min-height:var(--alvo);padding:0 12px;        /* [FITTS] */
+  font-size:1rem;font-family:var(--mono);
+  background:var(--tinta);color:var(--creme);
   border:1px solid var(--borda);border-radius:9px;
 }
 .campo input[type=number]:focus{border-color:var(--verde);outline:none}
 
-.alternador{display:flex;gap:6px;background:var(--fundo);border:1px solid var(--borda);border-radius:9px;padding:4px}
+.alternador{
+  display:flex;gap:5px;background:var(--tinta);
+  border:1px solid var(--borda);border-radius:9px;padding:4px;
+}
 .alternador button{
-  flex:1;padding:9px 10px;border:0;border-radius:6px;cursor:pointer;
+  flex:1;min-width:0;min-height:40px;                 /* [FITTS] */
+  border:0;border-radius:6px;cursor:pointer;
   background:transparent;color:var(--texto-2);font:inherit;font-size:.9rem;
   transition:background .18s,color .18s;
 }
-.alternador button[aria-pressed=true]{background:var(--verde);color:#06160F;font-weight:600}
+.alternador button[aria-pressed=true]{background:var(--creme);color:var(--tinta);font-weight:600}
 
-.dupla{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dupla{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 
-.resultado{padding:18px 16px;display:grid;gap:14px}
-.painel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.painel div{background:var(--fundo);border:1px solid var(--borda);border-radius:10px;padding:11px 12px}
-.painel .rot{font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;color:var(--texto-3);text-transform:uppercase}
+.resultado{padding:16px;display:grid;gap:13px}
+
+/* min-width:0 em tudo: sem isso um item de grid se recusa a
+   encolher abaixo do conteúdo e o "42,1%" estoura a caixa no
+   celular — era exatamente o bug que o Bruno viu. */
+.painel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.painel div{
+  min-width:0;background:var(--tinta);border:1px solid var(--borda);
+  border-radius:10px;padding:10px;
+}
+.painel .rot{
+  font-family:var(--mono);font-size:.64rem;letter-spacing:.04em;
+  color:var(--texto-3);text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 .painel .val{
-  font-family:var(--mono);font-size:1.3rem;font-weight:600;color:var(--texto);
+  font-family:var(--mono);font-weight:600;color:var(--creme);
+  font-size:clamp(.95rem,4.6vw,1.25rem);
   line-height:1.15;margin-top:3px;font-variant-numeric:tabular-nums;
+  overflow-wrap:anywhere;
 }
 
+/* [RESTORFF] a classificação é o que a pessoa veio ver: única
+   coisa colorida e arredondada do painel. */
 .selo-classe{
-  display:inline-flex;align-items:center;gap:8px;align-self:start;
-  padding:8px 14px;border-radius:999px;font-weight:600;font-size:.92rem;
-  border:1px solid;
+  /* justify-self, não align-self: num grid de uma coluna é o eixo
+     horizontal que precisa encolher ao conteúdo. */
+  display:inline-flex;align-items:center;gap:8px;justify-self:start;
+  min-height:42px;padding:0 16px;border-radius:999px;
+  font-weight:600;font-size:.93rem;border:1px solid;max-width:100%;
 }
-.selo-classe.adequado{background:rgba(93,181,130,.14);border-color:rgba(93,181,130,.45);color:var(--verde-claro)}
-.selo-classe.atencao{background:rgba(255,196,82,.12);border-color:rgba(255,196,82,.4);color:#FFD079}
-.selo-classe.risco{background:rgba(255,116,82,.14);border-color:rgba(255,116,82,.45);color:#FFA187}
+.selo-classe.adequado{background:rgba(93,181,130,.15);border-color:rgba(93,181,130,.5);color:#8FE3B4}
+.selo-classe.atencao{background:rgba(255,200,90,.12);border-color:rgba(255,200,90,.42);color:#FFD079}
+.selo-classe.risco{background:rgba(255,116,82,.16);border-color:rgba(255,116,82,.5);color:#FFA187}
 .selo-classe.vazio{background:transparent;border-color:var(--borda);color:var(--texto-3);font-weight:400}
 
-.grafico{padding:4px 10px 16px}
+.grafico{padding:0 8px 14px}
 .grafico svg{width:100%;height:auto;display:block;overflow:visible}
 .grafico .linha{fill:none;stroke:var(--borda-forte);stroke-width:1.1}
-.grafico .linha.mediana{stroke:var(--verde);stroke-width:1.7}
+.grafico .linha.mediana{stroke:var(--creme);stroke-width:1.7}
 .grafico .rotulo-curva{font-family:var(--mono);font-size:7px;fill:var(--texto-3)}
 .grafico .eixo{stroke:var(--borda);stroke-width:1}
 .grafico .eixo-txt{font-family:var(--mono);font-size:8.5px;fill:var(--texto-3)}
-.grafico .marca-ponto{fill:var(--coral);stroke:var(--preto);stroke-width:2}
+.grafico .marca-ponto{fill:var(--coral);stroke:var(--tinta);stroke-width:2}
 .grafico .halo{fill:rgba(255,116,82,.22)}
 
 .nota-demo{
   padding:13px 16px;border-top:1px solid var(--borda);
-  font-size:.82rem;color:var(--texto-3);background:rgba(7,20,14,.35);
+  font-size:.82rem;color:var(--texto-3);background:rgba(19,18,14,.4);
 }
 
 /* ══════════════════════════════════════════════════════════════
    6. Telas do app
    ══════════════════════════════════════════════════════════════ */
 
-.telas{display:grid;gap:40px;margin-top:34px}
-.tela-bloco{display:grid;gap:20px;align-items:center}
+.telas{display:grid;gap:44px;margin-top:34px}
+.tela-bloco{display:grid;gap:22px;align-items:center}
 
 .fone{
   width:218px;margin:0 auto;position:relative;
-  /* moldura de 2px: é a borda do aparelho, não um contorno de cartão.
-     Fio de 1px com sombra larga é a assinatura de interface gerada. */
-  background:#071A12;border:2px solid var(--borda-forte);
+  background:#0B0A07;border:2px solid var(--borda-forte);
   border-radius:28px;padding:8px;
-  box-shadow:0 12px 22px rgba(0,0,0,.45);
+  box-shadow:0 12px 22px rgba(0,0,0,.5);
 }
 .fone-tela{
   background:#FFF8C9;border-radius:21px;overflow:hidden;
@@ -338,7 +395,7 @@ a:hover{text-decoration:underline}
 .legenda{font-size:.8rem;color:var(--texto-3);text-align:center;margin-top:12px;font-family:var(--mono)}
 
 /* ══════════════════════════════════════════════════════════════
-   7. Cartões, lista, equipe
+   7. Cartões e lista
    ══════════════════════════════════════════════════════════════ */
 
 .cartoes{display:grid;gap:14px;margin-top:28px}
@@ -358,83 +415,166 @@ a:hover{text-decoration:underline}
 .lista li{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;font-size:.93rem;color:var(--texto-2)}
 .lista svg{width:18px;height:18px;margin-top:3px;stroke:var(--verde)}
 
-.time{display:grid;gap:14px;margin-top:28px}
-.pessoa{
-  background:var(--superficie);border:1px solid var(--borda);
-  border-radius:var(--r);padding:22px 18px;text-align:center;
-  transition:border-color .25s ease,transform .25s ease;
-}
-.pessoa:hover{border-color:var(--borda-forte);transform:translateY(-2px)}
-.retrato,.retrato-vazio{
-  width:88px;height:88px;border-radius:50%;margin:0 auto 14px;display:block;
-}
-.retrato{object-fit:cover;border:2px solid var(--borda-forte)}
-.retrato-vazio{
-  background:linear-gradient(145deg,#153B29,#0C2418);
-  border:1px solid var(--borda-forte);
-  display:grid;place-items:center;
-  font-family:var(--mono);font-size:1.6rem;color:var(--verde);
-}
-.pessoa h3{margin-bottom:3px}
-.pessoa .papel{
-  font-family:var(--mono);font-size:.74rem;color:var(--verde);
-  text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;
-}
-.pessoa p{font-size:.88rem}
-
 /* ══════════════════════════════════════════════════════════════
-   8. Rodapé
+   8. Equipe — cartão com abertura em clip-path
+   Modelo do Bruno, trazido para a paleta do site. O botão redondo
+   abre um painel por cima com a descrição e as redes.
    ══════════════════════════════════════════════════════════════ */
 
-footer{background:var(--preto);border-top:1px solid var(--borda);padding:46px 0 36px}
-footer .nome{font-size:1.3rem;font-weight:600;margin-bottom:8px;letter-spacing:-.02em}
+.time{
+  display:grid;gap:18px;margin-top:30px;
+  justify-content:center;grid-template-columns:min(300px,100%);
+}
+
+.pessoa{
+  position:relative;border-radius:1.75rem;overflow:hidden;
+  aspect-ratio:3/4;background:var(--superficie);
+  border:1px solid var(--borda);
+}
+.pessoa__img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+/* sem foto ainda: gradiente com a inicial */
+.pessoa__vazio{
+  width:100%;height:100%;display:grid;place-items:center;
+  background:linear-gradient(150deg,#2B2619,#15140F);
+  /* #544C3B dava 1,8:1 sobre este gradiente — a inicial sumia.
+     #9A9279 dá 4,85:1 e continua discreta. */
+  font-family:var(--mono);font-size:4.5rem;color:#9A9279;
+  transition:transform .45s ease;
+}
+.pessoa:hover .pessoa__img,.pessoa:hover .pessoa__vazio{transform:scale(1.06)}
+
+.pessoa__sombra{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 52%,rgba(10,9,6,.92) 100%);
+}
+.pessoa__dados{position:absolute;left:1.25rem;right:1.25rem;bottom:1.5rem}
+.pessoa__nome{font-size:1.4rem;font-weight:600;color:var(--creme);margin-bottom:.2rem;line-height:1.1}
+.pessoa__papel{
+  display:block;font-family:var(--mono);font-size:.74rem;
+  color:var(--verde);text-transform:uppercase;letter-spacing:.07em;
+}
+
+/* [FITTS] 44px de alvo, não os 32px do protótipo: num celular,
+   32px é um alvo que se erra. */
+.pessoa__clip{
+  position:absolute;top:1rem;right:1rem;z-index:5;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--coral);color:var(--tinta);
+  border:0;cursor:pointer;display:grid;place-items:center;
+  transition:transform .4s ease;
+}
+.pessoa__clip svg{width:20px;height:20px;display:block}
+.pessoa:hover .pessoa__clip,.pessoa.aberta .pessoa__clip{transform:rotate(-45deg)}
+
+.info{
+  position:absolute;inset:0;
+  background:rgba(14,13,9,.58);backdrop-filter:blur(14px);
+  padding:4.6rem 1.4rem 1.4rem;color:var(--creme);
+  clip-path:circle(0px at calc(100% - 2.375rem) 2.375rem);
+  transition:clip-path .55s cubic-bezier(.22,1,.36,1);
+}
+/* o círculo cresce A PARTIR do botão, não do centro do cartão:
+   mesma origem nos dois estados, senão a posição também interpola
+   e a abertura sai torta */
+.pessoa:hover .info,
+.pessoa:focus-within .info,
+.pessoa.aberta .info{clip-path:circle(150% at calc(100% - 2.375rem) 2.375rem)}
+
+.info__nome{font-size:1.45rem;font-weight:600;margin-bottom:.4rem;line-height:1.1}
+.info__papel{
+  font-family:var(--mono);font-size:.72rem;color:var(--verde);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:.7rem;display:block;
+}
+.info__descricao{font-size:.87rem;color:var(--texto-2);line-height:1.5}
+
+.info__redes{position:absolute;left:1.4rem;bottom:1.4rem;display:flex;gap:.6rem}
+.info__link{
+  width:42px;height:42px;border-radius:.8rem;      /* [FITTS] */
+  display:grid;place-items:center;
+  background:var(--creme);color:var(--tinta);
+  transition:transform .3s ease;
+}
+.info__link:hover{transform:translateY(-3px);text-decoration:none}
+.info__link svg{width:20px;height:20px}
+/* placeholder enquanto as redes não chegam: mesma forma, sem link */
+.info__link.vazio{background:rgba(255,248,201,.16);color:var(--texto-3);cursor:default}
+.info__link.vazio:hover{transform:none}
+
+/* ══════════════════════════════════════════════════════════════
+   9. Rodapé
+   ══════════════════════════════════════════════════════════════ */
+
+footer{background:#0B0A07;border-top:1px solid var(--borda);padding:46px 0 36px}
+footer .nome{font-size:1.3rem;font-weight:600;margin-bottom:8px;letter-spacing:-.02em;color:var(--creme)}
 footer .nome span{color:var(--verde);font-weight:400}
-footer p{font-size:.88rem;max-width:48ch}
+footer p{font-size:.88rem;max-width:48ch;color:var(--texto-2)}
+footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 .rodape-fim{margin-top:28px;padding-top:20px;border-top:1px solid var(--borda)}
 .rodape-fim p{font-size:.81rem;color:var(--texto-3);max-width:62ch}
 .rodape-fim p + p{margin-top:10px}
 
 /* ══════════════════════════════════════════════════════════════
-   9. Revelação ao rolar
+   10. Revelação ao rolar, com direção
+   data-rev="baixo" | "esq" | "dir"
    ══════════════════════════════════════════════════════════════ */
 
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal{
+  opacity:0;
+  transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);
+}
+.reveal[data-rev="baixo"],.reveal:not([data-rev]){transform:translateY(24px)}
+.reveal[data-rev="esq"]{transform:translateX(-46px)}
+.reveal[data-rev="dir"]{transform:translateX(46px)}
 .reveal.visivel{opacity:1;transform:none}
-.reveal[data-atraso="1"]{transition-delay:.09s}
-.reveal[data-atraso="2"]{transition-delay:.18s}
-.reveal[data-atraso="3"]{transition-delay:.27s}
+.reveal[data-atraso="1"]{transition-delay:.1s}
+.reveal[data-atraso="2"]{transition-delay:.2s}
+.reveal[data-atraso="3"]{transition-delay:.3s}
 
 /* ══════════════════════════════════════════════════════════════
-   10. Telas maiores
+   11. Telas maiores
    ══════════════════════════════════════════════════════════════ */
 
 @media (min-width:720px){
   :root{--gutter:32px}
   .secao{padding:86px 0}
   h2{font-size:2.1rem}
-  .heroi{padding:96px 0 104px}
-  .heroi h1{font-size:3.4rem}
+  .heroi{padding:94px 0 104px}
+  .heroi h1{font-size:3.3rem}
   .heroi .lede{font-size:1.12rem}
   .topo nav{display:flex}
-  .metricas ul{grid-template-columns:repeat(4,1fr)}
+  .metricas ul{grid-template-columns:repeat(4,minmax(0,1fr))}
   .cartoes{grid-template-columns:repeat(3,1fr)}
-  .time{grid-template-columns:repeat(2,1fr)}
-  .tela-bloco{grid-template-columns:250px 1fr;gap:44px}
+  .time{grid-template-columns:repeat(2,minmax(0,290px))}
+  .tela-bloco{grid-template-columns:250px 1fr;gap:46px}
   .tela-bloco.espelho{grid-template-columns:1fr 250px}
   .tela-bloco.espelho .fone{order:2}
   .legenda{text-align:left}
-  .demo-corpo{grid-template-columns:330px 1fr}
-  .controles{border-bottom:0;border-right:1px solid var(--borda)}
+
+  /* No PC o campo não precisa ser alto: o mouse acerta 40px sem
+     esforço, e campo gigante só empurra o resultado para fora da
+     vista. Era a reclamação do Bruno. */
+  .demo-corpo{grid-template-columns:300px 1fr}
+  .controles{border-bottom:0;border-right:1px solid var(--borda);gap:12px;padding:18px}
+  .controles .campo input[type=number]{min-height:40px;font-size:.95rem}
+  .controles .alternador button{min-height:34px}
+  .painel .val{font-size:1.25rem}
 }
 @media (min-width:980px){
-  .time{grid-template-columns:repeat(4,1fr)}
+  .time{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 @media (max-width:719px){
   .tela-bloco.espelho > div:first-child{order:2}
 }
 
+/* Celular estreito: o painel vira duas colunas e o percentil ocupa
+   a linha inteira, em vez de espremer três valores em 320px. */
+@media (max-width:430px){
+  .painel{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .painel div:last-child{grid-column:1 / -1}
+}
+
 /* ══════════════════════════════════════════════════════════════
-   11. Quem pediu menos movimento recebe tudo parado
+   12. Quem pediu menos movimento recebe tudo parado
    ══════════════════════════════════════════════════════════════ */
 
 @media (prefers-reduced-motion:reduce){
