@@ -446,19 +446,24 @@ a:hover{text-decoration:underline}
   text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px;
 }
 
-/* botão que abre a lista de contribuições. [FITTS] 44px de altura e
-   a largura do cartão: é um alvo difícil de errar. */
+/* Botão que abre a prévia das contribuições: pequeno, tracejado e
+   sem preenchimento. 38px de altura é menos do que os 44 que eu
+   usaria por [FITTS] — mas o painel também abre no hover e no
+   teclado, então o botão não é o único caminho. */
 .pessoa__contrib{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  min-height:44px;padding:0 18px;width:100%;
-  border-radius:999px;cursor:pointer;font:inherit;font-size:.9rem;font-weight:600;
-  background:var(--verde-suave);color:var(--verde-escuro);
-  border:1px solid var(--borda);
-  transition:background .25s ease,border-color .25s ease,transform .25s ease;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:38px;padding:0 15px;
+  border-radius:9px;cursor:pointer;font:inherit;font-size:.78rem;font-weight:600;
+  background:transparent;color:var(--verde-link);
+  border:1.5px dashed var(--verde-link);
+  transition:background .25s ease,border-color .25s ease,color .25s ease,transform .25s ease;
 }
-.pessoa__contrib svg{width:16px;height:16px;transition:transform .35s ease}
-.pessoa:hover .pessoa__contrib{background:var(--verde-claro);border-color:var(--verde-faixa)}
-.pessoa__contrib:hover{transform:translateY(-2px)}
+.pessoa__contrib svg{width:14px;height:14px;transition:transform .35s ease}
+.pessoa:hover .pessoa__contrib{border-color:var(--verde-faixa)}
+.pessoa__contrib:hover{
+  background:var(--verde-suave);border-style:solid;
+  color:var(--verde-escuro);transform:translateY(-2px);
+}
 .pessoa__contrib:hover svg,.pessoa.aberta-contrib .pessoa__contrib svg{transform:rotate(180deg)}
 
 /* ── o botão ──
@@ -532,15 +537,73 @@ a:hover{text-decoration:underline}
   text-transform:uppercase;color:var(--verde-faixa);
   margin-bottom:12px;text-align:left;
 }
-.info--contrib ul{list-style:none;display:grid;gap:9px;text-align:left}
-.info--contrib li{
+.lista-contrib{list-style:none;display:grid;gap:9px;text-align:left}
+.lista-contrib li{
   display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start;
-  font-size:.84rem;line-height:1.4;color:rgba(255,248,201,.86);
+  font-size:.84rem;line-height:1.4;
 }
-.info--contrib li::before{
+.lista-contrib li::before{
   content:"";width:6px;height:6px;border-radius:50%;
   background:var(--verde-faixa);margin-top:.45em;
 }
+/* na prévia do cartão só cabem três — o resto fica no modal */
+.info--contrib .lista-contrib li{color:rgba(255,248,201,.86)}
+.info--contrib .lista-contrib li:nth-child(n+4){display:none}
+
+.info__mais{
+  margin-top:16px;justify-self:start;
+  display:inline-flex;align-items:center;gap:7px;
+  min-height:38px;padding:0 15px;border-radius:9px;cursor:pointer;
+  font:inherit;font-size:.78rem;font-weight:600;
+  background:transparent;color:var(--creme);
+  border:1.5px dashed rgba(255,248,201,.5);
+  transition:background .25s ease,border-color .25s ease;
+}
+.info__mais:hover{background:rgba(255,248,201,.14);border-style:solid;border-color:var(--verde-faixa)}
+.info__mais svg{width:14px;height:14px}
+.info__mais[hidden]{display:none}
+
+/* ── modal com a lista completa ── */
+.modal{
+  width:min(560px,calc(100vw - 32px));
+  /* margin:auto é o que centra um <dialog>. O reset `*{margin:0}`
+     lá em cima apaga o padrão do navegador, e sem isto o modal
+     nasce grudado no canto superior esquerdo. */
+  margin:auto;
+  /* elevação, sem fio de contorno: borda fina + sombra larga é
+     assinatura de interface gerada. O modal flutua, então fica só
+     a sombra. */
+  padding:0;border:0;border-radius:var(--r);
+  background:var(--creme);color:var(--texto);
+  box-shadow:0 24px 60px rgba(22,59,40,.34);
+}
+.modal::backdrop{background:rgba(12,32,21,.62)}
+.modal[open]{animation:modalEntra .3s cubic-bezier(.16,1,.3,1)}
+@keyframes modalEntra{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+
+.modal__topo{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:20px 20px 16px;border-bottom:1px solid var(--borda-creme);
+}
+.modal__topo h3{margin:0;font-size:1.15rem}
+.modal__topo .papel{
+  display:block;font-family:var(--mono);font-size:.7rem;color:var(--verde-link);
+  text-transform:uppercase;letter-spacing:.07em;margin-top:3px;
+}
+.modal__fechar{
+  margin-left:auto;flex:none;
+  width:44px;height:44px;border-radius:50%;      /* [FITTS] */
+  display:grid;place-items:center;cursor:pointer;
+  background:var(--verde-suave);color:var(--verde-escuro);
+  border:1px solid var(--borda);
+  transition:background .2s ease;
+}
+.modal__fechar:hover{background:var(--verde-claro)}
+.modal__fechar svg{width:18px;height:18px}
+
+.modal__corpo{padding:18px 20px 22px;max-height:62vh;overflow:auto}
+.modal__corpo .lista-contrib li{color:var(--texto-2);font-size:.9rem}
+.modal__corpo .lista-contrib li::before{background:var(--verde)}
 
 .info__nome{font-size:1.1rem;font-weight:600;color:var(--creme);line-height:1.2}
 .info__papel{

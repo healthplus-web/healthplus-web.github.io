@@ -22,6 +22,17 @@
   var $$ = function (s, e) { return Array.prototype.slice.call((e || document).querySelectorAll(s)); };
   var menosMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Numa tela alta, a faixa de indicadores já está visível quando a
+     página carrega. Sem esta espera os contadores correm ATRÁS da
+     tela de abertura, e quando ela sai os números já estão no fim —
+     parece que a animação nem existe. Mesma coisa para os blocos
+     que entram ao rolar. */
+  var aberturaPronta = new Promise(function (pronto) {
+    if (!document.getElementById('abertura')) return pronto();
+    document.addEventListener('abertura-saiu', function () { pronto(); }, { once: true });
+    setTimeout(pronto, 3800);                 // rede de segurança
+  });
+
   /* ═══════════════════════════════════════════════════════════
      1. ABERTURA
      Sai sozinha quando a animação acaba, ou no máximo em 3,2 s —
@@ -40,6 +51,7 @@
       jaSaiu = true;
       tela.classList.add('saiu');
       document.body.classList.remove('travado');
+      document.dispatchEvent(new CustomEvent('abertura-saiu'));
       setTimeout(function () { if (tela.parentNode) tela.parentNode.removeChild(tela); }, 900);
     }
 
@@ -64,15 +76,17 @@
       return;
     }
 
-    var observador = new IntersectionObserver(function (entradas) {
-      entradas.forEach(function (ent) {
-        if (!ent.isIntersecting) return;
-        ent.target.classList.add('visivel');
-        observador.unobserve(ent.target);
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    aberturaPronta.then(function () {
+      var observador = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (ent) {
+          if (!ent.isIntersecting) return;
+          ent.target.classList.add('visivel');
+          observador.unobserve(ent.target);
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
-    alvos.forEach(function (e) { observador.observe(e); });
+      alvos.forEach(function (e) { observador.observe(e); });
+    });
   })();
 
   /* ═══════════════════════════════════════════════════════════
@@ -115,14 +129,17 @@
     }
 
     if (!('IntersectionObserver' in window)) { nums.forEach(anima); return; }
-    var obs = new IntersectionObserver(function (ents) {
-      ents.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        anima(e.target);
-        obs.unobserve(e.target);
-      });
-    }, { threshold: 0.5 });
-    nums.forEach(function (e) { obs.observe(e); });
+
+    aberturaPronta.then(function () {
+      var obs = new IntersectionObserver(function (ents) {
+        ents.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          anima(e.target);
+          obs.unobserve(e.target);
+        });
+      }, { threshold: 0.5 });
+      nums.forEach(function (e) { obs.observe(e); });
+    });
   })();
 
   /* ═══════════════════════════════════════════════════════════
@@ -385,6 +402,40 @@
     // Esc também fecha, para quem está no teclado
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') fecharTodos();
+    });
+
+    /* ── modal com a lista completa ──
+       O cartão mostra as três primeiras contribuições; o resto já
+       está no HTML, escondido por CSS. O modal clona a lista
+       inteira, então a fonte da verdade continua sendo uma só. */
+    var modal = $('#modal-contrib');
+    if (!modal || !modal.showModal) return;
+
+    $$('.info__mais').forEach(function (botao) {
+      botao.addEventListener('click', function (e) {
+        e.preventDefault();
+        var card = botao.closest('.pessoa');
+        if (!card) return;
+
+        $('#modal-nome').textContent = card.dataset.nome || '';
+        $('#modal-papel').textContent = card.dataset.papel || '';
+
+        var destino = $('#modal-lista');
+        destino.textContent = '';
+        $$('.info--contrib .lista-contrib li', card).forEach(function (li) {
+          destino.appendChild(li.cloneNode(true));
+        });
+
+        modal.showModal();
+      });
+    });
+
+    var fechar = $('#modal-fechar');
+    if (fechar) fechar.addEventListener('click', function () { modal.close(); });
+
+    // clicar no fundo escuro fecha (o Esc o <dialog> já trata sozinho)
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) modal.close();
     });
   })();
 })();
