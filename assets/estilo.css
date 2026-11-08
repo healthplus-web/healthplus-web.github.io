@@ -1,47 +1,55 @@
 /* ══════════════════════════════════════════════════════════════
    HealthPlus Web — folha de estilo
 
-   Tema CLARO: o creme #FFF8C9 é o fundo da página, o mesmo fundo
-   das telas do aplicativo (app/tema/index.js). Os verdes e os
-   textos vêm do mesmo tema. O coral é reservado: só a ação
-   principal e o resultado do cálculo.
+   Paleta: cremes quentes e verdes do aplicativo. NENHUM branco e
+   NENHUM cinza na página — as superfícies claras são cremes de
+   profundidades diferentes, e os blocos de dado (as métricas e a
+   calculadora) são verde-escuro, como um painel de instrumento.
+
+   Todas as cores saem de app/tema/index.js.
 
    Mobile first. Toda animação respeita prefers-reduced-motion.
-
    Leis de usabilidade marcadas como [FITTS], [HICK], [ZEIGARNIK],
    [JAKOB], [META], [RESTORFF] e [MILLER]. Mapa no LEIA-ME.md.
    ══════════════════════════════════════════════════════════════ */
 
 :root{
-  /* a cor da marca: fundo da página */
-  --creme:#FFF8C9;
-  --creme-claro:#FFFDF0;
-  --branco:#FFFFFF;
+  /* três profundidades de creme, nenhuma delas branca */
+  --creme:#FFF8C9;          /* superfícies: cartões, campos */
+  --creme-fundo:#FAF0B8;    /* fundo da página */
+  --creme-alt:#F3E6A2;      /* seções alternadas */
 
-  /* verdes, direto de app/tema/index.js */
+  /* verdes, de app/tema/index.js */
   --verde-faixa:#5DB582;
-  --verde:#2B7D52;
+  /* #2B7D52 é o verdeBotao do app, desenhado para ter texto branco
+     por cima. Sobre o creme da página ele fica em 4,38:1, então
+     aqui o tom de traço e de texto é o verdeLink. */
+  --verde:#26764A;
   --verde-link:#26764A;
   --verde-escuro:#163B28;
   --verde-suave:#E7F5EB;
   --verde-claro:#D9F2C7;
 
+  /* dentro dos blocos escuros */
+  --painel:#1B4531;
+  --painel-campo:#102E1F;
+  --painel-borda:#2F6447;
+
   --borda:#B8D9C3;
-  --linha:#E4E7E2;
+  --borda-creme:#DFCE84;
 
   --texto:#1F2A24;
   --texto-2:#4A5751;
   --texto-3:#5B6660;
 
-  /* coral: só como FUNDO. Como texto sobre creme dá 2,48:1 e
-     reprova — para texto existe o --coral-txt. */
+  /* coral: só como FUNDO. Como texto sobre creme dá 2,48:1. */
   --coral:#FF7452;
   --coral-forte:#FF5C36;
   --coral-txt:#C2410C;
 
   --gutter:20px;
   --max:1100px;
-  --r:14px;
+  --r:16px;
 
   --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:'IBM Plex Sans',"Segoe UI",system-ui,-apple-system,sans-serif;
@@ -57,10 +65,9 @@ html{-webkit-text-size-adjust:100%;overflow-x:clip}
 
 body{
   font-family:var(--sans);
-  background:var(--creme);
+  background:var(--creme-fundo);
   color:var(--texto);
-  line-height:1.6;
-  font-size:16px;
+  line-height:1.6;font-size:16px;
   overflow-x:hidden;
 }
 body.travado{overflow:hidden}
@@ -80,8 +87,8 @@ a:hover{text-decoration:underline}
 :focus-visible{outline:2px solid var(--coral-txt);outline-offset:3px;border-radius:4px}
 
 .secao{padding:60px 0;position:relative}
-.secao.alt{background:var(--creme-claro)}
-.linha-topo{border-top:1px solid var(--borda)}
+.secao.alt{background:var(--creme-alt)}
+.linha-topo{border-top:1px solid var(--borda-creme)}
 
 .mono{
   font-family:var(--mono);font-size:.78rem;font-weight:500;
@@ -93,30 +100,19 @@ a:hover{text-decoration:underline}
    ══════════════════════════════════════════════════════════════ */
 
 .abertura{
-  position:fixed;inset:0;z-index:999;
-  background:var(--creme);
+  position:fixed;inset:0;z-index:999;background:var(--creme-fundo);
   display:grid;place-items:center;
   transition:opacity .7s ease,visibility .7s ease;
 }
 .abertura.saiu{opacity:0;visibility:hidden;pointer-events:none}
 .abertura-caixa{display:grid;justify-items:center;gap:22px}
 .marca-anim{width:132px;height:132px;display:block}
-
-.marca-anim .anel{
-  stroke-dasharray:553;stroke-dashoffset:553;
-  animation:desenha 1s cubic-bezier(.65,0,.35,1) forwards;
-}
-.marca-anim .curva{
-  stroke-dasharray:300;stroke-dashoffset:300;
-  animation:desenha .85s cubic-bezier(.65,0,.35,1) forwards;
-}
+.marca-anim .anel{stroke-dasharray:553;stroke-dashoffset:553;animation:desenha 1s cubic-bezier(.65,0,.35,1) forwards}
+.marca-anim .curva{stroke-dasharray:300;stroke-dashoffset:300;animation:desenha .85s cubic-bezier(.65,0,.35,1) forwards}
 .marca-anim .c1{animation-delay:.34s}
 .marca-anim .c2{animation-delay:.46s}
 .marca-anim .c3{animation-delay:.58s}
-.marca-anim .ponto{
-  transform-origin:100px 100px;transform:scale(0);
-  animation:brota .62s cubic-bezier(.16,1,.3,1) 1.02s forwards;
-}
+.marca-anim .ponto{transform-origin:100px 100px;transform:scale(0);animation:brota .62s cubic-bezier(.16,1,.3,1) 1.02s forwards}
 @keyframes desenha{to{stroke-dashoffset:0}}
 @keyframes brota{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 
@@ -132,23 +128,18 @@ a:hover{text-decoration:underline}
 @keyframes sobe{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* ══════════════════════════════════════════════════════════════
-   2. Topo
-   [JAKOB] marca à esquerda, navegação à direita, presa no alto
+   2. Topo — [JAKOB] marca à esquerda, navegação à direita
    ══════════════════════════════════════════════════════════════ */
 
 .topo{
   position:sticky;top:0;z-index:60;
-  background:rgba(255,248,201,.88);
+  background:rgba(250,240,184,.9);
   backdrop-filter:saturate(170%) blur(14px);
-  border-bottom:1px solid transparent;
-  transition:border-color .3s ease;
+  border-bottom:1px solid transparent;transition:border-color .3s ease;
 }
-.topo.rolou{border-bottom-color:var(--borda)}
+.topo.rolou{border-bottom-color:var(--borda-creme)}
 .topo .env{display:flex;align-items:center;gap:10px;height:64px}
-.topo .marca{
-  display:flex;align-items:center;gap:9px;color:var(--verde-escuro);
-  text-decoration:none;padding:6px 4px;
-}
+.topo .marca{display:flex;align-items:center;gap:9px;color:var(--verde-escuro);text-decoration:none;padding:6px 4px}
 .topo .marca:hover{text-decoration:none}
 .topo .marca img{width:28px;height:28px}
 .topo .marca span{font-size:1.1rem;font-weight:600;letter-spacing:-.02em}
@@ -159,21 +150,20 @@ a:hover{text-decoration:underline}
   font-size:.9rem;color:var(--texto-2);text-decoration:none;
   padding:10px 14px;border-radius:8px;transition:color .2s,background .2s;
 }
-.topo nav a:hover{color:var(--verde-escuro);background:var(--verde-suave);text-decoration:none}
+.topo nav a:hover{color:var(--verde-escuro);background:var(--creme);text-decoration:none}
 
 /* ══════════════════════════════════════════════════════════════
    3. Herói
    ══════════════════════════════════════════════════════════════ */
 
 .heroi{
-  position:relative;overflow:hidden;
-  padding:60px 0 78px;
+  position:relative;overflow:hidden;padding:60px 0 78px;
   background:
-    radial-gradient(90% 70% at 80% 4%, rgba(93,181,130,.22), transparent 60%),
-    radial-gradient(70% 60% at 2% 98%, rgba(255,116,82,.12), transparent 58%),
+    radial-gradient(90% 70% at 80% 2%, rgba(93,181,130,.3), transparent 58%),
+    radial-gradient(70% 60% at 0% 100%, rgba(255,116,82,.14), transparent 56%),
     var(--creme);
 }
-.heroi .curvas{position:absolute;inset:0;width:100%;height:100%;opacity:.42;pointer-events:none}
+.heroi .curvas{position:absolute;inset:0;width:100%;height:100%;opacity:.4;pointer-events:none}
 .heroi .curvas path{
   fill:none;stroke:var(--verde);stroke-width:1.1;stroke-linecap:round;
   stroke-dasharray:1200;stroke-dashoffset:1200;
@@ -186,7 +176,8 @@ a:hover{text-decoration:underline}
 .heroi .env{position:relative;z-index:1}
 .heroi .mono{display:block;margin-bottom:16px}
 .heroi h1{font-size:2.25rem;margin-bottom:18px;max-width:17ch}
-.heroi h1 em{font-style:normal;color:var(--verde)}
+/* --verde-link, não --verde: sobre creme o #2B7D52 fica em 4,38:1 */
+.heroi h1 em{font-style:normal;color:var(--verde-link)}
 .heroi .lede{font-size:1.04rem;max-width:54ch}
 
 /* [HICK] uma ação principal e uma secundária. Nunca três. */
@@ -203,10 +194,10 @@ a:hover{text-decoration:underline}
 .btn:active{transform:translateY(1px)}
 /* [RESTORFF] o coral aparece em pouquíssimos lugares da página
    inteira: esta ação, o ponto do gráfico, o resultado e o botão
-   dos cartões da equipe. É o que faz o olho ir neles. */
+   dos cartões da equipe. */
 .btn-1{background:var(--coral);color:var(--texto)}
 .btn-1:hover{background:var(--coral-forte)}
-.btn-2{border-color:var(--borda);color:var(--verde-escuro);background:var(--branco)}
+.btn-2{border-color:var(--verde);color:var(--verde-escuro);background:transparent}
 .btn-2:hover{background:var(--verde-suave)}
 
 .rolar{
@@ -215,100 +206,87 @@ a:hover{text-decoration:underline}
   font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;
   color:var(--texto-3);z-index:1;
 }
-.rolar i{
-  display:block;width:1px;height:26px;
-  background:linear-gradient(var(--verde),transparent);
-  animation:desce 1.8s ease-in-out infinite;
-}
+.rolar i{display:block;width:1px;height:26px;background:linear-gradient(var(--verde),transparent);animation:desce 1.8s ease-in-out infinite}
 @keyframes desce{0%,100%{opacity:.25;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
 
 /* ══════════════════════════════════════════════════════════════
-   4. Métricas
+   4. Métricas — faixa verde-escura, não cinza
    [MILLER] quatro números, não oito.
    ══════════════════════════════════════════════════════════════ */
 
-.metricas{background:var(--verde-suave);border-block:1px solid var(--borda);padding:30px 0}
-.metricas ul{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}
+.metricas{background:var(--verde-escuro);padding:34px 0}
+.metricas ul{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 16px}
 .metricas li{min-width:0}
 .metricas .num{
   display:block;font-family:var(--mono);font-weight:600;
-  font-size:clamp(1.3rem,6vw,1.7rem);
-  color:var(--verde-escuro);line-height:1.1;font-variant-numeric:tabular-nums;
+  font-size:clamp(1.35rem,6vw,1.8rem);
+  color:var(--creme);line-height:1.1;font-variant-numeric:tabular-nums;
 }
-.metricas .rot{display:block;font-size:.82rem;color:var(--texto-3);line-height:1.35;margin-top:7px}
+.metricas .rot{display:block;font-size:.82rem;color:rgba(255,248,201,.72);line-height:1.35;margin-top:7px}
 
 /* ══════════════════════════════════════════════════════════════
-   5. Calculadora
+   5. Calculadora — painel de instrumento, verde-escuro
    ══════════════════════════════════════════════════════════════ */
 
 .demo{
   margin-top:26px;
-  background:var(--branco);border:1px solid var(--borda);
+  /* moldura de 2px: é um painel de instrumento, não um cartão.
+     Fio de 1px com sombra larga é assinatura de interface gerada. */
+  background:var(--verde-escuro);border:2px solid var(--painel-borda);
   border-radius:var(--r);overflow:hidden;
+  box-shadow:0 10px 20px rgba(22,59,40,.18);
 }
 .demo-cabeca{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  padding:12px 16px;border-bottom:1px solid var(--borda);
-  background:var(--verde-suave);
+  padding:12px 16px;border-bottom:1px solid var(--painel-borda);
+  background:var(--painel);
 }
-.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--verde);flex:none}
-.demo-cabeca .mono{min-width:0}
+.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--verde-faixa);flex:none}
+.demo-cabeca .mono{min-width:0;color:rgba(255,248,201,.65)}
 
 /* [ZEIGARNIK] + [META] — mostra o que falta para o resultado ficar
-   pronto. Campo vazio deixa a tarefa visivelmente inacabada; a
-   barra enchendo puxa para terminar, e vira coral ao fechar. */
+   pronto; a barra enchendo puxa para terminar e vira coral ao fechar. */
 .progresso{
   margin-left:auto;display:flex;align-items:center;gap:9px;
-  font-family:var(--mono);font-size:.7rem;color:var(--texto-3);white-space:nowrap;
+  font-family:var(--mono);font-size:.7rem;color:rgba(255,248,201,.65);white-space:nowrap;
 }
-.progresso .trilho{width:58px;height:4px;border-radius:999px;background:var(--borda);overflow:hidden}
-/* scaleX em vez de width: animar largura recalcula layout a cada
-   quadro; transform roda na composição. */
+.progresso .trilho{width:58px;height:4px;border-radius:999px;background:rgba(255,248,201,.2);overflow:hidden}
+/* scaleX em vez de width: animar largura recalcula layout a cada quadro */
 .progresso .trilho i{
-  display:block;height:100%;width:100%;border-radius:999px;
-  background:var(--verde);
+  display:block;height:100%;width:100%;border-radius:999px;background:var(--verde-faixa);
   transform:scaleX(0);transform-origin:left center;
   transition:transform .45s cubic-bezier(.22,1,.36,1);
 }
-.progresso.completo{color:var(--coral-txt)}
+.progresso.completo{color:#FFB199}
 .progresso.completo .trilho i{background:var(--coral)}
 
 .demo-corpo{display:grid}
-
-.controles{
-  padding:16px;display:grid;gap:13px;align-content:start;
-  border-bottom:1px solid var(--borda);
-}
+.controles{padding:16px;display:grid;gap:13px;align-content:start;border-bottom:1px solid var(--painel-borda)}
 
 .campo{display:grid;gap:6px;min-width:0}
 .campo > label,.campo > .rotulo{
   font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
-  color:var(--texto-3);text-transform:uppercase;
+  color:rgba(255,248,201,.6);text-transform:uppercase;
 }
 .campo input[type=number]{
-  width:100%;min-width:0;
-  min-height:var(--alvo);padding:0 12px;        /* [FITTS] */
+  width:100%;min-width:0;min-height:var(--alvo);padding:0 12px;   /* [FITTS] */
   font-size:1rem;font-family:var(--mono);
-  background:var(--branco);color:var(--texto);
-  border:1px solid var(--borda);border-radius:9px;
+  background:var(--painel-campo);color:var(--creme);
+  border:1px solid var(--painel-borda);border-radius:9px;
 }
-/* #9AA39E dá 2,59:1 e é ilegível — é o mesmo erro que o
-   app/tema/index.js já tinha corrigido, com o comentário
-   "era #9AA39E: 2,6:1, ilegível". #6B7570 dá 4,77:1. */
-.campo input[type=number]::placeholder{color:#6B7570;opacity:1}
-.campo input[type=number]:focus{border-color:var(--verde);outline:none;box-shadow:0 0 0 3px rgba(43,125,82,.14)}
+/* #9AA39E dá 2,6:1 e é ilegível — o próprio app/tema/index.js já
+   marcou esse erro. Aqui o placeholder é creme a 52%. */
+.campo input[type=number]::placeholder{color:rgba(255,248,201,.52);opacity:1}
+.campo input[type=number]:focus{border-color:var(--verde-faixa);outline:none;box-shadow:0 0 0 3px rgba(93,181,130,.22)}
 
-.alternador{
-  display:flex;gap:5px;background:var(--verde-suave);
-  border:1px solid var(--borda);border-radius:9px;padding:4px;
-}
+.alternador{display:flex;gap:5px;background:var(--painel-campo);border:1px solid var(--painel-borda);border-radius:9px;padding:4px}
 .alternador button{
   flex:1;min-width:0;min-height:40px;                 /* [FITTS] */
   border:0;border-radius:6px;cursor:pointer;
-  background:transparent;color:var(--texto-2);font:inherit;font-size:.9rem;
+  background:transparent;color:rgba(255,248,201,.72);font:inherit;font-size:.9rem;
   transition:background .18s,color .18s;
 }
-.alternador button[aria-pressed=true]{background:var(--verde);color:#fff;font-weight:600}
+.alternador button[aria-pressed=true]{background:var(--creme);color:var(--verde-escuro);font-weight:600}
 
 .dupla{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 
@@ -317,17 +295,14 @@ a:hover{text-decoration:underline}
 /* min-width:0 em tudo: sem isso um item de grid se recusa a
    encolher abaixo do conteúdo e o valor estoura a caixa. */
 .painel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.painel div{
-  min-width:0;background:var(--creme-claro);border:1px solid var(--linha);
-  border-radius:10px;padding:10px;
-}
+.painel div{min-width:0;background:var(--painel);border:1px solid var(--painel-borda);border-radius:10px;padding:10px}
 .painel .rot{
   font-family:var(--mono);font-size:.64rem;letter-spacing:.04em;
-  color:var(--texto-3);text-transform:uppercase;
+  color:rgba(255,248,201,.6);text-transform:uppercase;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .painel .val{
-  font-family:var(--mono);font-weight:600;color:var(--verde-escuro);
+  font-family:var(--mono);font-weight:600;color:var(--creme);
   font-size:clamp(.95rem,4.6vw,1.25rem);
   line-height:1.15;margin-top:3px;font-variant-numeric:tabular-nums;
   overflow-wrap:anywhere;
@@ -339,24 +314,24 @@ a:hover{text-decoration:underline}
   min-height:42px;padding:0 16px;border-radius:999px;
   font-weight:600;font-size:.93rem;border:1px solid;max-width:100%;
 }
-.selo-classe.adequado{background:var(--verde-claro);border-color:#8FCBA4;color:#17512F}
-.selo-classe.atencao{background:#FFEFB3;border-color:#E6C65C;color:#7A4E00}
-.selo-classe.risco{background:#FFE3DA;border-color:#F0A68E;color:#A3300A}
-.selo-classe.vazio{background:var(--creme-claro);border-color:var(--linha);color:var(--texto-3);font-weight:400}
+.selo-classe.adequado{background:rgba(93,181,130,.2);border-color:#5DB582;color:#A9E8C4}
+.selo-classe.atencao{background:rgba(255,200,90,.16);border-color:#C9A64A;color:#FFD079}
+.selo-classe.risco{background:rgba(255,116,82,.2);border-color:var(--coral);color:#FFB199}
+.selo-classe.vazio{background:transparent;border-color:var(--painel-borda);color:rgba(255,248,201,.6);font-weight:400}
 
 .grafico{padding:0 8px 14px}
 .grafico svg{width:100%;height:auto;display:block;overflow:visible}
-.grafico .linha{fill:none;stroke:#C7D6CC;stroke-width:1.1}
-.grafico .linha.mediana{stroke:var(--verde);stroke-width:1.8}
-.grafico .rotulo-curva{font-family:var(--mono);font-size:7px;fill:var(--texto-3)}
-.grafico .eixo{stroke:var(--linha);stroke-width:1}
-.grafico .eixo-txt{font-family:var(--mono);font-size:8.5px;fill:var(--texto-3)}
-.grafico .marca-ponto{fill:var(--coral);stroke:#fff;stroke-width:2}
-.grafico .halo{fill:rgba(255,116,82,.25)}
+.grafico .linha{fill:none;stroke:#3C7A5B;stroke-width:1.1}
+.grafico .linha.mediana{stroke:var(--creme);stroke-width:1.8}
+.grafico .rotulo-curva{font-family:var(--mono);font-size:7px;fill:rgba(255,248,201,.6)}
+.grafico .eixo{stroke:rgba(255,248,201,.14);stroke-width:1}
+.grafico .eixo-txt{font-family:var(--mono);font-size:8.5px;fill:rgba(255,248,201,.6)}
+.grafico .marca-ponto{fill:var(--coral);stroke:var(--verde-escuro);stroke-width:2}
+.grafico .halo{fill:rgba(255,116,82,.3)}
 
 .nota-demo{
-  padding:13px 16px;border-top:1px solid var(--borda);
-  font-size:.82rem;color:var(--texto-3);background:var(--creme-claro);
+  padding:13px 16px;border-top:1px solid var(--painel-borda);
+  font-size:.82rem;color:rgba(255,248,201,.62);background:var(--painel);
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -369,8 +344,7 @@ a:hover{text-decoration:underline}
 .fone{
   width:218px;margin:0 auto;position:relative;
   background:var(--verde-escuro);border:2px solid #0E2A1C;
-  border-radius:28px;padding:8px;
-  box-shadow:0 12px 22px rgba(22,59,40,.22);
+  border-radius:28px;padding:8px;box-shadow:0 12px 22px rgba(22,59,40,.24);
 }
 .fone-tela{
   background:var(--creme);border-radius:21px;overflow:hidden;
@@ -382,17 +356,17 @@ a:hover{text-decoration:underline}
 .fone-topo .tit{font-size:14px;font-weight:600;margin-top:2px;letter-spacing:-.01em}
 .fone-corpo{padding:11px;display:flex;flex-direction:column;gap:8px;overflow:hidden;flex:1}
 
-.fcard{background:#fff;border:1px solid var(--borda);border-radius:10px;padding:9px 10px}
+.fcard{background:#FFFDF0;border:1px solid var(--borda);border-radius:10px;padding:9px 10px}
 .fcard .rot{font-size:8px;color:var(--texto-3);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
 .fcard .val{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--verde-escuro);line-height:1.1;margin-top:2px}
 .fcard .sub{font-size:8.5px;color:var(--texto-3);margin-top:2px}
 .pill{display:inline-block;font-size:8px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--verde-claro);color:#1B5235}
 .pill.aten{background:#FFEFB3;color:#7A4E00}
 .flinha{display:flex;justify-content:space-between;align-items:baseline;font-size:9px}
-.flinha + .flinha{margin-top:5px;padding-top:5px;border-top:1px solid var(--linha)}
+.flinha + .flinha{margin-top:5px;padding-top:5px;border-top:1px solid var(--borda)}
 .flinha b{font-family:var(--mono);font-size:10px;color:var(--verde-escuro)}
 .flinha span{color:var(--texto-3)}
-.fbarra{height:5px;border-radius:999px;background:var(--linha);overflow:hidden;margin-top:5px}
+.fbarra{height:5px;border-radius:999px;background:var(--verde-suave);overflow:hidden;margin-top:5px}
 .fbarra i{display:block;height:100%;background:var(--verde);border-radius:999px}
 
 .legenda{font-size:.8rem;color:var(--texto-3);text-align:center;margin-top:12px;font-family:var(--mono)}
@@ -403,12 +377,12 @@ a:hover{text-decoration:underline}
 
 .cartoes{display:grid;gap:14px;margin-top:28px}
 .cartao{
-  background:var(--branco);border:1px solid var(--borda);
+  background:var(--creme);border:1px solid var(--borda-creme);
   border-radius:var(--r);padding:20px;
   display:grid;grid-template-columns:auto 1fr;gap:0 11px;align-items:center;
   transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease;
 }
-.cartao:hover{border-color:var(--verde-faixa);transform:translateY(-2px);box-shadow:0 8px 18px rgba(22,59,40,.08)}
+.cartao:hover{border-color:var(--verde-faixa);transform:translateY(-2px);box-shadow:0 10px 20px rgba(22,59,40,.1)}
 .cartao .ico{grid-row:1}
 .cartao .ico svg{width:22px;height:22px;display:block;stroke:var(--verde)}
 .cartao h3{grid-row:1;margin-bottom:0}
@@ -419,106 +393,114 @@ a:hover{text-decoration:underline}
 .lista svg{width:18px;height:18px;margin-top:3px;stroke:var(--verde)}
 
 /* ══════════════════════════════════════════════════════════════
-   8. Equipe — cartão com abertura em clip-path
+   8. Equipe
+   Cartão de conteúdo (retrato redondo, nome, função, descrição),
+   com o botão no canto e o painel das redes abrindo por cima.
 
-   IMPORTANTE: o painel abre pelo BOTÃO, não por passar o mouse no
-   cartão — é como estava no protótipo original do Bruno.
+   A animação é a do PowerPoint do Bruno: um retângulo arredondado
+   pequeno, centrado no botão, que CRESCE até ocupar o cartão
+   inteiro. Em CSS isso é clip-path: inset() — as porcentagens
+   abaixo são as do slide 1 (fechado) e do slide 2 (aberto).
    ══════════════════════════════════════════════════════════════ */
 
-.time{
-  display:grid;gap:18px;margin-top:30px;
-  justify-content:center;grid-template-columns:min(300px,100%);
-}
+.time{display:grid;gap:16px;margin-top:30px}
 
 .pessoa{
-  position:relative;border-radius:1.75rem;overflow:hidden;
-  aspect-ratio:3/4;background:var(--verde-escuro);
-  box-shadow:0 10px 24px rgba(22,59,40,.14);
+  position:relative;overflow:hidden;
+  background:var(--creme);border:1px solid var(--borda-creme);
+  border-radius:var(--r);padding:26px 20px 24px;text-align:center;
+  transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;
 }
-.pessoa__img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
-/* sem foto ainda: gradiente verde com a inicial */
-.pessoa__vazio{
-  width:100%;height:100%;display:grid;place-items:center;
-  background:linear-gradient(150deg,#2E6B4C,#12301F);
-  font-family:var(--mono);font-size:4.5rem;color:rgba(255,248,201,.5);
-  transition:transform .45s ease;
-}
-.pessoa:hover .pessoa__img,.pessoa:hover .pessoa__vazio{transform:scale(1.06)}
+.pessoa:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(22,59,40,.14);border-color:var(--verde-faixa)}
 
-.pessoa__sombra{
-  position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 50%,rgba(8,20,13,.92) 100%);
+.retrato,.retrato-vazio{width:92px;height:92px;border-radius:50%;margin:0 auto 14px;display:block}
+.retrato{object-fit:cover;border:2px solid var(--borda)}
+/* o gradiente começa em #246B46, não no #5DB582: sobre o verde
+   claro a inicial creme dava 2,32:1 e sumia. Assim dá 5,98:1 na
+   ponta mais clara. */
+.retrato-vazio{
+  background:linear-gradient(150deg,#246B46,var(--verde-escuro));
+  display:grid;place-items:center;
+  font-family:var(--mono);font-size:2rem;color:var(--creme);
 }
-.pessoa__dados{position:absolute;left:1.25rem;right:1.25rem;bottom:1.5rem}
-.pessoa__nome{font-size:1.4rem;font-weight:600;color:var(--creme);margin-bottom:.2rem;line-height:1.1}
+.pessoa__nome{font-size:1.12rem;font-weight:600;color:var(--verde-escuro);margin-bottom:3px;line-height:1.2}
 .pessoa__papel{
-  display:block;font-family:var(--mono);font-size:.74rem;
-  color:var(--verde-faixa);text-transform:uppercase;letter-spacing:.07em;
+  display:block;font-family:var(--mono);font-size:.72rem;color:var(--verde-link);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;
 }
+.pessoa__texto{font-size:.88rem;color:var(--texto-2)}
 
-/* [FITTS] 44px de alvo, não os 32px do protótipo: num celular,
-   32px é um alvo que se erra. */
+/* ── o botão ──
+   [FITTS] 44px. Ao passar o mouse NO CARTÃO ele cresce, ganha um
+   anel e muda de cor: o convite a clicar tem de ser maior que um
+   giro discreto. */
 .pessoa__clip{
-  position:absolute;top:1rem;right:1rem;z-index:5;
+  position:absolute;top:14px;right:14px;z-index:6;
   width:44px;height:44px;border-radius:50%;
   background:var(--coral);color:var(--texto);
   border:0;cursor:pointer;display:grid;place-items:center;
-  /* sombra com deslocamento, não brilho colorido: o halo de cor
-     sem offset é cacoete de interface gerada e, sobre foto clara,
-     some. A sombra separa o botão de qualquer fundo. */
-  box-shadow:0 4px 12px rgba(10,26,18,.38);
-  transition:transform .4s ease,background .25s ease;
+  box-shadow:0 4px 10px rgba(22,59,40,.26);
+  transition:transform .35s cubic-bezier(.16,1,.3,1),background .25s ease,box-shadow .3s ease;
 }
-.pessoa__clip svg{width:20px;height:20px;display:block}
-/* como no protótipo: o ícone gira quando o mouse entra no CARD —
-   é o aviso de "tem algo aqui". O painel, esse só abre no botão. */
-.pessoa:hover .pessoa__clip,
-.pessoa.aberta .pessoa__clip{transform:rotate(-45deg)}
+.pessoa__clip svg{width:20px;height:20px;display:block;transition:transform .35s ease}
+.pessoa__clip::after{
+  content:"";position:absolute;inset:-7px;border-radius:50%;
+  border:2px solid var(--coral);
+  opacity:0;transform:scale(.8);
+  transition:opacity .35s ease,transform .35s cubic-bezier(.16,1,.3,1);
+}
+.pessoa:hover .pessoa__clip{
+  transform:scale(1.18);
+  box-shadow:0 8px 20px rgba(255,116,82,.45);
+}
+.pessoa:hover .pessoa__clip::after{opacity:.55;transform:scale(1)}
+.pessoa:hover .pessoa__clip svg,
+.pessoa.aberta .pessoa__clip svg{transform:rotate(-45deg)}
 .pessoa__clip:hover{background:var(--coral-forte)}
+.pessoa.aberta .pessoa__clip{transform:scale(1.08)}
+.pessoa.aberta .pessoa__clip::after{opacity:0}
 
+/* ── o painel ──
+   fechado: um retângulo arredondado de ~10% × 7% do cartão,
+   centrado no botão (slide 1).
+   aberto: o cartão inteiro (slide 2). */
 .info{
-  position:absolute;inset:0;
-  background:rgba(10,26,18,.55);backdrop-filter:blur(14px);
-  padding:4.6rem 1.4rem 1.4rem;color:var(--creme);
-  clip-path:circle(0px at calc(100% - 2.375rem) 2.375rem);
+  position:absolute;inset:0;z-index:5;
+  background:var(--verde-escuro);
+  padding:22px 20px;
+  display:grid;align-content:center;justify-items:center;gap:4px;
+  clip-path:inset(6.9% 13.9% 85.8% 75.8% round 22px);
   transition:clip-path .55s cubic-bezier(.22,1,.36,1);
 }
-/* abre pelo botão (ou com o painel já aberto sob o mouse), e pela
-   classe .aberta que o toque e o teclado colocam. O cartão inteiro
-   NÃO abre no hover. */
 .pessoa__clip:hover ~ .info,
 .pessoa__clip:focus-visible ~ .info,
 .info:hover,
 .info:focus-within,
-.pessoa.aberta .info{clip-path:circle(150% at calc(100% - 2.375rem) 2.375rem)}
+.pessoa.aberta .info{clip-path:inset(0% 0% 0% 0% round 15px)}
 
-.info__nome{font-size:1.45rem;font-weight:600;margin-bottom:.4rem;line-height:1.1;color:var(--creme)}
+.info__nome{font-size:1.1rem;font-weight:600;color:var(--creme);line-height:1.2}
 .info__papel{
-  font-family:var(--mono);font-size:.72rem;color:var(--verde-faixa);
-  text-transform:uppercase;letter-spacing:.07em;margin-bottom:.7rem;display:block;
+  font-family:var(--mono);font-size:.7rem;color:var(--verde-faixa);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px;
 }
-.info__descricao{font-size:.87rem;color:rgba(255,248,201,.86);line-height:1.5}
-
-.info__redes{position:absolute;left:1.4rem;bottom:1.4rem;display:flex;gap:.6rem}
+.info__redes{display:flex;gap:.6rem;justify-content:center}
 .info__link{
-  width:44px;height:44px;border-radius:.85rem;      /* [FITTS] */
+  width:46px;height:46px;border-radius:.9rem;      /* [FITTS] */
   display:grid;place-items:center;
   background:rgba(255,248,201,.14);color:var(--creme);
-  border:1px solid rgba(255,248,201,.25);
+  border:1px solid rgba(255,248,201,.28);
   transition:transform .28s ease,background .28s ease,color .28s ease,border-color .28s ease;
 }
-/* o ícone muda de verdade ao passar o mouse (e ao tocar, no
-   celular, onde :active responde ao toque) */
+/* o ícone muda de verdade no hover, no foco e no toque */
 .info__link:hover,
 .info__link:focus-visible,
 .info__link:active{
   background:var(--coral);color:var(--texto);border-color:var(--coral);
-  transform:translateY(-4px) scale(1.06);text-decoration:none;
+  transform:translateY(-4px) scale(1.08);text-decoration:none;
 }
-.info__link svg{width:20px;height:20px}
-/* placeholder enquanto as redes não chegam: mesma forma, sem link */
-.info__link.vazio{opacity:.45;cursor:default}
-.info__link.vazio:hover{transform:none;background:rgba(255,248,201,.14);color:var(--creme);border-color:rgba(255,248,201,.25)}
+.info__link svg{width:21px;height:21px}
+.info__link.vazio{opacity:.4;cursor:default}
+.info__link.vazio:hover{transform:none;background:rgba(255,248,201,.14);color:var(--creme);border-color:rgba(255,248,201,.28)}
 
 /* ══════════════════════════════════════════════════════════════
    9. Rodapé
@@ -537,10 +519,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
    10. Revelação ao rolar, com direção
    ══════════════════════════════════════════════════════════════ */
 
-.reveal{
-  opacity:0;
-  transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);
-}
+.reveal{opacity:0;transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
 .reveal[data-rev="baixo"],.reveal:not([data-rev]){transform:translateY(24px)}
 .reveal[data-rev="esq"]{transform:translateX(-46px)}
 .reveal[data-rev="dir"]{transform:translateX(46px)}
@@ -563,7 +542,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   .topo nav{display:flex}
   .metricas ul{grid-template-columns:repeat(4,minmax(0,1fr))}
   .cartoes{grid-template-columns:repeat(3,1fr)}
-  .time{grid-template-columns:repeat(2,minmax(0,290px))}
+  .time{grid-template-columns:repeat(2,minmax(0,1fr))}
   .tela-bloco{grid-template-columns:250px 1fr;gap:46px}
   .tela-bloco.espelho{grid-template-columns:1fr 250px}
   .tela-bloco.espelho .fone{order:2}
@@ -572,7 +551,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   /* No PC o campo não precisa ser alto: o mouse acerta 40px sem
      esforço, e campo gigante empurra o resultado para fora da vista. */
   .demo-corpo{grid-template-columns:300px 1fr}
-  .controles{border-bottom:0;border-right:1px solid var(--borda);gap:12px;padding:18px}
+  .controles{border-bottom:0;border-right:1px solid var(--painel-borda);gap:12px;padding:18px}
   .controles .campo input[type=number]{min-height:40px;font-size:.95rem}
   .controles .alternador button{min-height:34px}
   .painel .val{font-size:1.25rem}
