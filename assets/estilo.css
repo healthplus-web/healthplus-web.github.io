@@ -522,11 +522,14 @@ a:hover{text-decoration:underline}
 
 .info__link .agua{
   position:absolute;left:0;right:0;bottom:0;height:100%;z-index:1;
-  transform:translateY(100%);
+  /* em repouso a bolha inteira tem de ficar ABAIXO do botão. Como
+     ela começa 12px acima do topo da caixa, a caixa desce 100% + 12px
+     — senão a cor aparece sem ninguém passar o mouse. */
+  transform:translateY(calc(100% + 12px));
   transition:transform .6s cubic-bezier(.3,.85,.35,1);
 }
 .info__link .agua i{
-  position:absolute;left:50%;top:-86%;
+  position:absolute;left:50%;top:-12px;
   width:240%;aspect-ratio:1;margin-left:-120%;
   background:var(--cor-rede,var(--coral));
   border-radius:43% 46% 41% 44%;
@@ -540,9 +543,11 @@ a:hover{text-decoration:underline}
 .info__link:active{
   transform:translateY(-5px);color:#fff;border-color:transparent;text-decoration:none;
 }
+/* cheio: a linha d'água para a uns 13px do topo, deixando a onda
+   visível dentro do botão em vez de afogar o ícone inteiro */
 .info__link:hover .agua,
 .info__link:focus-visible .agua,
-.info__link:active .agua{transform:translateY(16%)}
+.info__link:active .agua{transform:translateY(55%)}
 
 /* as cores de cada rede */
 .info__link[data-rede="instagram"]{--cor-rede:#E1306C}
@@ -552,7 +557,7 @@ a:hover{text-decoration:underline}
 /* placeholder enquanto as redes não chegam: não enche */
 .info__link.vazio{opacity:.4;cursor:default}
 .info__link.vazio:hover,.info__link.vazio:active{transform:none;color:var(--creme);border-color:rgba(255,248,201,.28)}
-.info__link.vazio:hover .agua,.info__link.vazio:active .agua{transform:translateY(100%)}
+.info__link.vazio:hover .agua,.info__link.vazio:active .agua{transform:translateY(calc(100% + 12px))}
 
 /* ══════════════════════════════════════════════════════════════
    9. Rodapé

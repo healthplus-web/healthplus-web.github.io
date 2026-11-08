@@ -333,6 +333,14 @@
     var cards = $$('.pessoa');
     if (!cards.length) return;
 
+    function fecharTodos() {
+      cards.forEach(function (o) {
+        o.classList.remove('aberta');
+        var b = $('.pessoa__clip', o);
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+    }
+
     cards.forEach(function (card) {
       var botao = $('.pessoa__clip', card);
       if (!botao) return;
@@ -340,24 +348,25 @@
       botao.addEventListener('click', function (e) {
         e.preventDefault();
         var abrindo = !card.classList.contains('aberta');
-        cards.forEach(function (o) {
-          o.classList.remove('aberta');
-          var b = $('.pessoa__clip', o);
-          if (b) b.setAttribute('aria-expanded', 'false');
-        });
+        fecharTodos();                       // um aberto por vez
         card.classList.toggle('aberta', abrindo);
         botao.setAttribute('aria-expanded', String(abrindo));
       });
     });
 
-    // tocar fora fecha
+    // Clicar em QUALQUER lugar fora do cartão que está aberto fecha —
+    // inclusive em cima de outro cartão. Antes eu checava `.pessoa`, e
+    // isso fazia o toque num cartão vizinho não fechar o primeiro.
+    // Só o conteúdo do cartão aberto é poupado, para o dedo poder
+    // chegar nos links das redes.
     document.addEventListener('click', function (e) {
-      if (e.target.closest && e.target.closest('.pessoa')) return;
-      cards.forEach(function (o) {
-        o.classList.remove('aberta');
-        var b = $('.pessoa__clip', o);
-        if (b) b.setAttribute('aria-expanded', 'false');
-      });
+      if (e.target.closest && e.target.closest('.pessoa.aberta')) return;
+      fecharTodos();
+    });
+
+    // Esc também fecha, para quem está no teclado
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') fecharTodos();
     });
   })();
 })();
