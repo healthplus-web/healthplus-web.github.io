@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css?v=gqsly">
+<link rel="stylesheet" href="assets/estilo.css?v=h4k5c">
 </head>
 <body>
 
@@ -475,66 +475,100 @@
            por
              <img class="retrato" src="fotos/bruno.jpg" alt="Bruno Fernandes">
 
-           TROCAR AS REDES: substitua
-             <span class="info__link vazio" title="...">…</span>
+           TROCAR UMA REDE: substitua
+             <span class="info__link vazio" data-rede="x" title="...">…</span>
            por
-             <a class="info__link" href="URL" target="_blank" rel="noopener" aria-label="Instagram de Fulano">…</a>
+             <a class="info__link" data-rede="x" href="URL" target="_blank" rel="noopener" aria-label="...">…</a>
            ───────────────────────────────────────────────────────── -->
 
       <article class="pessoa reveal" data-rev="esq">
         <div class="retrato-vazio" aria-hidden="true">B</div>
         <h3 class="pessoa__nome">Bruno Fernandes</h3>
         <span class="pessoa__papel">Design e gestão</span>
-        <p class="pessoa__texto">Dirigiu o projeto e distribuiu as tarefas. Fez o design do aplicativo, a identidade visual e as logos, os cartões de visita, a apresentação e o marketing.</p>
+        <button class="pessoa__contrib" type="button" aria-expanded="false">Contribuições <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
 
         <button class="pessoa__clip" type="button" aria-expanded="false" aria-label="Ver as redes de Bruno Fernandes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
 
-        <div class="info">
+        <div class="info info--redes">
           <div class="info__nome">Bruno Fernandes</div>
           <div class="info__papel">Design e gestão</div>
           <div class="info__redes">
-          <span class="info__link vazio" data-rede="instagram" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
-          <a class="info__link" data-rede="linkedin" href="https://www.linkedin.com/in/brunofernandesdevpro/" target="_blank" rel="noopener" aria-label="LinkedIn de Bruno Fernandes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg><span class="agua" aria-hidden="true"><i></i></span></a>
-          <a class="info__link" data-rede="github" href="https://github.com/Bruno6540" target="_blank" rel="noopener" aria-label="GitHub de Bruno Fernandes"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg><span class="agua" aria-hidden="true"><i></i></span></a>
+            <span class="info__link vazio" data-rede="instagram" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
+            <a class="info__link" data-rede="linkedin" href="https://www.linkedin.com/in/brunofernandesdevpro/" target="_blank" rel="noopener" aria-label="LinkedIn de Bruno Fernandes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg><span class="agua" aria-hidden="true"><i></i></span></a>
+            <a class="info__link" data-rede="github" href="https://github.com/Bruno6540" target="_blank" rel="noopener" aria-label="GitHub de Bruno Fernandes"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg><span class="agua" aria-hidden="true"><i></i></span></a>
           </div>
+        </div>
+
+        <div class="info info--contrib">
+          <div class="titulo">O que Bruno fez</div>
+          <ul>
+              <li>Direção do projeto e distribuição das tarefas</li>
+              <li>Identidade visual, logos e o design das telas</li>
+              <li>Calculadora da OMS: conversão das curvas e o motor de cálculo</li>
+              <li>Evolução do paciente e previsão de altura</li>
+              <li>Envio de e-mails: convite, redefinição de senha e avisos</li>
+              <li>Cartões de visita, apresentação e este site</li>
+          </ul>
         </div>
       </article>
 
       <article class="pessoa reveal" data-rev="baixo" data-atraso="1">
         <div class="retrato-vazio" aria-hidden="true">K</div>
         <h3 class="pessoa__nome">Kaio Felipe</h3>
-        <span class="pessoa__papel">Função a definir</span>
-        <p class="pessoa__texto">Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
+        <span class="pessoa__papel">Back-end e cadastros</span>
+        <button class="pessoa__contrib" type="button" aria-expanded="false">Contribuições <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
 
         <button class="pessoa__clip" type="button" aria-expanded="false" aria-label="Ver as redes de Kaio Felipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
 
-        <div class="info">
+        <div class="info info--redes">
           <div class="info__nome">Kaio Felipe</div>
-          <div class="info__papel">Função a definir</div>
+          <div class="info__papel">Back-end e cadastros</div>
           <div class="info__redes">
-          <span class="info__link vazio" data-rede="instagram" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
-          <span class="info__link vazio" data-rede="linkedin" title="LinkedIn — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
-          <span class="info__link vazio" data-rede="github" title="GitHub — a definir"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
+            <span class="info__link vazio" data-rede="instagram" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
+            <a class="info__link" data-rede="linkedin" href="https://www.linkedin.com/in/kaiogg/" target="_blank" rel="noopener" aria-label="LinkedIn de Kaio Felipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg><span class="agua" aria-hidden="true"><i></i></span></a>
+            <a class="info__link" data-rede="github" href="https://github.com/Kaio-GG" target="_blank" rel="noopener" aria-label="GitHub de Kaio Felipe"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg><span class="agua" aria-hidden="true"><i></i></span></a>
           </div>
+        </div>
+
+        <div class="info info--contrib">
+          <div class="titulo">O que Kaio fez</div>
+          <ul>
+              <li>Primeira versão da API, em Node e Express</li>
+              <li>Cadastro e login do nutricionista, no app e na API</li>
+              <li>Cadastro de pacientes em etapas</li>
+              <li>Convite do paciente e marcação de consultas</li>
+              <li>Modelagem inicial do banco de dados</li>
+          </ul>
         </div>
       </article>
 
       <article class="pessoa reveal" data-rev="baixo" data-atraso="2">
         <div class="retrato-vazio" aria-hidden="true">C</div>
         <h3 class="pessoa__nome">Caio Fernandes</h3>
-        <span class="pessoa__papel">Função a definir</span>
-        <p class="pessoa__texto">Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
+        <span class="pessoa__papel">Interface e componentes</span>
+        <button class="pessoa__contrib" type="button" aria-expanded="false">Contribuições <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
 
         <button class="pessoa__clip" type="button" aria-expanded="false" aria-label="Ver as redes de Caio Fernandes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
 
-        <div class="info">
+        <div class="info info--redes">
           <div class="info__nome">Caio Fernandes</div>
-          <div class="info__papel">Função a definir</div>
+          <div class="info__papel">Interface e componentes</div>
           <div class="info__redes">
-          <span class="info__link vazio" data-rede="instagram" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
-          <span class="info__link vazio" data-rede="linkedin" title="LinkedIn — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
-          <span class="info__link vazio" data-rede="github" title="GitHub — a definir"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
+            <span class="info__link vazio" data-rede="instagram" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
+            <span class="info__link vazio" data-rede="linkedin" title="LinkedIn — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
+            <span class="info__link vazio" data-rede="github" title="GitHub — a definir"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
           </div>
+        </div>
+
+        <div class="info info--contrib">
+          <div class="titulo">O que Caio fez</div>
+          <ul>
+              <li>Biblioteca de componentes reutilizáveis do aplicativo</li>
+              <li>Telas da área do paciente e a ficha do paciente</li>
+              <li>Revisão de segurança, LGPD e registro de auditoria</li>
+              <li>Acessibilidade: contraste das telas e modo de alto contraste</li>
+              <li>Correção das dependências e do que não abria no celular</li>
+          </ul>
         </div>
       </article>
 
@@ -542,18 +576,25 @@
         <div class="retrato-vazio" aria-hidden="true">A</div>
         <h3 class="pessoa__nome">Ayck</h3>
         <span class="pessoa__papel">Função a definir</span>
-        <p class="pessoa__texto">Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
+        <button class="pessoa__contrib" type="button" aria-expanded="false">Contribuições <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
 
         <button class="pessoa__clip" type="button" aria-expanded="false" aria-label="Ver as redes de Ayck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
 
-        <div class="info">
+        <div class="info info--redes">
           <div class="info__nome">Ayck</div>
           <div class="info__papel">Função a definir</div>
           <div class="info__redes">
-          <span class="info__link vazio" data-rede="instagram" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
-          <span class="info__link vazio" data-rede="linkedin" title="LinkedIn — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
-          <span class="info__link vazio" data-rede="github" title="GitHub — a definir"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
+            <span class="info__link vazio" data-rede="instagram" title="Instagram — a definir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg><span class="agua" aria-hidden="true"><i></i></span></span>
+            <a class="info__link" data-rede="linkedin" href="https://www.linkedin.com/in/ayckmartinss/" target="_blank" rel="noopener" aria-label="LinkedIn de Ayck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-3a2 2 0 014 0v3"/></svg><span class="agua" aria-hidden="true"><i></i></span></a>
+            <a class="info__link" data-rede="github" href="https://github.com/AyckMartins" target="_blank" rel="noopener" aria-label="GitHub de Ayck"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg><span class="agua" aria-hidden="true"><i></i></span></a>
           </div>
+        </div>
+
+        <div class="info info--contrib">
+          <div class="titulo">O que Ayck fez</div>
+          <ul>
+              <li>A preencher pela equipe</li>
+          </ul>
         </div>
       </article>
 
@@ -570,7 +611,7 @@
     <p>Avaliação nutricional infantojuvenil no padrão da Organização Mundial da Saúde.</p>
     <p style="margin-top:14px">
       <!-- EDITAR: e-mail da empresa -->
-      <a href="mailto:contato@healthplus.app">contato@healthplus.app</a>
+      <a href="mailto:health.plus.brazil@gmail.com">health.plus.brazil@gmail.com</a>
     </p>
 
     <div class="rodape-fim">
@@ -591,7 +632,7 @@
   </div>
 </footer>
 
-<script src="assets/oms-imc.js?v=gqsly"></script>
-<script src="assets/app.js?v=gqsly" defer></script>
+<script src="assets/oms-imc.js?v=h4k5c"></script>
+<script src="assets/app.js?v=h4k5c" defer></script>
 </body>
 </html>

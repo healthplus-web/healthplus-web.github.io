@@ -335,22 +335,40 @@
 
     function fecharTodos() {
       cards.forEach(function (o) {
-        o.classList.remove('aberta');
-        var b = $('.pessoa__clip', o);
-        if (b) b.setAttribute('aria-expanded', 'false');
+        o.classList.remove('aberta', 'aberta-contrib');
+        $$('.pessoa__clip, .pessoa__contrib', o).forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+        });
       });
     }
 
-    cards.forEach(function (card) {
-      var botao = $('.pessoa__clip', card);
-      if (!botao) return;
+    // O painel das contribuições cresce a partir do botão que o abre.
+    // A altura do cartão muda conforme o nome quebra em uma ou duas
+    // linhas, então o centro do botão é medido, não chutado.
+    function marcarOrigem() {
+      cards.forEach(function (card) {
+        var b = $('.pessoa__contrib', card);
+        if (!b) return;
+        var rc = card.getBoundingClientRect(), rb = b.getBoundingClientRect();
+        card.style.setProperty('--cx', Math.round(rb.left - rc.left + rb.width / 2) + 'px');
+        card.style.setProperty('--cy', Math.round(rb.top - rc.top + rb.height / 2) + 'px');
+      });
+    }
+    marcarOrigem();
+    window.addEventListener('resize', marcarOrigem, { passive: true });
 
-      botao.addEventListener('click', function (e) {
-        e.preventDefault();
-        var abrindo = !card.classList.contains('aberta');
-        fecharTodos();                       // um aberto por vez
-        card.classList.toggle('aberta', abrindo);
-        botao.setAttribute('aria-expanded', String(abrindo));
+    cards.forEach(function (card) {
+      [['.pessoa__clip', 'aberta'], ['.pessoa__contrib', 'aberta-contrib']].forEach(function (par) {
+        var botao = $(par[0], card), classe = par[1];
+        if (!botao) return;
+
+        botao.addEventListener('click', function (e) {
+          e.preventDefault();
+          var abrindo = !card.classList.contains(classe);
+          fecharTodos();                     // um painel aberto por vez
+          card.classList.toggle(classe, abrindo);
+          botao.setAttribute('aria-expanded', String(abrindo));
+        });
       });
     });
 
@@ -360,7 +378,7 @@
     // Só o conteúdo do cartão aberto é poupado, para o dedo poder
     // chegar nos links das redes.
     document.addEventListener('click', function (e) {
-      if (e.target.closest && e.target.closest('.pessoa.aberta')) return;
+      if (e.target.closest && e.target.closest('.pessoa.aberta, .pessoa.aberta-contrib')) return;
       fecharTodos();
     });
 

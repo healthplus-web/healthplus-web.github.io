@@ -443,9 +443,23 @@ a:hover{text-decoration:underline}
 .pessoa__nome{font-size:1.12rem;font-weight:600;color:var(--verde-escuro);margin-bottom:3px;line-height:1.2}
 .pessoa__papel{
   display:block;font-family:var(--mono);font-size:.72rem;color:var(--verde-link);
-  text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px;
 }
-.pessoa__texto{font-size:.88rem;color:var(--texto-2)}
+
+/* botão que abre a lista de contribuições. [FITTS] 44px de altura e
+   a largura do cartão: é um alvo difícil de errar. */
+.pessoa__contrib{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;padding:0 18px;width:100%;
+  border-radius:999px;cursor:pointer;font:inherit;font-size:.9rem;font-weight:600;
+  background:var(--verde-suave);color:var(--verde-escuro);
+  border:1px solid var(--borda);
+  transition:background .25s ease,border-color .25s ease,transform .25s ease;
+}
+.pessoa__contrib svg{width:16px;height:16px;transition:transform .35s ease}
+.pessoa:hover .pessoa__contrib{background:var(--verde-claro);border-color:var(--verde-faixa)}
+.pessoa__contrib:hover{transform:translateY(-2px)}
+.pessoa__contrib:hover svg,.pessoa.aberta-contrib .pessoa__contrib svg{transform:rotate(180deg)}
 
 /* ── o botão ──
    [FITTS] 44px. Ao passar o mouse NO CARTÃO ele cresce, ganha um
@@ -488,14 +502,45 @@ a:hover{text-decoration:underline}
   background:var(--verde-escuro);
   padding:22px 20px;
   display:grid;align-content:center;justify-items:center;gap:4px;
-  clip-path:circle(22px at calc(100% - 36px) 36px);
   transition:clip-path .6s cubic-bezier(.22,1,.36,1);
 }
-.pessoa__clip:hover ~ .info,
-.pessoa__clip:focus-visible ~ .info,
-.info:hover,
-.info:focus-within,
-.pessoa.aberta .info{clip-path:circle(150% at calc(100% - 36px) 36px)}
+
+/* painel das redes: nasce atrás do botão redondo */
+.info--redes{clip-path:circle(22px at calc(100% - 36px) 36px)}
+.pessoa__clip:hover ~ .info--redes,
+.pessoa__clip:focus-visible ~ .info--redes,
+.info--redes:hover,
+.info--redes:focus-within,
+.pessoa.aberta .info--redes{clip-path:circle(150% at calc(100% - 36px) 36px)}
+
+/* painel das contribuições: nasce do botão "Contribuições". O
+   centro dele vem do JS em --cx/--cy, porque a altura do cartão
+   muda conforme o nome quebra em uma ou duas linhas. */
+.info--contrib{
+  align-content:start;justify-items:stretch;gap:0;
+  padding:24px 22px;
+  clip-path:circle(0px at var(--cx,50%) var(--cy,78%));
+}
+.pessoa__contrib:hover ~ .info--contrib,
+.pessoa__contrib:focus-visible ~ .info--contrib,
+.info--contrib:hover,
+.info--contrib:focus-within,
+.pessoa.aberta-contrib .info--contrib{clip-path:circle(150% at var(--cx,50%) var(--cy,78%))}
+
+.info--contrib .titulo{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--verde-faixa);
+  margin-bottom:12px;text-align:left;
+}
+.info--contrib ul{list-style:none;display:grid;gap:9px;text-align:left}
+.info--contrib li{
+  display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start;
+  font-size:.84rem;line-height:1.4;color:rgba(255,248,201,.86);
+}
+.info--contrib li::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--verde-faixa);margin-top:.45em;
+}
 
 .info__nome{font-size:1.1rem;font-weight:600;color:var(--creme);line-height:1.2}
 .info__papel{
