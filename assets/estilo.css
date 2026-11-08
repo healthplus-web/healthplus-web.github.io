@@ -1,0 +1,451 @@
+/* ══════════════════════════════════════════════════════════════
+   HealthPlus Web — folha de estilo
+
+   Mobile first. Tema escuro de painel de instrumentos: o verde da
+   marca (app/tema/index.js) sobre fundo quase preto, com os números
+   em fonte monoespaçada.
+
+   Toda animação respeita prefers-reduced-motion — quem pediu menos
+   movimento no sistema recebe a página inteira, parada.
+   ══════════════════════════════════════════════════════════════ */
+
+:root{
+  /* marca */
+  --verde:#5DB582;
+  --verde-claro:#8FE3B4;
+  --coral:#FF7452;
+
+  /* superfícies */
+  --preto:#07140E;
+  --fundo:#0A1C14;
+  --fundo-2:#0D2419;
+  --superficie:#102E20;
+  --borda:#1C4632;
+  --borda-forte:#2A6246;
+
+  /* texto */
+  --texto:#E9F3ED;
+  --texto-2:#A7C0B2;
+  --texto-3:#8BA698;
+
+  --gutter:20px;
+  --max:1100px;
+  --r:14px;
+
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:'IBM Plex Sans',"Segoe UI",system-ui,-apple-system,sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+
+body{
+  font-family:var(--sans);
+  background:var(--fundo);
+  color:var(--texto);
+  line-height:1.6;
+  font-size:16px;
+  overflow-x:hidden;
+}
+body.travado{overflow:hidden}
+
+.env{width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+
+h1,h2,h3{line-height:1.15;letter-spacing:-.022em;font-weight:600}
+h2{font-size:1.7rem;margin-bottom:14px}
+h3{font-size:1.06rem;margin-bottom:6px}
+p{color:var(--texto-2)}
+strong{color:var(--texto);font-weight:600}
+
+a{color:var(--verde-claro);text-decoration:none}
+a:hover{text-decoration:underline}
+
+:focus-visible{outline:2px solid var(--verde-claro);outline-offset:3px;border-radius:4px}
+
+.secao{padding:60px 0;position:relative}
+.secao.alt{background:var(--fundo-2)}
+.linha-topo{border-top:1px solid var(--borda)}
+
+/* etiqueta monoespaçada usada como rótulo de dado, não como enfeite */
+.mono{
+  font-family:var(--mono);font-size:.78rem;font-weight:500;
+  letter-spacing:.06em;color:var(--texto-3);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   1. Abertura animada
+   O traço da marca sendo desenhado: o anel, as três curvas de
+   crescimento e o ponto. É a metáfora do produto — uma curva sendo
+   plotada e um valor caindo sobre ela.
+   ══════════════════════════════════════════════════════════════ */
+
+.abertura{
+  position:fixed;inset:0;z-index:999;
+  background:var(--preto);
+  display:grid;place-items:center;
+  transition:opacity .7s ease,visibility .7s ease;
+}
+.abertura.saiu{opacity:0;visibility:hidden;pointer-events:none}
+
+.abertura-caixa{display:grid;justify-items:center;gap:22px}
+.marca-anim{width:132px;height:132px;display:block}
+
+.marca-anim .anel{
+  stroke-dasharray:553;stroke-dashoffset:553;
+  animation:desenha 1s cubic-bezier(.65,0,.35,1) forwards;
+}
+.marca-anim .curva{
+  stroke-dasharray:300;stroke-dashoffset:300;
+  animation:desenha .85s cubic-bezier(.65,0,.35,1) forwards;
+}
+.marca-anim .c1{animation-delay:.34s}
+.marca-anim .c2{animation-delay:.46s}
+.marca-anim .c3{animation-delay:.58s}
+/* Desaceleração exponencial, sem repique: o ponto pousa na curva,
+   não quica nela. */
+.marca-anim .ponto{
+  transform-origin:100px 100px;transform:scale(0);
+  animation:brota .62s cubic-bezier(.16,1,.3,1) 1.02s forwards;
+}
+@keyframes desenha{to{stroke-dashoffset:0}}
+@keyframes brota{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+.abertura-nome{
+  font-size:1.4rem;font-weight:600;letter-spacing:-.02em;
+  opacity:0;animation:sobe .6s ease 1.25s forwards;
+}
+.abertura-nome span{color:var(--verde);font-weight:400}
+.abertura-passo{
+  font-family:var(--mono);font-size:.74rem;color:var(--texto-3);
+  opacity:0;animation:sobe .6s ease 1.45s forwards;
+  letter-spacing:.08em;
+}
+@keyframes sobe{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ══════════════════════════════════════════════════════════════
+   2. Topo
+   ══════════════════════════════════════════════════════════════ */
+
+.topo{
+  position:sticky;top:0;z-index:60;
+  background:rgba(10,28,20,.82);
+  backdrop-filter:saturate(160%) blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s ease;
+}
+.topo.rolou{border-bottom-color:var(--borda)}
+.topo .env{display:flex;align-items:center;gap:10px;height:62px}
+.topo .marca{display:flex;align-items:center;gap:9px;color:var(--texto);text-decoration:none}
+.topo .marca img{width:28px;height:28px}
+.topo .marca span{font-size:1.1rem;font-weight:600;letter-spacing:-.02em}
+.topo .marca b{font-weight:400;color:var(--verde)}
+.topo nav{margin-left:auto;display:none;gap:24px}
+.topo nav a{font-size:.9rem;color:var(--texto-2);text-decoration:none;transition:color .2s}
+.topo nav a:hover{color:var(--verde-claro)}
+
+/* ══════════════════════════════════════════════════════════════
+   3. Herói
+   ══════════════════════════════════════════════════════════════ */
+
+.heroi{
+  position:relative;overflow:hidden;
+  padding:64px 0 76px;
+  background:
+    radial-gradient(90% 70% at 76% 8%, rgba(93,181,130,.15), transparent 62%),
+    radial-gradient(70% 60% at 6% 94%, rgba(255,116,82,.09), transparent 60%),
+    var(--fundo);
+}
+/* O fundo são as próprias curvas de crescimento da OMS sendo
+   desenhadas. A malha quadriculada que estava aqui é o papel de
+   parede de qualquer site "de tecnologia"; estas curvas dizem o
+   que o produto faz. */
+.heroi .curvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  opacity:.62;pointer-events:none;
+}
+.heroi .curvas path{
+  fill:none;stroke:var(--verde);stroke-width:1.1;stroke-linecap:round;
+  stroke-dasharray:1200;stroke-dashoffset:1200;
+  animation:desenha 2.6s ease .4s forwards;
+}
+.heroi .curvas path:nth-child(2){animation-delay:.55s;opacity:.75}
+.heroi .curvas path:nth-child(3){animation-delay:.7s;opacity:.55}
+.heroi .curvas path:nth-child(4){animation-delay:.85s;opacity:.4}
+
+.heroi .env{position:relative;z-index:1}
+.heroi .mono{display:block;margin-bottom:16px}
+.heroi h1{font-size:2.3rem;margin-bottom:18px;max-width:17ch}
+.heroi h1 em{font-style:normal;color:var(--verde)}
+.heroi .lede{font-size:1.04rem;max-width:54ch}
+
+.acoes{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-weight:600;font-size:.95rem;padding:13px 22px;border-radius:999px;
+  border:1px solid transparent;cursor:pointer;text-decoration:none;
+  font-family:inherit;
+  transition:transform .14s ease,box-shadow .25s ease,background .2s ease;
+}
+.btn:hover{text-decoration:none}
+.btn:active{transform:translateY(1px)}
+.btn-1{background:var(--verde);color:#06160F}
+.btn-1:hover{background:var(--verde-claro)}
+.btn-2{border-color:var(--borda-forte);color:var(--texto)}
+.btn-2:hover{background:var(--superficie)}
+
+.rolar{
+  position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
+  display:grid;place-items:center;gap:7px;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;
+  color:var(--texto-3);z-index:1;
+}
+.rolar i{
+  display:block;width:1px;height:26px;
+  background:linear-gradient(var(--verde),transparent);
+  animation:desce 1.8s ease-in-out infinite;
+}
+@keyframes desce{0%,100%{opacity:.25;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ══════════════════════════════════════════════════════════════
+   4. Métricas
+   ══════════════════════════════════════════════════════════════ */
+
+.metricas{background:var(--fundo-2);border-block:1px solid var(--borda);padding:30px 0}
+.metricas ul{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:24px 16px}
+.metricas .num{
+  display:block;font-family:var(--mono);font-size:1.7rem;font-weight:600;
+  color:var(--verde-claro);line-height:1;font-variant-numeric:tabular-nums;
+}
+.metricas .rot{display:block;font-size:.82rem;color:var(--texto-3);line-height:1.35;margin-top:7px}
+
+/* ══════════════════════════════════════════════════════════════
+   5. Calculadora ao vivo
+   ══════════════════════════════════════════════════════════════ */
+
+.demo{
+  margin-top:28px;
+  background:var(--superficie);border:1px solid var(--borda);
+  border-radius:var(--r);overflow:hidden;
+}
+.demo-cabeca{
+  display:flex;align-items:center;gap:9px;
+  padding:12px 16px;border-bottom:1px solid var(--borda);
+  background:rgba(7,20,14,.45);
+}
+/* Ponto parado. O pontinho pulsando de "ao vivo" é clichê, e o
+   texto ao lado já diz que o cálculo roda aqui. */
+.demo-cabeca .ponto-vivo{
+  width:7px;height:7px;border-radius:50%;background:var(--verde);
+}
+
+.demo-corpo{display:grid}
+.controles{padding:18px 16px;display:grid;gap:16px;border-bottom:1px solid var(--borda)}
+
+.campo{display:grid;gap:7px}
+.campo > label,.campo > .rotulo{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.07em;
+  color:var(--texto-3);text-transform:uppercase;
+}
+.campo input[type=number]{
+  width:100%;padding:11px 13px;font-size:1rem;font-family:var(--mono);
+  background:var(--fundo);color:var(--texto);
+  border:1px solid var(--borda);border-radius:9px;
+}
+.campo input[type=number]:focus{border-color:var(--verde);outline:none}
+
+.alternador{display:flex;gap:6px;background:var(--fundo);border:1px solid var(--borda);border-radius:9px;padding:4px}
+.alternador button{
+  flex:1;padding:9px 10px;border:0;border-radius:6px;cursor:pointer;
+  background:transparent;color:var(--texto-2);font:inherit;font-size:.9rem;
+  transition:background .18s,color .18s;
+}
+.alternador button[aria-pressed=true]{background:var(--verde);color:#06160F;font-weight:600}
+
+.dupla{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.resultado{padding:18px 16px;display:grid;gap:14px}
+.painel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.painel div{background:var(--fundo);border:1px solid var(--borda);border-radius:10px;padding:11px 12px}
+.painel .rot{font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;color:var(--texto-3);text-transform:uppercase}
+.painel .val{
+  font-family:var(--mono);font-size:1.3rem;font-weight:600;color:var(--texto);
+  line-height:1.15;margin-top:3px;font-variant-numeric:tabular-nums;
+}
+
+.selo-classe{
+  display:inline-flex;align-items:center;gap:8px;align-self:start;
+  padding:8px 14px;border-radius:999px;font-weight:600;font-size:.92rem;
+  border:1px solid;
+}
+.selo-classe.adequado{background:rgba(93,181,130,.14);border-color:rgba(93,181,130,.45);color:var(--verde-claro)}
+.selo-classe.atencao{background:rgba(255,196,82,.12);border-color:rgba(255,196,82,.4);color:#FFD079}
+.selo-classe.risco{background:rgba(255,116,82,.14);border-color:rgba(255,116,82,.45);color:#FFA187}
+.selo-classe.vazio{background:transparent;border-color:var(--borda);color:var(--texto-3);font-weight:400}
+
+.grafico{padding:4px 10px 16px}
+.grafico svg{width:100%;height:auto;display:block;overflow:visible}
+.grafico .linha{fill:none;stroke:var(--borda-forte);stroke-width:1.1}
+.grafico .linha.mediana{stroke:var(--verde);stroke-width:1.7}
+.grafico .rotulo-curva{font-family:var(--mono);font-size:7px;fill:var(--texto-3)}
+.grafico .eixo{stroke:var(--borda);stroke-width:1}
+.grafico .eixo-txt{font-family:var(--mono);font-size:8.5px;fill:var(--texto-3)}
+.grafico .marca-ponto{fill:var(--coral);stroke:var(--preto);stroke-width:2}
+.grafico .halo{fill:rgba(255,116,82,.22)}
+
+.nota-demo{
+  padding:13px 16px;border-top:1px solid var(--borda);
+  font-size:.82rem;color:var(--texto-3);background:rgba(7,20,14,.35);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6. Telas do app
+   ══════════════════════════════════════════════════════════════ */
+
+.telas{display:grid;gap:40px;margin-top:34px}
+.tela-bloco{display:grid;gap:20px;align-items:center}
+
+.fone{
+  width:218px;margin:0 auto;position:relative;
+  /* moldura de 2px: é a borda do aparelho, não um contorno de cartão.
+     Fio de 1px com sombra larga é a assinatura de interface gerada. */
+  background:#071A12;border:2px solid var(--borda-forte);
+  border-radius:28px;padding:8px;
+  box-shadow:0 12px 22px rgba(0,0,0,.45);
+}
+.fone-tela{
+  background:#FFF8C9;border-radius:21px;overflow:hidden;
+  height:406px;display:flex;flex-direction:column;
+  font-size:10px;line-height:1.35;color:#1F2A24;
+}
+.fone-topo{background:#5DB582;padding:12px 12px 10px;color:#163B28}
+.fone-topo .mini{font-size:8px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.78}
+.fone-topo .tit{font-size:14px;font-weight:600;margin-top:2px;letter-spacing:-.01em}
+.fone-corpo{padding:11px;display:flex;flex-direction:column;gap:8px;overflow:hidden;flex:1}
+
+.fcard{background:#fff;border:1px solid #B8D9C3;border-radius:10px;padding:9px 10px}
+.fcard .rot{font-size:8px;color:#5B6660;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.fcard .val{font-family:var(--mono);font-size:18px;font-weight:600;color:#163B28;line-height:1.1;margin-top:2px}
+.fcard .sub{font-size:8.5px;color:#5B6660;margin-top:2px}
+.pill{display:inline-block;font-size:8px;font-weight:700;padding:2px 7px;border-radius:999px;background:#D9F2C7;color:#1B5235}
+.pill.aten{background:#FFEFB3;color:#8A5A00}
+.flinha{display:flex;justify-content:space-between;align-items:baseline;font-size:9px}
+.flinha + .flinha{margin-top:5px;padding-top:5px;border-top:1px solid #E4E7E2}
+.flinha b{font-family:var(--mono);font-size:10px;color:#163B28}
+.flinha span{color:#5B6660}
+.fbarra{height:5px;border-radius:999px;background:#E4E7E2;overflow:hidden;margin-top:5px}
+.fbarra i{display:block;height:100%;background:#2B7D52;border-radius:999px}
+
+.legenda{font-size:.8rem;color:var(--texto-3);text-align:center;margin-top:12px;font-family:var(--mono)}
+
+/* ══════════════════════════════════════════════════════════════
+   7. Cartões, lista, equipe
+   ══════════════════════════════════════════════════════════════ */
+
+.cartoes{display:grid;gap:14px;margin-top:28px}
+.cartao{
+  background:var(--superficie);border:1px solid var(--borda);
+  border-radius:var(--r);padding:20px;
+  display:grid;grid-template-columns:auto 1fr;gap:0 11px;align-items:center;
+  transition:border-color .25s ease,transform .25s ease;
+}
+.cartao:hover{border-color:var(--borda-forte);transform:translateY(-2px)}
+.cartao .ico{grid-row:1}
+.cartao .ico svg{width:22px;height:22px;display:block;stroke:var(--verde)}
+.cartao h3{grid-row:1;margin-bottom:0}
+.cartao p{grid-column:1 / -1;font-size:.91rem;margin-top:11px}
+
+.lista{list-style:none;display:grid;gap:13px;margin-top:24px}
+.lista li{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;font-size:.93rem;color:var(--texto-2)}
+.lista svg{width:18px;height:18px;margin-top:3px;stroke:var(--verde)}
+
+.time{display:grid;gap:14px;margin-top:28px}
+.pessoa{
+  background:var(--superficie);border:1px solid var(--borda);
+  border-radius:var(--r);padding:22px 18px;text-align:center;
+  transition:border-color .25s ease,transform .25s ease;
+}
+.pessoa:hover{border-color:var(--borda-forte);transform:translateY(-2px)}
+.retrato,.retrato-vazio{
+  width:88px;height:88px;border-radius:50%;margin:0 auto 14px;display:block;
+}
+.retrato{object-fit:cover;border:2px solid var(--borda-forte)}
+.retrato-vazio{
+  background:linear-gradient(145deg,#153B29,#0C2418);
+  border:1px solid var(--borda-forte);
+  display:grid;place-items:center;
+  font-family:var(--mono);font-size:1.6rem;color:var(--verde);
+}
+.pessoa h3{margin-bottom:3px}
+.pessoa .papel{
+  font-family:var(--mono);font-size:.74rem;color:var(--verde);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;
+}
+.pessoa p{font-size:.88rem}
+
+/* ══════════════════════════════════════════════════════════════
+   8. Rodapé
+   ══════════════════════════════════════════════════════════════ */
+
+footer{background:var(--preto);border-top:1px solid var(--borda);padding:46px 0 36px}
+footer .nome{font-size:1.3rem;font-weight:600;margin-bottom:8px;letter-spacing:-.02em}
+footer .nome span{color:var(--verde);font-weight:400}
+footer p{font-size:.88rem;max-width:48ch}
+.rodape-fim{margin-top:28px;padding-top:20px;border-top:1px solid var(--borda)}
+.rodape-fim p{font-size:.81rem;color:var(--texto-3);max-width:62ch}
+.rodape-fim p + p{margin-top:10px}
+
+/* ══════════════════════════════════════════════════════════════
+   9. Revelação ao rolar
+   ══════════════════════════════════════════════════════════════ */
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.visivel{opacity:1;transform:none}
+.reveal[data-atraso="1"]{transition-delay:.09s}
+.reveal[data-atraso="2"]{transition-delay:.18s}
+.reveal[data-atraso="3"]{transition-delay:.27s}
+
+/* ══════════════════════════════════════════════════════════════
+   10. Telas maiores
+   ══════════════════════════════════════════════════════════════ */
+
+@media (min-width:720px){
+  :root{--gutter:32px}
+  .secao{padding:86px 0}
+  h2{font-size:2.1rem}
+  .heroi{padding:96px 0 104px}
+  .heroi h1{font-size:3.4rem}
+  .heroi .lede{font-size:1.12rem}
+  .topo nav{display:flex}
+  .metricas ul{grid-template-columns:repeat(4,1fr)}
+  .cartoes{grid-template-columns:repeat(3,1fr)}
+  .time{grid-template-columns:repeat(2,1fr)}
+  .tela-bloco{grid-template-columns:250px 1fr;gap:44px}
+  .tela-bloco.espelho{grid-template-columns:1fr 250px}
+  .tela-bloco.espelho .fone{order:2}
+  .legenda{text-align:left}
+  .demo-corpo{grid-template-columns:330px 1fr}
+  .controles{border-bottom:0;border-right:1px solid var(--borda)}
+}
+@media (min-width:980px){
+  .time{grid-template-columns:repeat(4,1fr)}
+}
+@media (max-width:719px){
+  .tela-bloco.espelho > div:first-child{order:2}
+}
+
+/* ══════════════════════════════════════════════════════════════
+   11. Quem pediu menos movimento recebe tudo parado
+   ══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+  .reveal{opacity:1;transform:none}
+  .marca-anim .anel,.marca-anim .curva{stroke-dashoffset:0}
+  .marca-anim .ponto{transform:none}
+  .abertura-nome,.abertura-passo{opacity:1}
+  .heroi .curvas path{stroke-dashoffset:0}
+}

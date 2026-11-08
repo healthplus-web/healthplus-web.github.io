@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HealthPlus — Avaliação nutricional infantojuvenil no padrão da OMS</title>
+<meta name="description" content="Escore-z, percentil e evolução antropométrica de 0 a 19 anos pelas curvas oficiais da OMS, no celular do nutricionista. Calcule aqui mesmo.">
+<meta name="theme-color" content="#0A1C14">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="HealthPlus — Avaliação nutricional no padrão da OMS">
+<meta property="og:description" content="Escore-z e percentil de 0 a 19 anos pelas curvas oficiais da OMS. Experimente a calculadora na própria página.">
+<meta property="og:locale" content="pt_BR">
+
+<link rel="icon" href="assets/logo-marca.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+
+<!-- ══════════════ ABERTURA ══════════════
+     A marca sendo desenhada: o anel, as três curvas de crescimento
+     e o ponto caindo sobre elas. Sai sozinha; clicar pula. -->
+<div class="abertura" id="abertura" role="status" aria-label="Carregando">
+  <div class="abertura-caixa">
+    <svg class="marca-anim" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <clipPath id="recorte"><circle cx="100" cy="100" r="96"/></clipPath>
+        <radialGradient id="miolo" cx="38%" cy="30%">
+          <stop offset="0%" stop-color="#1A4A3A"/>
+          <stop offset="100%" stop-color="#0B2A1E"/>
+        </radialGradient>
+      </defs>
+
+      <circle cx="100" cy="100" r="96" fill="url(#miolo)"/>
+
+      <g clip-path="url(#recorte)" fill="none" stroke="#3E8F68" stroke-width="3.4" stroke-linecap="round">
+        <path class="curva c1" d="M-10 182 C 46 164, 104 118, 214 28"/>
+        <path class="curva c2" d="M-10 206 C 50 188, 112 140, 214 54"/>
+        <path class="curva c3" d="M-10 230 C 54 212, 120 162, 214 80"/>
+      </g>
+
+      <circle class="anel" cx="100" cy="100" r="88" fill="none" stroke="#3E8F68" stroke-width="2.6"/>
+      <circle class="ponto" cx="100" cy="100" r="13" fill="#FF7452"/>
+    </svg>
+
+    <div style="display:grid;justify-items:center;gap:7px">
+      <div class="abertura-nome">Health<span>Plus</span></div>
+      <div class="abertura-passo">CARREGANDO CURVAS DA OMS</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ TOPO ══════════════ -->
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="#"><img src="assets/logo-marca.png" alt=""><span>Health<b>Plus</b></span></a>
+    <nav>
+      <a href="#calcular">Calculadora</a>
+      <a href="#produto">O aplicativo</a>
+      <a href="#precisao">Precisão</a>
+      <a href="#equipe">Equipe</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ══════════════ HERÓI ══════════════ -->
+<section class="heroi">
+  <svg class="curvas" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M-20 290 C 90 258, 210 170, 420 48"/>
+    <path d="M-20 318 C 96 288, 224 198, 420 84"/>
+    <path d="M-20 346 C 102 318, 238 228, 420 120"/>
+    <path d="M-20 262 C 84 228, 196 142, 420 12"/>
+  </svg>
+
+  <div class="env">
+    <span class="mono">WHO GROWTH REFERENCE · MÉTODO LMS · ESCORE-Z</span>
+    <h1>A régua da OMS, <em>no bolso do nutricionista.</em></h1>
+    <p class="lede">
+      O HealthPlus calcula escore-z, percentil e evolução antropométrica
+      pelas curvas oficiais da Organização Mundial da Saúde. O mesmo
+      resultado que o WHO AnthroPlus entrega — em menos de um segundo,
+      durante a consulta.
+    </p>
+    <div class="acoes">
+      <a class="btn btn-1" href="#calcular">Calcular agora
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-2" href="#produto">Ver o aplicativo</a>
+    </div>
+  </div>
+
+  <div class="rolar" aria-hidden="true"><span>ROLE</span><i></i></div>
+</section>
+
+<!-- ══════════════ MÉTRICAS ══════════════ -->
+<section class="metricas">
+  <div class="env">
+    <ul>
+      <li><span class="num" data-ate="933">0</span><span class="rot">casos do WHO AnthroPlus conferidos</span></li>
+      <li><span class="num" data-ate="9">0</span><span class="rot">indicadores antropométricos</span></li>
+      <li><span class="num" data-ate="10234">0</span><span class="rot">desvios-padrão reconstruídos</span></li>
+      <li><span class="num" data-ate="1" data-prefixo="&lt;" data-sufixo=" s">0</span><span class="rot">para escore-z e percentil</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ O PROBLEMA ══════════════ -->
+<section class="secao">
+  <div class="env reveal">
+    <h2>Avaliar uma criança direito dá trabalho demais.</h2>
+    <p style="max-width:60ch;margin-bottom:16px">
+      Classificar o estado nutricional de uma criança exige cruzar peso,
+      estatura e idade contra as curvas da OMS, achar o escore-z e ler o
+      percentil. Na prática isso vira planilha, tabela impressa ou um
+      software de desktop que não vai junto para a consulta.
+    </p>
+    <p style="max-width:60ch">
+      O cálculo é sempre o mesmo e a referência é pública. O que faltava
+      era ele caber no celular que o profissional já leva no bolso — e
+      guardar o histórico, para a próxima consulta começar de onde a
+      anterior parou.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ CALCULADORA ══════════════ -->
+<section class="secao alt linha-topo" id="calcular">
+  <div class="env">
+    <div class="reveal">
+      <h2>Não acredite na gente. Calcule.</h2>
+      <p style="max-width:60ch">
+        Isto aqui não é maquete. É o mesmo cálculo do aplicativo, com as
+        mesmas tabelas da OMS, rodando no seu navegador. Mexa nos campos
+        e veja o ponto andar sobre as curvas.
+      </p>
+    </div>
+
+    <div class="demo reveal" id="demo" data-atraso="1">
+      <div class="demo-cabeca">
+        <span class="ponto-vivo" aria-hidden="true"></span>
+        <span class="mono">IMC POR IDADE · 0 A 19 ANOS · CÁLCULO LOCAL</span>
+      </div>
+
+      <div class="demo-corpo">
+        <div class="controles">
+          <div class="campo">
+            <span class="rotulo" id="rot-sexo">Sexo</span>
+            <div class="alternador" role="group" aria-labelledby="rot-sexo">
+              <button type="button" data-sexo="meninos" aria-pressed="true">Masculino</button>
+              <button type="button" data-sexo="meninas" aria-pressed="false">Feminino</button>
+            </div>
+          </div>
+
+          <div class="dupla">
+            <div class="campo">
+              <label for="anos">Anos</label>
+              <input type="number" id="anos" value="7" min="0" max="19" step="1" inputmode="numeric">
+            </div>
+            <div class="campo">
+              <label for="meses">Meses</label>
+              <input type="number" id="meses" value="4" min="0" max="11" step="1" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="dupla">
+            <div class="campo">
+              <label for="peso">Peso (kg)</label>
+              <input type="number" id="peso" value="23.5" min="1" max="200" step="0.1" inputmode="decimal">
+            </div>
+            <div class="campo">
+              <label for="altura">Altura (cm)</label>
+              <input type="number" id="altura" value="124" min="40" max="220" step="0.5" inputmode="decimal">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="resultado">
+            <div class="painel">
+              <div><div class="rot">IMC</div><div class="val" id="v-imc">—</div></div>
+              <div><div class="rot">Escore-z</div><div class="val" id="v-z">—</div></div>
+              <div><div class="rot">Percentil</div><div class="val" id="v-p">—</div></div>
+            </div>
+            <span class="selo-classe vazio" id="v-classe" aria-live="polite">Preencha os campos</span>
+          </div>
+
+          <div class="grafico">
+            <svg id="curvas-svg" viewBox="0 0 330 196" role="img"
+                 aria-label="Curvas de IMC por idade da OMS, com o ponto calculado marcado"></svg>
+          </div>
+        </div>
+      </div>
+
+      <p class="nota-demo">
+        Demonstração. O que você digita fica no seu navegador e não é
+        enviado a lugar nenhum. Escore-z não é diagnóstico: quem interpreta
+        o caso é o profissional de saúde.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ O APLICATIVO ══════════════ -->
+<section class="secao linha-topo" id="produto">
+  <div class="env">
+    <div class="reveal">
+      <h2>Da medida ao diagnóstico nutricional, numa tela.</h2>
+      <p style="max-width:60ch">
+        Dois perfis, um banco de dados. O nutricionista cadastra, avalia e
+        acompanha; o paciente entra com a conta dele e vê a própria evolução.
+      </p>
+    </div>
+
+    <div class="telas">
+
+      <div class="tela-bloco reveal">
+        <div>
+          <div class="fone">
+            <div class="fone-tela">
+              <div class="fone-topo"><div class="mini">Resultado</div><div class="tit">Avaliação de hoje</div></div>
+              <div class="fone-corpo">
+                <div class="fcard"><div class="rot">IMC para a idade</div><div class="val">−0,42</div><div class="sub">percentil 34 · <span class="pill">Eutrofia</span></div></div>
+                <div class="fcard"><div class="rot">Estatura para a idade</div><div class="val">+0,18</div><div class="sub">percentil 57 · <span class="pill">Adequada</span></div></div>
+                <div class="fcard"><div class="rot">Peso para a idade</div><div class="val">−1,27</div><div class="sub">percentil 10 · <span class="pill aten">Acompanhar</span></div></div>
+                <div class="fcard" style="background:#E7F5EB"><div class="rot">Referência</div><div class="sub" style="margin-top:3px">WHO Growth Reference 2007 · 5 a 19 anos</div></div>
+              </div>
+            </div>
+          </div>
+          <p class="legenda">tela de resultado da avaliação</p>
+        </div>
+        <div>
+          <h3>Escore-z e percentil na hora</h3>
+          <p>
+            A nutricionista digita peso, estatura e a data de nascimento. O
+            app escolhe a curva certa para a idade e o sexo, calcula o
+            escore-z pelo método LMS e devolve o percentil e a classificação
+            — tudo dentro do aplicativo, sem depender do servidor.
+          </p>
+          <p style="margin-top:10px">
+            São <strong>9 indicadores</strong>: peso para idade, estatura
+            para idade, IMC para idade, peso para estatura e para comprimento,
+            perímetro cefálico, perímetro braquial e as dobras cutâneas
+            tricipital e subescapular.
+          </p>
+        </div>
+      </div>
+
+      <div class="tela-bloco espelho reveal">
+        <div>
+          <h3>A evolução, consulta a consulta</h3>
+          <p>
+            Cada avaliação entra no histórico do paciente e vira gráfico. Dá
+            para ver se a criança está acompanhando a própria curva ou se
+            desviou dela — que é a leitura que interessa, muito mais do que o
+            número de uma consulta isolada.
+          </p>
+          <p style="margin-top:10px">
+            A mesma função calcula a evolução para os dois perfis, então o
+            que o nutricionista vê e o que o paciente vê nunca divergem.
+          </p>
+        </div>
+        <div>
+          <div class="fone">
+            <div class="fone-tela">
+              <div class="fone-topo"><div class="mini">Paciente</div><div class="tit">Minha evolução</div></div>
+              <div class="fone-corpo">
+                <div class="fcard">
+                  <div class="rot">IMC para a idade · 12 meses</div>
+                  <svg viewBox="0 0 160 70" style="width:100%;height:auto;margin-top:6px" aria-hidden="true">
+                    <g stroke="#E4E7E2" stroke-width="1"><line x1="0" y1="14" x2="160" y2="14"/><line x1="0" y1="34" x2="160" y2="34"/><line x1="0" y1="54" x2="160" y2="54"/></g>
+                    <path d="M4 52 L34 47 L64 44 L94 38 L124 35 L154 31" fill="none" stroke="#2B7D52" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <g fill="#2B7D52"><circle cx="4" cy="52" r="2.8"/><circle cx="34" cy="47" r="2.8"/><circle cx="64" cy="44" r="2.8"/><circle cx="94" cy="38" r="2.8"/><circle cx="124" cy="35" r="2.8"/></g>
+                    <circle cx="154" cy="31" r="4" fill="#FF7452"/>
+                  </svg>
+                  <div class="sub" style="margin-top:4px">6 avaliações · tendência de subida</div>
+                </div>
+                <div class="fcard">
+                  <div class="flinha"><span>Estatura</span><b>+2,4 cm</b></div>
+                  <div class="flinha"><span>Peso</span><b>+1,9 kg</b></div>
+                  <div class="flinha"><span>Escore-z do IMC</span><b>−0,42</b></div>
+                </div>
+                <div class="fcard" style="background:#E7F5EB"><div class="rot">Próxima consulta</div><div class="sub" style="margin-top:3px">24 de novembro, 14h30</div></div>
+              </div>
+            </div>
+          </div>
+          <p class="legenda">minha evolução, na área do paciente</p>
+        </div>
+      </div>
+
+      <div class="tela-bloco reveal">
+        <div>
+          <div class="fone">
+            <div class="fone-tela">
+              <div class="fone-topo"><div class="mini">Nutricionista</div><div class="tit">Ficha do paciente</div></div>
+              <div class="fone-corpo">
+                <div class="fcard"><div class="rot">Em acompanhamento</div><div class="val" style="font-size:15px">Helena, 7 anos</div><div class="sub">última avaliação há 21 dias</div></div>
+                <div class="fcard"><div class="rot">Agenda</div><div class="flinha" style="margin-top:4px"><span>Retorno</span><b>24/11</b></div><div class="flinha"><span>Avaliação</span><b>12/12</b></div></div>
+                <div class="fcard">
+                  <div class="rot">Privacidade (LGPD)</div>
+                  <div class="sub" style="margin-top:3px">Exportar dados · Histórico de acessos</div>
+                  <div class="fbarra"><i style="width:100%"></i></div>
+                  <div class="sub" style="margin-top:3px">Consentimento registrado em 02/11</div>
+                </div>
+                <div class="fcard"><div class="rot">Previsão de altura</div><div class="sub" style="margin-top:3px">Estimativa, não diagnóstico — com a margem de erro declarada na tela</div></div>
+              </div>
+            </div>
+          </div>
+          <p class="legenda">ficha do paciente, com o cartão de LGPD</p>
+        </div>
+        <div>
+          <h3>O paciente inteiro num lugar só</h3>
+          <p>
+            Cadastro, agenda de consultas, histórico de avaliações e os
+            controles de privacidade na mesma ficha. O nutricionista exporta
+            os dados do paciente ou consulta quem acessou o quê sem sair da tela.
+          </p>
+          <p style="margin-top:10px">
+            A previsão de altura aparece com as duas leituras — altura-alvo
+            dos pais e projeção pela curva da OMS — e diz, com todas as
+            letras, a margem de erro de cada uma.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PRECISÃO ══════════════ -->
+<section class="secao alt linha-topo" id="precisao">
+  <div class="env">
+    <div class="reveal">
+      <h2>Não acreditamos na nossa conta. Conferimos.</h2>
+      <p style="max-width:60ch">
+        Um cálculo nutricional que erra é pior do que cálculo nenhum. Por
+        isso a conversão das curvas da OMS foi verificada de duas formas
+        independentes, antes de qualquer tela existir.
+      </p>
+    </div>
+
+    <div class="cartoes">
+      <div class="cartao reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
+        <h3>Curvas oficiais</h3>
+        <p>
+          WHO Child Growth Standards 2006 para 0 a 5 anos e WHO Growth
+          Reference 2007 para 5 a 19 anos, convertidas direto das planilhas
+          publicadas pela OMS. São 17 tabelas de referência.
+        </p>
+      </div>
+      <div class="cartao reveal" data-atraso="1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h3>10.234 valores reconstruídos</h3>
+        <p>
+          A partir dos parâmetros L, M e S refizemos todos os desvios-padrão
+          que a própria OMS publica. Todos caíram dentro da precisão com que
+          ela os divulga.
+        </p>
+      </div>
+      <div class="cartao reveal" data-atraso="2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg></div>
+        <h3>933 casos do WHO AnthroPlus</h3>
+        <p>
+          Rodamos o conjunto de teste oficial do software da OMS. Os escores-z
+          de estatura, peso e IMC por idade saem idênticos aos publicados, e as
+          marcações de medida implausível batem em todos os casos.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PRIVACIDADE ══════════════ -->
+<section class="secao linha-topo" id="privacidade">
+  <div class="env">
+    <div class="reveal">
+      <h2>Dado de saúde de criança é dado sensível.</h2>
+      <p style="max-width:60ch">
+        A LGPD trata dado de saúde como categoria especial, e a maior parte
+        dos nossos pacientes é menor de idade. A conformidade não foi colada
+        no fim: está no banco, nas rotas e nas telas.
+      </p>
+    </div>
+
+    <ul class="lista reveal" data-atraso="1">
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 118 0v3"/></svg>
+        <span><strong>Nenhuma senha em texto simples.</strong> Todas passam por hash com bcrypt, e a sessão usa JSON Web Token sobre HTTPS/TLS.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        <span><strong>Consentimento registrado, não presumido.</strong> O paciente — ou o responsável, se for menor — aceita os termos no primeiro acesso, e cada versão nova dos termos pede aceite de novo.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>
+        <span><strong>O titular leva os dados dele embora.</strong> Exportação e exclusão a pedido, mais um histórico de acessos que o próprio paciente abre e lê.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span><strong>Força bruta não passa.</strong> Cinco senhas erradas bloqueiam a conta por 15 minutos, e há limite por endereço de IP.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span><strong>Tudo que acontece fica registrado.</strong> Log de auditoria no banco, com a tela de histórico de acessos aberta aos dois perfis.</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+        <span><strong>Acessível de verdade.</strong> Todos os pares de cor das telas passam no WCAG 2.1 nível AA (4,5:1), e há paleta de alto contraste e controle de tamanho de texto nas configurações.</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ EQUIPE ══════════════ -->
+<section class="secao alt linha-topo" id="equipe">
+  <div class="env">
+    <div class="reveal">
+      <h2>Quatro pessoas, um aplicativo inteiro.</h2>
+      <p style="max-width:60ch">
+        Da modelagem do banco à conferência das curvas da OMS, tudo aqui foi
+        desenhado, escrito e revisado por nós.
+      </p>
+    </div>
+
+    <div class="time">
+
+      <!-- ─────────────────────────────────────────────────────
+           TROCAR AS FOTOS: ponha os arquivos em site/fotos/ e
+           substitua  <div class="retrato-vazio">B</div>  por
+           <img class="retrato" src="fotos/bruno.jpg" alt="Bruno Fernandes">
+           ───────────────────────────────────────────────────── -->
+
+      <div class="pessoa reveal">
+        <div class="retrato-vazio">B</div>
+        <h3>Bruno Fernandes</h3>
+        <div class="papel">Design e gestão</div>
+        <p>
+          Dirigiu o projeto e distribuiu as tarefas. Fez o design do
+          aplicativo, a identidade visual e as logos, os cartões de visita,
+          a apresentação e o marketing.
+        </p>
+      </div>
+
+      <div class="pessoa reveal" data-atraso="1">
+        <div class="retrato-vazio">K</div>
+        <h3>Kaio Felipe</h3>
+        <div class="papel">Função a definir</div>
+        <p>Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
+      </div>
+
+      <div class="pessoa reveal" data-atraso="2">
+        <div class="retrato-vazio">C</div>
+        <h3>Caio Fernandes</h3>
+        <div class="papel">Função a definir</div>
+        <p>Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
+      </div>
+
+      <div class="pessoa reveal" data-atraso="3">
+        <div class="retrato-vazio">A</div>
+        <h3>Ayck</h3>
+        <div class="papel">Função a definir</div>
+        <p>Uma ou duas frases sobre o que esta pessoa fez no projeto.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════════ RODAPÉ ══════════════ -->
+<footer>
+  <div class="env">
+    <div class="nome">Health<span>Plus</span></div>
+    <p>Avaliação nutricional infantojuvenil no padrão da Organização Mundial da Saúde.</p>
+    <p style="margin-top:14px">
+      <!-- EDITAR: e-mail da empresa -->
+      <a href="mailto:contato@healthplus.app">contato@healthplus.app</a>
+    </p>
+
+    <div class="rodape-fim">
+      <p>
+        O HealthPlus nasceu como projeto acadêmico e segue em desenvolvimento.
+        Ainda não é um produto comercial: as telas e os números desta página vêm
+        da versão atual do aplicativo. O app não substitui a avaliação de um
+        profissional de saúde.
+      </p>
+      <p>
+        Curvas de crescimento: WHO Child Growth Standards 2006 e WHO Growth
+        Reference 2007, da Organização Mundial da Saúde.
+      </p>
+      <p>
+        Esta página não usa cookies, não coleta dados e não rastreia quem a visita.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/oms-imc.js"></script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
