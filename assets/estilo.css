@@ -693,7 +693,8 @@ body.modal-aberto{overflow:hidden}
   width:48px;height:48px;border-radius:50%;
   display:grid;place-items:center;cursor:pointer;border:0;
   background:var(--verde-escuro);color:var(--creme);
-  box-shadow:0 6px 16px rgba(22,59,40,.34);
+  /* sombra neutra, não tingida de verde: halo colorido é cacoete */
+  box-shadow:0 6px 16px rgba(0,0,0,.26);
   opacity:0;visibility:hidden;transform:translateY(14px);
   transition:opacity .3s ease,transform .3s ease,visibility .3s ease,background .2s ease;
 }
