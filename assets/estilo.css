@@ -521,11 +521,19 @@ a:hover{text-decoration:underline}
 /* painel das contribuições: nasce do botão "Contribuições". O
    centro dele vem do JS em --cx/--cy, porque a altura do cartão
    muda conforme o nome quebra em uma ou duas linhas. */
+/* z-index 7 passa por cima do botão redondo das redes (6). Sem
+   isto, no celular, o texto das contribuições saía POR BAIXO dele. */
 .info--contrib{
+  z-index:7;
   align-content:start;justify-items:stretch;gap:0;
-  padding:24px 22px;
+  padding:22px 20px;
   clip-path:circle(0px at var(--cx,50%) var(--cy,78%));
 }
+/* e o botão das redes some enquanto as contribuições estão abertas,
+   para não ficar espiando por baixo do painel */
+.pessoa__contrib:hover ~ .pessoa__clip,
+.pessoa.aberta-contrib .pessoa__clip{opacity:0;pointer-events:none}
+.pessoa__clip{transition:transform .35s cubic-bezier(.16,1,.3,1),background .25s ease,box-shadow .3s ease,opacity .3s ease}
 .pessoa__contrib:hover ~ .info--contrib,
 .pessoa__contrib:focus-visible ~ .info--contrib,
 .info--contrib:hover,
@@ -546,9 +554,11 @@ a:hover{text-decoration:underline}
   content:"";width:6px;height:6px;border-radius:50%;
   background:var(--verde-faixa);margin-top:.45em;
 }
-/* na prévia do cartão só cabem três — o resto fica no modal */
-.info--contrib .lista-contrib li{color:rgba(255,248,201,.86)}
-.info--contrib .lista-contrib li:nth-child(n+4){display:none}
+/* na prévia do cartão só cabem DUAS — com três, o botão "Ver mais"
+   era empurrado para fora do cartão no desktop. O resto fica no modal. */
+.info--contrib .lista-contrib{gap:8px}
+.info--contrib .lista-contrib li{color:rgba(255,248,201,.86);font-size:.82rem}
+.info--contrib .lista-contrib li:nth-child(n+3){display:none}
 
 .info__mais{
   margin-top:16px;justify-self:start;
@@ -601,7 +611,12 @@ a:hover{text-decoration:underline}
 .modal__fechar:hover{background:var(--verde-claro)}
 .modal__fechar svg{width:18px;height:18px}
 
-.modal__corpo{padding:18px 20px 22px;max-height:62vh;overflow:auto}
+/* overscroll-behavior:contain impede que, ao chegar no fim da
+   lista, a rolagem "vaze" para a página atrás do modal. */
+.modal__corpo{padding:18px 20px 22px;max-height:62vh;overflow:auto;overscroll-behavior:contain}
+/* cinto e suspensório: a página também trava enquanto o modal está
+   aberto, para o caso de o gesto começar fora da área rolável. */
+body.modal-aberto{overflow:hidden}
 .modal__corpo .lista-contrib li{color:var(--texto-2);font-size:.9rem}
 .modal__corpo .lista-contrib li::before{background:var(--verde)}
 
@@ -666,6 +681,26 @@ a:hover{text-decoration:underline}
 .info__link.vazio{opacity:.4;cursor:default}
 .info__link.vazio:hover,.info__link.vazio:active{transform:none;color:var(--creme);border-color:rgba(255,248,201,.28)}
 .info__link.vazio:hover .agua,.info__link.vazio:active .agua{transform:translateY(calc(100% + 12px))}
+
+/* ══════════════════════════════════════════════════════════════
+   8.1 Voltar ao topo
+   Aparece depois de uma dobra de rolagem. [FITTS] 48px, no canto
+   que o polegar alcança no celular.
+   ══════════════════════════════════════════════════════════════ */
+
+.ao-topo{
+  position:fixed;right:18px;bottom:18px;z-index:70;
+  width:48px;height:48px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;border:0;
+  background:var(--verde-escuro);color:var(--creme);
+  box-shadow:0 6px 16px rgba(22,59,40,.34);
+  opacity:0;visibility:hidden;transform:translateY(14px);
+  transition:opacity .3s ease,transform .3s ease,visibility .3s ease,background .2s ease;
+}
+.ao-topo.aparece{opacity:1;visibility:visible;transform:none}
+.ao-topo:hover{background:#1F5436}
+.ao-topo svg{width:20px;height:20px}
+@media (min-width:720px){.ao-topo{right:28px;bottom:28px}}
 
 /* ══════════════════════════════════════════════════════════════
    9. Rodapé

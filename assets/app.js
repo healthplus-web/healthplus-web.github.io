@@ -426,6 +426,7 @@
           destino.appendChild(li.cloneNode(true));
         });
 
+        document.body.classList.add('modal-aberto');
         modal.showModal();
       });
     });
@@ -436,6 +437,33 @@
     // clicar no fundo escuro fecha (o Esc o <dialog> já trata sozinho)
     modal.addEventListener('click', function (e) {
       if (e.target === modal) modal.close();
+    });
+
+    // Fechar o modal fecha também o painel do cartão. Sem isto ele
+    // ficava aberto por baixo, e aí passar o mouse em outro cartão
+    // deixava dois abertos ao mesmo tempo.
+    modal.addEventListener('close', function () {
+      document.body.classList.remove('modal-aberto');
+      fecharTodos();
+    });
+  })();
+
+  /* ═══════════════════════════════════════════════════════════
+     7. VOLTAR AO TOPO
+     ═══════════════════════════════════════════════════════════ */
+
+  (function aoTopo() {
+    var botao = $('#ao-topo');
+    if (!botao) return;
+
+    var mostrar = function () {
+      botao.classList.toggle('aparece', window.scrollY > 600);
+    };
+    mostrar();
+    window.addEventListener('scroll', mostrar, { passive: true });
+
+    botao.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: menosMovimento ? 'auto' : 'smooth' });
     });
   })();
 })();
