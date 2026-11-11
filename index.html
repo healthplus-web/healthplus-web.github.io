@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css?v=gi8l2">
+<link rel="stylesheet" href="assets/estilo.css?v=hemqw">
 </head>
 <body>
 
@@ -59,7 +59,6 @@
       <a href="#precisao">Precisão</a>
       <a href="#equipe">Equipe</a>
     </nav>
-    <button class="curtir" id="topo-curtir" type="button" aria-pressed="false" aria-label="Curtir o HealthPlus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 9.2C3.4 6.3 5.7 4 8.5 4c1.9 0 3.1 1 3.5 1.9C12.4 5 13.6 4 15.5 4c2.8 0 5.1 2.3 5.1 5.2 0 5.8-8.6 11.4-8.6 11.4z" stroke-linejoin="round"/></svg></button>
   </div>
 </header>
 
@@ -87,8 +86,8 @@
     <h1>A régua da OMS, <em>no bolso do nutricionista.</em></h1>
     <p class="lede">
       O HealthPlus calcula z-score, percentil e evolução antropométrica
-      pelas curvas oficiais da Organização Mundial da Saúde. O mesmo
-      resultado que o WHO AnthroPlus entrega, em menos de um segundo,
+      pelas curvas oficiais da Organização Mundial da Saúde. Os valores
+      conferem com os do WHO AnthroPlus caso a caso, e saem na hora,
       durante a consulta.
     </p>
     <!-- [HICK] uma ação principal e uma alternativa. Três botões aqui
@@ -410,9 +409,10 @@
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg></div>
         <h3>933 casos do WHO AnthroPlus</h3>
         <p>
-          Rodamos o conjunto de teste oficial do software da OMS. Os z-scores
-          de estatura, peso e IMC por idade saem idênticos aos publicados, e as
-          marcações de medida implausível batem em todos os casos.
+          Rodamos o conjunto de teste oficial do WHO AnthroPlus, a ferramenta
+          da OMS para 5 a 19 anos. Os z-scores de estatura, peso e IMC por
+          idade saem idênticos aos publicados, e as marcações de medida
+          implausível batem em todos os casos.
         </p>
       </div>
     </div>
@@ -447,7 +447,7 @@
       </li>
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span><strong>Força bruta não passa.</strong> Cinco senhas erradas bloqueiam a conta por 15 minutos, e há limite por endereço de IP.</span>
+        <span><strong>Força bruta não passa.</strong> A conta trava sozinha depois de poucas tentativas erradas, e há limite por endereço de IP.</span>
       </li>
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
@@ -518,7 +518,7 @@
               <li>Calculadora da OMS: conversão das curvas e o motor de cálculo LMS</li>
               <li>Conferência contra os 933 casos de teste do WHO AnthroPlus</li>
               <li>Evolução do paciente e previsão de altura</li>
-              <li>Senha do paciente pela data de nascimento e primeiro acesso</li>
+              <li>Primeiro acesso do paciente, com senha própria e aceite dos termos</li>
               <li>Envio de e-mails: convite, redefinição de senha, boas-vindas e avisos</li>
               <li>Assinatura, pacotes de planos e contagem real de pacientes</li>
               <li>Campo de CRN, logo no cabeçalho e validações de formulário</li>
@@ -635,6 +635,7 @@
      O número vem de um banco só para isto. O navegador guarda
      apenas um identificador aleatório que ele mesmo sorteia. -->
 <section class="meta" id="meta">
+  <div class="chuva" id="chuva" aria-hidden="true"></div>
   <div class="env">
     <h2 data-digita>Curtiu o que viu?</h2>
     <p>
@@ -697,13 +698,27 @@
   </div>
 </footer>
 
+<!-- Convite para curtir. Aparece uma vez, depois de a pessoa já ter
+     lido boa parte da página, e some para sempre se ela fechar. -->
+<div class="convite" id="convite" role="complementary" aria-label="Convite para curtir" hidden>
+  <span class="convite-coracao" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 9.2C3.4 6.3 5.7 4 8.5 4c1.9 0 3.1 1 3.5 1.9C12.4 5 13.6 4 15.5 4c2.8 0 5.1 2.3 5.1 5.2 0 5.8-8.6 11.4-8.6 11.4z" stroke-linejoin="round"/></svg></span>
+  <div class="convite-texto">
+    <strong>Gostou do que viu?</strong>
+    <span>Deixa um coração para a gente.</span>
+  </div>
+  <a class="convite-ir" href="#meta">Curtir</a>
+  <button class="convite-fechar" type="button" aria-label="Fechar o convite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
 <nav class="menu" id="menu" aria-label="Atalhos do site">
   <a href="#" data-secao="topo" class="ativo" aria-label="Voltar ao topo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.6L12 3l9 7.6"/><path d="M5.6 9.4V21h12.8V9.4"/></svg></a>
   <a href="#calcular" data-secao="calcular" aria-label="Calculadora"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.4"/><path d="M8.4 6.4h7.2M8.4 11h.01M12 11h.01M15.6 11h.01M8.4 14.6h.01M12 14.6h.01M15.6 14.6h.01M8.4 18.2h7.2"/></svg></a>
   <a href="#produto" data-secao="produto" aria-label="O aplicativo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.2" y="2.2" width="11.6" height="19.6" rx="2.6"/><path d="M10.4 18.6h3.2"/></svg></a>
   <a href="#equipe" data-secao="equipe" aria-label="A equipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 20.2c0-3.3 2.8-5.2 6.2-5.2s6.2 1.9 6.2 5.2"/><path d="M16.4 5.4a3.1 3.1 0 010 5.7M18 20.2c0-2.1-.8-3.7-2.1-4.7"/></svg></a>
   <span class="separador" aria-hidden="true"></span>
-  <button class="curtir" type="button" aria-pressed="false" aria-label="Curtir o HealthPlus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 9.2C3.4 6.3 5.7 4 8.5 4c1.9 0 3.1 1 3.5 1.9C12.4 5 13.6 4 15.5 4c2.8 0 5.1 2.3 5.1 5.2 0 5.8-8.6 11.4-8.6 11.4z" stroke-linejoin="round"/></svg></button>
+  <a href="#meta" data-secao="meta" class="menu-coracao" aria-label="Ir para as curtidas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.6S3.4 15 3.4 9.2C3.4 6.3 5.7 4 8.5 4c1.9 0 3.1 1 3.5 1.9C12.4 5 13.6 4 15.5 4c2.8 0 5.1 2.3 5.1 5.2 0 5.8-8.6 11.4-8.6 11.4z" stroke-linejoin="round"/></svg></a>
 </nav>
 
 <dialog class="modal" id="modal-contrib" aria-labelledby="modal-nome">
@@ -719,7 +734,7 @@
   </div>
 </dialog>
 
-<script src="assets/oms-imc.js?v=gi8l2"></script>
-<script src="assets/app.js?v=gi8l2" defer></script>
+<script src="assets/oms-imc.js?v=hemqw"></script>
+<script src="assets/app.js?v=hemqw" defer></script>
 </body>
 </html>

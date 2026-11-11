@@ -610,21 +610,27 @@
       });
     }
 
-    function pinta(total) {
+    // número e coração são pintados separados: na comemoração o
+    // número sobe na hora e o coração só volta ao proporcional
+    // depois da chuva.
+    function pintaNumero(total) {
       var n = Number(total) || 0;
       numeros.forEach(function (el) { el.textContent = n.toLocaleString('pt-BR'); });
-
-      if (enchimento) {
-        var fracao = Math.min(n / META, 1);
-        // o coração enche de baixo para cima; 110 é a altura do viewBox
-        enchimento.style.transform = 'translate(0,' + (110 * (1 - fracao)) + 'px)';
-      }
       if (recado) {
         recado.textContent = n >= META
           ? 'Meta batida. Obrigado a cada uma das ' + n.toLocaleString('pt-BR') + ' pessoas.'
           : 'Faltam ' + (META - n) + ' para encher o coração.';
       }
     }
+
+    function pintaCoracao(total) {
+      if (!enchimento) return;
+      var fracao = Math.min((Number(total) || 0) / META, 1);
+      // o coração enche de baixo para cima; 110 é a altura do viewBox
+      enchimento.style.transform = 'translate(0,' + (110 * (1 - fracao)) + 'px)';
+    }
+
+    function pinta(total) { pintaNumero(total); pintaCoracao(total); }
 
     function marcarEstado() {
       botoes.forEach(function (b) {
@@ -648,6 +654,43 @@
       setTimeout(function () { faisca.remove(); }, 800);
     }
 
+    /* ── a chuva de corações ──
+       O coração grande enche até em cima, estoura numa chuva de
+       uns dois segundos e então volta ao tamanho proporcional às
+       curtidas de verdade. */
+    var chuva = $('#chuva');
+    var CORACAO = '<svg viewBox="0 0 24 24"><path d="M12 20.6S3.4 15 3.4 9.2C3.4 6.3 5.7 4 8.5 4c1.9 0 ' +
+                  '3.1 1 3.5 1.9C12.4 5 13.6 4 15.5 4c2.8 0 5.1 2.3 5.1 5.2 0 5.8-8.6 11.4-8.6 11.4z"/></svg>';
+
+    function chover() {
+      if (!chuva || menosMovimento) return;
+      var altura = chuva.getBoundingClientRect().height || 420;
+      for (var i = 0; i < 24; i++) {
+        setTimeout(function () {
+          var c = document.createElement('i');
+          var tam = 13 + Math.random() * 24;
+          c.innerHTML = CORACAO;
+          c.style.left = (Math.random() * 96) + '%';
+          c.style.width = tam + 'px';
+          c.style.height = tam + 'px';
+          c.style.setProperty('--queda', Math.round(altura + 70) + 'px');
+          c.style.setProperty('--desvio', Math.round((Math.random() - 0.5) * 130) + 'px');
+          c.style.setProperty('--giro', Math.round((Math.random() - 0.5) * 340) + 'deg');
+          c.style.setProperty('--dur', (1.5 + Math.random() * 0.8).toFixed(2) + 's');
+          chuva.appendChild(c);
+          setTimeout(function () { c.remove(); }, 2800);
+        }, i * 50);
+      }
+    }
+
+    function comemorar(total) {
+      pintaNumero(total);
+      if (menosMovimento || !enchimento) { pintaCoracao(total); return; }
+      enchimento.style.transform = 'translate(0,0px)';     // enche por inteiro
+      setTimeout(chover, 260);
+      setTimeout(function () { pintaCoracao(total); }, 2300);
+    }
+
     marcarEstado();
     chamar('total_curtidas').then(pinta).catch(function (e) {
       console.warn(e);
@@ -657,14 +700,54 @@
     botoes.forEach(function (b) {
       b.addEventListener('click', function () {
         explode(b);
-        if (jaCurtiu) return;             // não soma duas vezes
+        if (jaCurtiu) {                   // já curtiu: só a festa, sem somar
+          chamar('total_curtidas').then(comemorar).catch(function (e) { console.warn(e); });
+          return;
+        }
         jaCurtiu = true;
         guardar('healthplus:curtiu', '1');
         marcarEstado();
+        esconderConvite();
         chamar('curtir', { p_dispositivo: aparelho() })
-          .then(pinta)
+          .then(comemorar)
           .catch(function (e) { console.warn(e); });
       });
     });
+
+    /* ── o convite ──
+       Aparece uma vez, quando a pessoa já leu boa parte da página.
+       Quem já curtiu ou já fechou não vê mais. */
+    var caixa = $('#convite');
+
+    function esconderConvite() {
+      if (!caixa) return;
+      caixa.classList.remove('aparece');
+      setTimeout(function () { caixa.hidden = true; }, 500);
+    }
+
+    if (caixa && !jaCurtiu && guardado('healthplus:convite') !== 'fechado') {
+      var fechar = $('.convite-fechar', caixa);
+      if (fechar) {
+        fechar.addEventListener('click', function () {
+          guardar('healthplus:convite', 'fechado');
+          esconderConvite();
+        });
+      }
+      var irCurtir = $('.convite-ir', caixa);
+      if (irCurtir) irCurtir.addEventListener('click', esconderConvite);
+
+      var mostrou = false;
+      var talvezMostrar = function () {
+        if (mostrou || jaCurtiu) return;
+        var rolado = window.scrollY + window.innerHeight;
+        var total = document.body.scrollHeight;
+        // só depois de metade da página, para não atrapalhar quem chegou agora
+        if (rolado < total * 0.5) return;
+        mostrou = true;
+        caixa.hidden = false;
+        requestAnimationFrame(function () { caixa.classList.add('aparece'); });
+      };
+      window.addEventListener('scroll', talvezMostrar, { passive: true });
+    }
   })();
 })();
