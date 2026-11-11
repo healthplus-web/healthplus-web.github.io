@@ -414,10 +414,10 @@ a:hover{text-decoration:underline}
 }
 .fone-rolar{
   display:flex;align-items:center;justify-content:center;gap:6px;
-  font-size:8px;letter-spacing:.1em;text-transform:uppercase;
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;
   color:var(--texto-3);padding:2px 0 6px;
 }
-.fone-rolar svg{width:10px;height:10px;animation:desce 1.8s ease-in-out infinite}
+.fone-rolar svg{width:12px;height:12px;animation:desce 1.8s ease-in-out infinite}
 
 .fcard{background:#FFFDF0;border:1px solid var(--borda);border-radius:10px;padding:9px 10px}
 .fcard .rot{font-size:8px;color:var(--texto-3);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
@@ -492,7 +492,7 @@ a:hover{text-decoration:underline}
 
 .cartao__verso p{color:rgba(255,248,201,.86);font-size:.9rem;margin:0}
 .cartao__verso .voltar{
-  font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.07em;
   color:var(--verde-faixa);text-transform:uppercase;margin-top:4px;
 }
 
@@ -1037,11 +1037,13 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   .time{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 
-/* Entre 720 e 1280px o menu lateral encosta no conteúdo e cobre a
-   borda direita — era isso que escondia as setas da privacidade.
-   Acima disso a própria margem da página já dá o espaço. */
-@media (min-width:720px) and (max-width:1279px){
-  .env{padding-right:calc(var(--gutter) + 72px)}
+/* No computador o menu flutua na lateral direita e ocupa 84px
+   mais a folga. Enquanto a margem natural da página não der esse
+   espaço, a coluna se estreita (dos dois lados, para a página
+   seguir centrada); a partir daí o min() devolve o limite normal.
+   Era isso que escondia as setas da privacidade. */
+@media (min-width:720px){
+  .env{max-width:min(var(--max),calc(100% - 192px))}
 }
 @media (max-width:719px){
   .tela-bloco.espelho > div:first-child{order:2}
