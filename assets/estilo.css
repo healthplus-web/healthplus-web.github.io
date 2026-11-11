@@ -1250,14 +1250,6 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 }
 .mvv__bloco:focus-visible{outline:3px solid var(--verde-faixa);outline-offset:3px}
 .mvv__bloco.ativa{border-color:var(--verde-faixa);box-shadow:0 10px 26px rgba(0,0,0,.22)}
-/* a barrinha que corre para o painel ativo */
-.mvv__bloco::after{
-  content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
-  background:var(--verde-faixa);
-  transform:scaleY(0);transform-origin:top;
-  transition:transform .7s cubic-bezier(.22,1,.36,1);
-}
-.mvv__bloco.ativa::after{transform:scaleY(1)}
 .mvv__rot{
   display:flex;align-items:center;gap:10px;
   font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;
@@ -1355,12 +1347,15 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   display:grid;place-items:center;cursor:pointer;padding:0;
 }
 .carrossel__ponto i{
-  display:block;width:9px;height:9px;border-radius:999px;
+  display:block;width:10px;height:10px;border-radius:999px;
   background:var(--borda-creme);
-  transition:width .5s cubic-bezier(.22,1,.36,1),background .35s ease;
+  transition:transform .5s cubic-bezier(.22,1,.36,1),background .35s ease,box-shadow .35s ease;
 }
 .carrossel__ponto:hover i{background:var(--verde-faixa)}
-.carrossel__ponto.ativo i{width:30px;background:var(--coral-forte)}
+.carrossel__ponto.ativo i{
+  background:var(--coral-forte);transform:scale(1.4);
+  box-shadow:0 0 0 4px rgba(255,92,54,.2);
+}
 
 @media (min-width:720px){
   .mvv{grid-template-columns:1fr 1fr;gap:18px;align-items:start;
