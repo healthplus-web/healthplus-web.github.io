@@ -1096,10 +1096,10 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   background:
     radial-gradient(130% 75% at 50% 0%,rgba(93,181,130,.20),transparent 68%),
     linear-gradient(170deg,var(--painel),var(--painel-campo));
-  box-shadow:inset 0 1px 0 rgba(255,248,201,.10),0 12px 30px rgba(16,46,31,.22);
+  box-shadow:inset 0 1px 0 rgba(255,248,201,.10),0 12px 30px rgba(0,0,0,.24);
 }
-/* o brilho que a tela joga no palco */
-.fone{box-shadow:0 12px 22px rgba(0,0,0,.4),0 0 44px rgba(255,248,201,.10)}
+/* elevacao sobre o palco: sombra neutra, sem halo colorido */
+.fone{box-shadow:0 14px 26px rgba(0,0,0,.42)}
 
 /* barra de status: a pista mais barata de que aquilo é um aparelho */
 .fone-status{
