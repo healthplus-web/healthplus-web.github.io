@@ -818,7 +818,7 @@ body.modal-aberto{overflow:hidden}
   margin-left:auto;flex:none;
   min-height:42px;padding:0 18px;border-radius:999px;      /* [FITTS] */
   display:grid;place-items:center;white-space:nowrap;
-  background:#FF4D6D;color:#fff;font-weight:600;font-size:.86rem;text-decoration:none;
+  background:#FF4D6D;color:#13120E;font-weight:600;font-size:.86rem;text-decoration:none;
 }
 .convite-ir:hover{background:#FF6880;text-decoration:none}
 .convite-fechar{
@@ -858,7 +858,8 @@ body.modal-aberto{overflow:hidden}
 }
 .meta-rotulo{font-size:.92rem;color:rgba(255,248,201,.74);margin-top:8px}
 .meta-recado{font-family:var(--mono);font-size:.78rem;color:rgba(255,248,201,.5);margin-top:16px}
-.meta .btn{margin-top:26px;background:#FF4D6D;color:#fff}
+/* texto escuro no rosa: branco da 3,21:1 e reprova; #13120E da 5,83:1 */
+.meta .btn{margin-top:26px;background:#FF4D6D;color:#13120E}
 .meta .btn:hover{background:#FF6880}
 .meta .btn.curtido{background:transparent;border-color:rgba(255,248,201,.3);color:rgba(255,248,201,.8)}
 
