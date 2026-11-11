@@ -394,7 +394,30 @@ a:hover{text-decoration:underline}
 .fone-topo{background:var(--verde-faixa);padding:12px 12px 10px;color:var(--verde-escuro)}
 .fone-topo .mini{font-size:8px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.78}
 .fone-topo .tit{font-size:14px;font-weight:600;margin-top:2px;letter-spacing:-.01em}
-.fone-corpo{padding:11px;display:flex;flex-direction:column;gap:8px;overflow:hidden;flex:1}
+/* A tela rola de verdade, com o dedo ou a roda do mouse. O
+   overscroll-behavior prende a rolagem dentro do aparelho: sem
+   ele, chegar ao fim da telinha empurrava a página. */
+.fone-corpo{
+  padding:11px;display:flex;flex-direction:column;gap:8px;flex:1;
+  overflow-y:auto;overflow-x:hidden;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.fone-corpo::-webkit-scrollbar{width:0;height:0}
+.fone-tela{position:relative}
+/* o esmaecido embaixo avisa que tem mais conteúdo */
+.fone-tela::after{
+  content:"";position:absolute;left:8px;right:8px;bottom:0;height:34px;
+  background:linear-gradient(rgba(255,248,201,0),var(--creme));
+  pointer-events:none;border-radius:0 0 18px 18px;
+}
+.fone-rolar{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:8px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--texto-3);padding:2px 0 6px;
+}
+.fone-rolar svg{width:10px;height:10px;animation:desce 1.8s ease-in-out infinite}
 
 .fcard{background:#FFFDF0;border:1px solid var(--borda);border-radius:10px;padding:9px 10px}
 .fcard .rot{font-size:8px;color:var(--texto-3);text-transform:uppercase;letter-spacing:.08em;font-weight:600}

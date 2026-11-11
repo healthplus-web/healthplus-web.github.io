@@ -694,21 +694,23 @@
     function chover() {
       if (!chuva || menosMovimento) return;
       var altura = chuva.getBoundingClientRect().height || 420;
-      for (var i = 0; i < 24; i++) {
+      // 60 corações soltos ao longo de 1,6 s, cada um levando de 2,2
+      // a 3,2 s para cair: a chuva inteira dura perto de 4 segundos.
+      for (var i = 0; i < 60; i++) {
         setTimeout(function () {
           var c = document.createElement('i');
-          var tam = 13 + Math.random() * 24;
+          var tam = 12 + Math.random() * 26;
           c.innerHTML = CORACAO;
           c.style.left = (Math.random() * 96) + '%';
           c.style.width = tam + 'px';
           c.style.height = tam + 'px';
-          c.style.setProperty('--queda', Math.round(altura + 70) + 'px');
-          c.style.setProperty('--desvio', Math.round((Math.random() - 0.5) * 130) + 'px');
-          c.style.setProperty('--giro', Math.round((Math.random() - 0.5) * 340) + 'deg');
-          c.style.setProperty('--dur', (1.5 + Math.random() * 0.8).toFixed(2) + 's');
+          c.style.setProperty('--queda', Math.round(altura + 90) + 'px');
+          c.style.setProperty('--desvio', Math.round((Math.random() - 0.5) * 150) + 'px');
+          c.style.setProperty('--giro', Math.round((Math.random() - 0.5) * 360) + 'deg');
+          c.style.setProperty('--dur', (2.2 + Math.random()).toFixed(2) + 's');
           chuva.appendChild(c);
-          setTimeout(function () { c.remove(); }, 2800);
-        }, i * 50);
+          setTimeout(function () { c.remove(); }, 3400);
+        }, i * 27);
       }
     }
 
