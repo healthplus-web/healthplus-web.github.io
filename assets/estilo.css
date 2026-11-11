@@ -1020,10 +1020,6 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   .metricas ul{grid-template-columns:repeat(4,minmax(0,1fr))}
   .cartoes{grid-template-columns:repeat(3,1fr)}
   .time{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .tela-bloco{grid-template-columns:250px 1fr;gap:46px}
-  .tela-bloco.espelho{grid-template-columns:1fr 250px}
-  .tela-bloco.espelho .fone{order:2}
-  .legenda{text-align:left}
 
   /* No PC o campo não precisa ser alto: o mouse acerta 40px sem
      esforço, e campo gigante empurra o resultado para fora da vista. */
@@ -1033,6 +1029,15 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   .controles .alternador button{min-height:34px}
   .painel .val{font-size:1.25rem}
 }
+/* O aparelho ocupa 300px fixos, então as duas colunas só fazem
+   sentido quando sobra largura de texto de verdade. Abaixo disto
+   o bloco empilha: aparelho em cima, explicação embaixo. */
+@media (min-width:1000px){
+  .tela-bloco{grid-template-columns:300px 1fr;gap:46px}
+  .tela-bloco.espelho{grid-template-columns:1fr 300px}
+  .legenda{text-align:left}
+}
+
 @media (min-width:980px){
   .time{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
@@ -1071,4 +1076,143 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   .marca-anim .ponto{transform:none}
   .abertura-nome,.abertura-passo{opacity:1}
   .heroi .curvas path{stroke-dashoffset:0}
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   9.1 Palco, barra de status e balões das telas
+   ══════════════════════════════════════════════════════════════
+   O fundo creme da telinha é a cor REAL do app (fundo: '#FFF8C9'
+   em app/tema/index.js), então mudá-la faria o mockup mentir. O
+   que faltava era separar o aparelho da página: como o site
+   também é creme, dentro e fora do aro tinham a mesma cor e o
+   olho lia "um contorno desenhado", não "um aparelho". O palco
+   escuro resolve isso sem tocar nas cores do app — e a tela
+   passa a acender como uma tela de verdade. */
+.palco{
+  position:relative;
+  padding:30px 34px 26px;border-radius:28px;
+  max-width:300px;margin-inline:auto;   /* empilhado, o palco nao se espalha */
+  background:
+    radial-gradient(130% 75% at 50% 0%,rgba(93,181,130,.20),transparent 68%),
+    linear-gradient(170deg,var(--painel),var(--painel-campo));
+  box-shadow:inset 0 1px 0 rgba(255,248,201,.10),0 12px 30px rgba(16,46,31,.22);
+}
+/* o brilho que a tela joga no palco */
+.fone{box-shadow:0 12px 22px rgba(0,0,0,.4),0 0 44px rgba(255,248,201,.10)}
+
+/* barra de status: a pista mais barata de que aquilo é um aparelho */
+.fone-status{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--verde-faixa);color:var(--verde-escuro);
+  padding:5px 12px 1px;font-size:9px;font-weight:700;letter-spacing:.02em;
+}
+.fone-status__ico{display:inline-flex;align-items:flex-end;gap:2.5px}
+.fone-status__ico i{width:2.5px;height:5px;background:currentColor;border-radius:1px;opacity:.9}
+.fone-status__ico i:last-of-type{height:8px}
+.fone-status__ico b{
+  width:15px;height:8px;margin-left:2px;border:1px solid currentColor;
+  border-radius:2px;position:relative;opacity:.9;
+}
+.fone-status__ico b::after{content:"";position:absolute;inset:1.5px;right:5px;background:currentColor;border-radius:1px}
+
+/* ── balõezinhos sobre as telas ────────────────────────────────
+   Ficam como filhos de .fone, e não de .fone-tela: a tela tem
+   overflow:hidden (precisa ter, para rolar) e cortaria o balão.
+   [FITTS] o pino desenha 30px e acerta 46px, pelo ::before. */
+.dica{position:absolute;top:var(--t);z-index:40;line-height:0}
+.dica[data-lado="dir"]{right:-15px}
+.dica[data-lado="esq"]{left:-15px}
+.dica__pin{
+  position:relative;width:30px;height:30px;padding:0;
+  border-radius:50%;border:2px solid var(--creme);
+  background:var(--coral);color:#13120E;
+  font-family:var(--corpo);font-size:15px;font-weight:700;line-height:1;
+  display:grid;place-items:center;cursor:pointer;
+  box-shadow:0 3px 10px rgba(0,0,0,.34);
+  transition:transform .2s ease,background .2s ease;
+}
+.dica__pin::before{content:"";position:absolute;inset:-8px;border-radius:50%}
+.dica__pin:hover,.dica__pin:focus-visible{background:var(--coral-forte);transform:scale(1.12)}
+.dica.aberta .dica__pin{background:var(--coral-forte);transform:scale(1.12)}
+/* o anel que chama o olho, só enquanto ninguém abriu nenhum */
+.dica__pin::after{
+  content:"";position:absolute;inset:-4px;border-radius:50%;
+  border:2px solid var(--coral);animation:anel 2.6s ease-out infinite;
+}
+.telas.tocada .dica__pin::after{animation:none;opacity:0}
+@keyframes anel{
+  0%{transform:scale(.9);opacity:.75}
+  70%,100%{transform:scale(1.5);opacity:0}
+}
+.dica__balao{
+  position:absolute;top:-12px;width:250px;
+  padding:12px 14px;border-radius:13px;
+  background:var(--verde-escuro);color:var(--creme);
+  border:1px solid var(--painel-borda);
+  font-size:12.5px;line-height:1.5;text-align:left;
+  box-shadow:0 16px 34px rgba(0,0,0,.36);
+  opacity:0;visibility:hidden;pointer-events:none;z-index:80;
+  transform:translateY(8px) scale(.97);transform-origin:top left;
+  transition:opacity .22s ease,transform .22s ease,visibility .22s;
+}
+.dica__balao strong{color:#FFD9A8}
+.dica[data-lado="dir"] .dica__balao{left:42px}
+.dica[data-lado="esq"] .dica__balao{right:42px;transform-origin:top right}
+.dica.aberta .dica__balao{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+@media (hover:hover){
+  .dica:hover .dica__balao{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+}
+/* No celular não há espaço ao lado do aparelho: o balão vira uma
+   folha no pé da tela, acima da barra do menu. */
+@media (max-width:719px){
+  .dica[data-lado="dir"] .dica__balao,
+  .dica[data-lado="esq"] .dica__balao{
+    position:fixed;left:16px;right:16px;width:auto;
+    top:auto;bottom:92px;font-size:13.5px;
+    transform:translateY(12px);transform-origin:center bottom;
+  }
+  .dica.aberta .dica__balao{transform:none}
+}
+
+/* ── L, M e S: cada letra explica a si mesma ───────────────────
+   Uma por uma, e não um balão com os três, porque a dúvida chega
+   letra por letra: quem para no "L" quer saber o L. */
+.sigla{position:relative;display:inline-block}
+.sigla__b{
+  font:inherit;font-weight:700;
+  color:var(--coral);                 /* 4,66:1 sobre o verso escuro */
+  background:rgba(255,116,82,.14);
+  border:1px solid rgba(255,116,82,.45);
+  border-radius:7px;padding:1px 7px;cursor:pointer;
+  transition:background .2s ease,border-color .2s ease;
+}
+.sigla__b i{
+  display:inline-block;width:4px;height:4px;margin-left:4px;
+  border-radius:50%;background:var(--coral);vertical-align:middle;opacity:.8;
+}
+.sigla__b:hover,.sigla__b:focus-visible,.sigla.aberta .sigla__b{
+  background:rgba(255,116,82,.3);border-color:var(--coral);
+}
+.sigla__balao{
+  position:absolute;left:50%;bottom:calc(100% + 11px);
+  width:min(265px,72vw);padding:11px 13px;border-radius:12px;
+  background:var(--creme);color:var(--texto);border:1px solid var(--borda-creme);
+  font-size:12.5px;font-weight:400;line-height:1.5;text-align:left;
+  box-shadow:0 16px 34px rgba(0,0,0,.42);
+  opacity:0;visibility:hidden;pointer-events:none;z-index:60;
+  transform:translateX(-50%) translateY(7px);
+  transition:opacity .22s ease,transform .22s ease,visibility .22s;
+}
+.sigla__balao b{color:var(--coral-txt)}
+.sigla__balao::after{
+  content:"";position:absolute;top:100%;left:50%;margin-left:-7px;
+  border:7px solid transparent;border-top-color:var(--creme);
+}
+.sigla.aberta .sigla__balao{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%)}
+@media (hover:hover){
+  .sigla:hover .sigla__balao{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%)}
+}
+@media (prefers-reduced-motion:reduce){
+  .dica__pin::after{animation:none;opacity:0}
 }

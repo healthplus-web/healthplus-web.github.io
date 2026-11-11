@@ -801,4 +801,101 @@
       window.addEventListener('scroll', talvezMostrar, { passive: true });
     }
   })();
+
+  /* ═══════════════════════════════════════════════════════════
+     10. BALÕES EXPLICATIVOS
+     Dois tipos, um só comportamento: os pinos sobre as telas do
+     app e as letras L, M e S no verso do cartão 02.
+
+     No computador o hover já abre (é CSS puro, funciona até sem
+     JavaScript). Aqui entra o resto: clique e teclado para quem
+     está no celular ou navegando por tab, um aberto de cada vez,
+     e fechar clicando em qualquer lugar ou com Esc.
+
+     O stopPropagation nas letras é obrigatório: elas vivem DENTRO
+     do cartão que gira ao clique, e sem isso abrir a explicação
+     viraria o cartão de volta na mesma hora.
+     ═══════════════════════════════════════════════════════════ */
+
+  (function baloes() {
+    var grupos = [
+      { caixa: '.dica', gatilho: '.dica__pin' },
+      { caixa: '.sigla', gatilho: '.sigla__b' }
+    ];
+    var todas = [];
+
+    function fechaTudo() {
+      todas.forEach(function (c) {
+        c.classList.remove('aberta');
+        var b = $('.dica__pin', c) || $('.sigla__b', c);
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    grupos.forEach(function (g) {
+      $$(g.caixa).forEach(function (caixa) {
+        var botao = $(g.gatilho, caixa);
+        if (!botao) return;
+        todas.push(caixa);
+
+        botao.addEventListener('click', function (e) {
+          // sem isto o clique sobe para o cartão e ele gira
+          e.stopPropagation();
+          var abrir = !caixa.classList.contains('aberta');
+          fechaTudo();
+          caixa.classList.toggle('aberta', abrir);
+          botao.setAttribute('aria-expanded', String(abrir));
+          // o anel pulsante já chamou a atenção; depois do primeiro
+          // toque ele só distrai
+          var telas = $('.telas');
+          if (telas) telas.classList.add('tocada');
+        });
+
+        botao.addEventListener('keydown', function (e) {
+          // Enter e Espaço no botão já geram um click; o que não pode
+          // é a tecla chegar ao cartão e girá-lo
+          if (e.key === 'Enter' || e.key === ' ') e.stopPropagation();
+        });
+      });
+    });
+
+    if (!todas.length) return;
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.dica, .sigla')) fechaTudo();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') fechaTudo();
+    });
+    // virar o cartão fecha a explicação que estava aberta nele
+    $$('.cartao').forEach(function (c) {
+      c.addEventListener('click', function () { fechaTudo(); });
+    });
+  })();
+
+  /* ═══════════════════════════════════════════════════════════
+     11. RECARREGAR VOLTA AO TOPO
+     O navegador, por conta dele, devolve a página na altura em
+     que você estava. Numa página comum isso ajuda; aqui não: a
+     abertura animada roda a cada carregamento, então recarregar
+     no meio da página mostrava a animação de entrada atrás de uma
+     seção do meio — o visitante via o fim antes do começo.
+
+     Um endereço com #secao continua valendo: ali a altura foi
+     pedida de propósito, por um link ou pelo menu.
+     ═══════════════════════════════════════════════════════════ */
+
+  (function recarregaNoTopo() {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    var temAncora = function () {
+      var h = location.hash;
+      return h.length > 1 && !!document.getElementById(h.slice(1));
+    };
+    if (temAncora()) return;
+    window.scrollTo(0, 0);
+    window.addEventListener('load', function () {
+      if (!temAncora()) window.scrollTo(0, 0);
+    });
+  })();
+
 })();

@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css?v=b5p0u">
+<link rel="stylesheet" href="assets/estilo.css?v=cfet3">
 </head>
 <body>
 
@@ -263,8 +263,12 @@
 
       <div class="tela-bloco">
         <div class="reveal" data-rev="esq">
-          <div class="fone">
+          <div class="palco">
+            <div class="fone">
+            <div class="dica" style="--t:34px" data-lado="dir"><button class="dica__pin" type="button" aria-expanded="false" aria-label="O que estou vendo aqui?"><span aria-hidden="true">?</span></button><div class="dica__balao" role="tooltip">O app escolhe a curva da OMS pela idade e pelo sexo da criança <strong>antes</strong> de calcular. A mesma medida dá resultados diferentes em idades diferentes.</div></div>
+            <div class="dica" style="--t:126px" data-lado="dir"><button class="dica__pin" type="button" aria-expanded="false" aria-label="O que estou vendo aqui?"><span aria-hidden="true">?</span></button><div class="dica__balao" role="tooltip"><strong>−0,42</strong> é o z-score: a distância até a mediana da referência. O percentil ao lado é o mesmo número traduzido para “quantas crianças ficam abaixo dessa”.</div></div>
             <div class="fone-tela">
+              <div class="fone-status" aria-hidden="true"><span>9:41</span><span class="fone-status__ico"><i></i><i></i><b></b></span></div>
               <div class="fone-topo"><div class="mini">Resultado</div><div class="tit">Avaliação de hoje</div></div>
               <div class="fone-corpo">
                 <div class="fcard"><div class="rot">IMC para a idade</div><div class="val">−0,42</div><div class="sub">percentil 34 · <span class="pill">Eutrofia</span></div></div>
@@ -278,6 +282,7 @@
                 <div class="fone-rolar">role a tela <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>
               </div>
             </div>
+          </div>
           </div>
           <p class="legenda">tela de resultado da avaliação</p>
         </div>
@@ -313,8 +318,12 @@
           </p>
         </div>
         <div class="reveal" data-rev="dir" data-atraso="1">
-          <div class="fone">
+          <div class="palco">
+            <div class="fone">
+            <div class="dica" style="--t:34px" data-lado="esq"><button class="dica__pin" type="button" aria-expanded="false" aria-label="O que estou vendo aqui?"><span aria-hidden="true">?</span></button><div class="dica__balao" role="tooltip">O paciente entra com a conta dele e vê <strong>só</strong> a própria evolução — o mesmo cálculo que o nutricionista vê, nunca um número diferente.</div></div>
+            <div class="dica" style="--t:132px" data-lado="esq"><button class="dica__pin" type="button" aria-expanded="false" aria-label="O que estou vendo aqui?"><span aria-hidden="true">?</span></button><div class="dica__balao" role="tooltip">A linha é a criança ao longo das consultas; o ponto laranja é a avaliação de hoje. O que interessa é o caminho, não o número de uma consulta isolada.</div></div>
             <div class="fone-tela">
+              <div class="fone-status" aria-hidden="true"><span>9:41</span><span class="fone-status__ico"><i></i><i></i><b></b></span></div>
               <div class="fone-topo"><div class="mini">Paciente</div><div class="tit">Minha evolução</div></div>
               <div class="fone-corpo">
                 <div class="fcard">
@@ -344,14 +353,19 @@
               </div>
             </div>
           </div>
+          </div>
           <p class="legenda">minha evolução, na área do paciente</p>
         </div>
       </div>
 
       <div class="tela-bloco">
         <div class="reveal" data-rev="esq">
-          <div class="fone">
+          <div class="palco">
+            <div class="fone">
+            <div class="dica" style="--t:34px" data-lado="dir"><button class="dica__pin" type="button" aria-expanded="false" aria-label="O que estou vendo aqui?"><span aria-hidden="true">?</span></button><div class="dica__balao" role="tooltip">A ficha junta cadastro, agenda, histórico de avaliações e os controles de privacidade no mesmo lugar.</div></div>
+            <div class="dica" style="--t:164px" data-lado="dir"><button class="dica__pin" type="button" aria-expanded="false" aria-label="O que estou vendo aqui?"><span aria-hidden="true">?</span></button><div class="dica__balao" role="tooltip">Exportar os dados e ver quem acessou o quê são direitos garantidos pela LGPD. Ficam dentro do app, não num pedido por e-mail.</div></div>
             <div class="fone-tela">
+              <div class="fone-status" aria-hidden="true"><span>9:41</span><span class="fone-status__ico"><i></i><i></i><b></b></span></div>
               <div class="fone-topo"><div class="mini">Nutricionista</div><div class="tit">Ficha do paciente</div></div>
               <div class="fone-corpo">
                 <div class="fcard"><div class="rot">Em acompanhamento</div><div class="val" style="font-size:15px">Helena, 7 anos</div><div class="sub">última avaliação há 21 dias</div></div>
@@ -369,6 +383,7 @@
                 <div class="fone-rolar">role a tela <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>
               </div>
             </div>
+          </div>
           </div>
           <p class="legenda">ficha do paciente, com o cartão de LGPD</p>
         </div>
@@ -433,9 +448,12 @@
           <span class="cartao__dica">ver o detalhe <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
         </div>
         <div class="cartao__face cartao__verso">
-          <p>A partir dos parâmetros L, M e S refizemos todos os desvios-padrão
-          que a própria OMS publica. Todos caíram dentro da precisão com que
-          ela os divulga.</p>
+          <p>A partir dos três parâmetros que a OMS publica para cada idade —
+          <span class="sigla"><button class="sigla__b" type="button" aria-expanded="false">L<i aria-hidden="true"></i></button><span class="sigla__balao" role="tooltip"><b>L</b> corrige a assimetria. Peso e IMC não se distribuem igualmente dos dois lados da mediana: sempre sobra mais gente do lado de cima. O L é o expoente que endireita a curva antes da conta.</span></span>,
+          <span class="sigla"><button class="sigla__b" type="button" aria-expanded="false">M<i aria-hidden="true"></i></button><span class="sigla__balao" role="tooltip"><b>M</b> é a mediana: o valor esperado para uma criança daquela idade e daquele sexo. É o ponto de comparação, o “normal” da referência.</span></span> e
+          <span class="sigla"><button class="sigla__b" type="button" aria-expanded="false">S<i aria-hidden="true"></i></button><span class="sigla__balao" role="tooltip"><b>S</b> é a dispersão relativa: o quanto os valores costumam variar em volta da mediana. É o que define o tamanho de um desvio-padrão naquela idade.</span></span> —
+          refizemos todos os desvios-padrão que ela mesma divulga. Todos
+          caíram dentro da precisão publicada.</p>
           <div class="voltar">toque para voltar</div>
         </div>
       </div>
@@ -707,9 +725,8 @@
   <div class="env">
     <h2 data-digita>Curtiu o que viu?</h2>
     <p>
-      Esta página não vende nada, não pede cadastro e não guarda quem você é.
-      A única coisa que a gente pede é um toque no coração. E o número
-      abaixo é de verdade, somando todo mundo que já tocou.
+      O número abaixo é de verdade: são as pessoas que acessaram esta
+      página e tocaram no coração.
     </p>
 
     <svg class="meta-coracao" viewBox="0 0 120 110" role="img" aria-labelledby="titulo-coracao">
@@ -803,7 +820,7 @@
 </dialog>
 
 
-<script src="assets/oms-imc.js?v=b5p0u"></script>
-<script src="assets/app.js?v=b5p0u" defer></script>
+<script src="assets/oms-imc.js?v=cfet3"></script>
+<script src="assets/app.js?v=cfet3" defer></script>
 </body>
 </html>
