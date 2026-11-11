@@ -351,6 +351,8 @@
     if (!cards.length) return;
 
     function fecharTodos() {
+      // libera o hover de novo (ver o comentário no CSS)
+      document.body.classList.remove('trava-clique');
       cards.forEach(function (o) {
         o.classList.remove('aberta', 'aberta-contrib');
         $$('.pessoa__clip, .pessoa__contrib', o).forEach(function (b) {
@@ -385,6 +387,8 @@
           fecharTodos();                     // um painel aberto por vez
           card.classList.toggle(classe, abrindo);
           botao.setAttribute('aria-expanded', String(abrindo));
+          // enquanto um painel está travado por clique, o hover não abre
+          document.body.classList.toggle('trava-clique', abrindo);
         });
       });
     });
@@ -458,18 +462,209 @@
      7. VOLTAR AO TOPO
      ═══════════════════════════════════════════════════════════ */
 
-  (function aoTopo() {
-    var botao = $('#ao-topo');
-    if (!botao) return;
+  (function menuFlutuante() {
+    var menu = $('#menu');
+    if (!menu) return;
 
-    var mostrar = function () {
-      botao.classList.toggle('aparece', window.scrollY > 600);
-    };
-    mostrar();
-    window.addEventListener('scroll', mostrar, { passive: true });
+    var itens = $$('a[data-secao]', menu);
+    var secoes = itens
+      .map(function (a) { return document.getElementById(a.dataset.secao); })
+      .filter(Boolean);
 
-    botao.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: menosMovimento ? 'auto' : 'smooth' });
+    function acende(qual) {
+      itens.forEach(function (a) {
+        var ativo = a.dataset.secao === qual;
+        a.classList.toggle('ativo', ativo);
+        if (ativo) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    }
+
+    // o primeiro item é o topo: ele faz o que o botão antigo fazia
+    var aoTopo = $('a[data-secao="topo"]', menu);
+    if (aoTopo) {
+      aoTopo.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: menosMovimento ? 'auto' : 'smooth' });
+        acende('topo');
+      });
+    }
+
+    if ('IntersectionObserver' in window && secoes.length) {
+      var obs = new IntersectionObserver(function (ents) {
+        ents.forEach(function (ent) {
+          if (ent.isIntersecting) acende(ent.target.id);
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      secoes.forEach(function (s) { obs.observe(s); });
+    }
+
+    window.addEventListener('scroll', function () {
+      if (window.scrollY < 200) acende('topo');
+    }, { passive: true });
+  })();
+
+  /* ═══════════════════════════════════════════════════════════
+     8. TÍTULOS SENDO DIGITADOS
+     O texto inteiro fica no aria-label, então leitor de tela lê o
+     título de uma vez só — a digitação é só para o olho. A altura
+     é travada antes de esvaziar, para a página não pular.
+     ═══════════════════════════════════════════════════════════ */
+
+  (function digitando() {
+    var alvos = $$('[data-digita]');
+    if (!alvos.length) return;
+
+    alvos.forEach(function (el) {
+      var texto = el.textContent.trim();
+      el.setAttribute('aria-label', texto);
+      el.dataset.texto = texto;
+      var altura = el.getBoundingClientRect().height;
+      if (altura) el.style.minHeight = altura + 'px';
+      if (menosMovimento) return;
+      el.innerHTML = '<span class="digitado" aria-hidden="true"></span>' +
+                     '<span class="cursor" aria-hidden="true"></span>';
+    });
+
+    if (menosMovimento) return;
+
+    function digita(el) {
+      var alvo = el.dataset.texto || '';
+      var saida = $('.digitado', el);
+      var cursor = $('.cursor', el);
+      if (!saida) return;
+      var i = 0;
+      (function tic() {
+        saida.textContent = alvo.slice(0, i);
+        if (i++ <= alvo.length) setTimeout(tic, 22);
+        else if (cursor) setTimeout(function () { cursor.remove(); }, 1000);
+      })();
+    }
+
+    aberturaPronta.then(function () {
+      if (!('IntersectionObserver' in window)) { alvos.forEach(digita); return; }
+      var obs = new IntersectionObserver(function (ents) {
+        ents.forEach(function (ent) {
+          if (!ent.isIntersecting) return;
+          digita(ent.target);
+          obs.unobserve(ent.target);
+        });
+      }, { threshold: 0.35 });
+      alvos.forEach(function (e) { obs.observe(e); });
+    });
+  })();
+
+  /* ═══════════════════════════════════════════════════════════
+     9. CURTIDAS
+     A conta é global, guardada num banco só para isto. O navegador
+     guarda apenas um identificador aleatório que ele mesmo sorteia
+     — não é dado pessoal, não é IP, e serve só para a mesma pessoa
+     não contar duas vezes. A chave abaixo é a publicável: ela é
+     feita para ficar no navegador e não abre a tabela, que só
+     responde pelas duas funções.
+     ═══════════════════════════════════════════════════════════ */
+
+  (function curtidas() {
+    var API = 'https://mfcumktqaglnkbtrxynt.supabase.co/rest/v1/rpc/';
+    var CHAVE = 'sb_publishable_fhk3WiDfq941ftyUaeOgeg_F8I5qFyO';
+    var META = 100;
+
+    var botoes = $$('.curtir');
+    var numeros = $$('[data-curtidas]');
+    var enchimento = $('#meta-enchimento');
+    var recado = $('#meta-recado');
+    if (!botoes.length && !numeros.length) return;
+
+    function guardado(chave) {
+      try { return localStorage.getItem(chave); } catch (e) { return null; }
+    }
+    function guardar(chave, valor) {
+      try { localStorage.setItem(chave, valor); } catch (e) { /* modo privado */ }
+    }
+
+    function aparelho() {
+      var v = guardado('healthplus:aparelho');
+      if (!v) {
+        var bytes = new Uint8Array(24);
+        (window.crypto || {}).getRandomValues
+          ? crypto.getRandomValues(bytes)
+          : bytes.forEach(function (_, i) { bytes[i] = Math.floor(Math.random() * 256); });
+        v = Array.prototype.map.call(bytes, function (b) {
+          return 'abcdefghijklmnopqrstuvwxyz0123456789'[b % 36];
+        }).join('');
+        guardar('healthplus:aparelho', v);
+      }
+      return v;
+    }
+
+    var jaCurtiu = guardado('healthplus:curtiu') === '1';
+
+    function chamar(fn, corpo) {
+      return fetch(API + fn, {
+        method: 'POST',
+        headers: { apikey: CHAVE, 'Content-Type': 'application/json' },
+        body: JSON.stringify(corpo || {})
+      }).then(function (r) {
+        if (!r.ok) throw new Error('curtidas: HTTP ' + r.status);
+        return r.json();
+      });
+    }
+
+    function pinta(total) {
+      var n = Number(total) || 0;
+      numeros.forEach(function (el) { el.textContent = n.toLocaleString('pt-BR'); });
+
+      if (enchimento) {
+        var fracao = Math.min(n / META, 1);
+        // o coração enche de baixo para cima; 110 é a altura do viewBox
+        enchimento.style.transform = 'translate(0,' + (110 * (1 - fracao)) + 'px)';
+      }
+      if (recado) {
+        recado.textContent = n >= META
+          ? 'Meta batida. Obrigado a cada uma das ' + n.toLocaleString('pt-BR') + ' pessoas.'
+          : 'Faltam ' + (META - n) + ' para encher o coração.';
+      }
+    }
+
+    function marcarEstado() {
+      botoes.forEach(function (b) {
+        b.classList.toggle('curtido', jaCurtiu);
+        b.setAttribute('aria-pressed', String(jaCurtiu));
+        b.title = jaCurtiu ? 'Você já curtiu. Obrigado!' : 'Curtir o HealthPlus';
+        var txt = $('.curtir-texto', b);
+        if (txt) txt.textContent = jaCurtiu ? 'Você curtiu' : 'Curtir';
+      });
+    }
+
+    function explode(botao) {
+      if (menosMovimento) return;
+      botao.classList.remove('batendo');
+      void botao.offsetWidth;            // reinicia a animação
+      botao.classList.add('batendo');
+      var faisca = document.createElement('span');
+      faisca.className = 'faisca';
+      faisca.setAttribute('aria-hidden', 'true');
+      botao.appendChild(faisca);
+      setTimeout(function () { faisca.remove(); }, 800);
+    }
+
+    marcarEstado();
+    chamar('total_curtidas').then(pinta).catch(function (e) {
+      console.warn(e);
+      numeros.forEach(function (el) { el.textContent = '—'; });
+    });
+
+    botoes.forEach(function (b) {
+      b.addEventListener('click', function () {
+        explode(b);
+        if (jaCurtiu) return;             // não soma duas vezes
+        jaCurtiu = true;
+        guardar('healthplus:curtiu', '1');
+        marcarEstado();
+        chamar('curtir', { p_dispositivo: aparelho() })
+          .then(pinta)
+          .catch(function (e) { console.warn(e); });
+      });
     });
   })();
 })();
