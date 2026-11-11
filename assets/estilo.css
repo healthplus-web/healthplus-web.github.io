@@ -996,14 +996,14 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
    10. Revelação ao rolar, com direção
    ══════════════════════════════════════════════════════════════ */
 
-.reveal{opacity:0;transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
-.reveal[data-rev="baixo"],.reveal:not([data-rev]){transform:translateY(24px)}
-.reveal[data-rev="esq"]{transform:translateX(-46px)}
-.reveal[data-rev="dir"]{transform:translateX(46px)}
+.reveal{opacity:0;transition:opacity 1.15s cubic-bezier(.22,1,.36,1),transform 1.15s cubic-bezier(.22,1,.36,1)}
+.reveal[data-rev="baixo"],.reveal:not([data-rev]){transform:translateY(40px)}
+.reveal[data-rev="esq"]{transform:translateX(-84px)}
+.reveal[data-rev="dir"]{transform:translateX(84px)}
 .reveal.visivel{opacity:1;transform:none}
-.reveal[data-atraso="1"]{transition-delay:.1s}
-.reveal[data-atraso="2"]{transition-delay:.2s}
-.reveal[data-atraso="3"]{transition-delay:.3s}
+.reveal[data-atraso="1"]{transition-delay:.16s}
+.reveal[data-atraso="2"]{transition-delay:.32s}
+.reveal[data-atraso="3"]{transition-delay:.48s}
 
 /* ══════════════════════════════════════════════════════════════
    11. Telas maiores
@@ -1233,41 +1233,150 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 
 
 /* ══════════════════════════════════════════════════════════════
-   9.2 Missão, visão e valores
+   9.2 Missão e visão: painéis que abrem
    ══════════════════════════════════════════════════════════════
-   Missão e visão em painel escuro, como os outros painéis de
-   instrumento. O rótulo usa --verde-claro e não --verde-faixa:
-   o verde da faixa dá 4,33:1 sobre o painel e não passa em AA;
-   o claro dá 9,0:1. */
-.mvv{display:grid;gap:18px;margin-top:30px}
+   O painel aberto toma mais largura e mostra o texto; o outro
+   recolhe para o rótulo. No computador quem manda é o mouse; no
+   celular, o toque. O rótulo usa --verde-claro e não --verde-faixa:
+   o verde da faixa dá 4,33:1 sobre o painel e não passa em AA; o
+   claro dá 9,0:1. */
+.mvv{display:grid;gap:14px;margin-top:30px}
 .mvv__bloco{
+  position:relative;overflow:hidden;cursor:pointer;
   background:linear-gradient(170deg,var(--painel),var(--painel-campo));
   border:1px solid var(--painel-borda);border-radius:var(--r);
-  padding:26px 24px;color:var(--creme);
+  padding:24px;color:var(--creme);
+  transition:border-color .5s ease,box-shadow .5s ease;
 }
+.mvv__bloco:focus-visible{outline:3px solid var(--verde-faixa);outline-offset:3px}
+.mvv__bloco.ativa{border-color:var(--verde-faixa);box-shadow:0 10px 26px rgba(0,0,0,.22)}
+/* a barrinha que corre para o painel ativo */
+.mvv__bloco::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:var(--verde-faixa);
+  transform:scaleY(0);transform-origin:top;
+  transition:transform .7s cubic-bezier(.22,1,.36,1);
+}
+.mvv__bloco.ativa::after{transform:scaleY(1)}
 .mvv__rot{
-  font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--verde-claro);margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--verde-claro);
 }
-.mvv__bloco p{margin:0;font-size:1.04rem;line-height:1.6;color:var(--creme)}
+.mvv__rot i{
+  width:9px;height:9px;border-radius:50%;background:var(--verde-faixa);
+  opacity:.4;transition:opacity .5s ease,transform .5s ease;
+}
+.mvv__bloco.ativa .mvv__rot i{opacity:1;transform:scale(1.25)}
+/* o corpo some pela linha, e não pelo display: assim dá para animar */
+.mvv__corpo{
+  display:grid;grid-template-rows:0fr;opacity:0;
+  transition:grid-template-rows .7s cubic-bezier(.22,1,.36,1),opacity .45s ease;
+}
+.mvv__corpo > div{overflow:hidden}
+.mvv__bloco.ativa .mvv__corpo{grid-template-rows:1fr;opacity:1;transition-delay:0s,.18s}
+.mvv__corpo p{margin:12px 0 0;font-size:1.02rem;line-height:1.6;color:var(--creme)}
 
-.mvv__titulo{margin:38px 0 0;font-size:1.3rem}
+/* ══════════════════════════════════════════════════════════════
+   9.3 Carrossel dos valores
+   ══════════════════════════════════════════════════════════════
+   Um valor por vez, com os vizinhos espiando pela beirada: é o
+   que deixa a profundidade visível na troca. Arrasta com o dedo
+   ou com o mouse, e anda pelas setas, pelos pontos e pelo teclado. */
+.carrossel{margin-top:38px}
+.carrossel__topo{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-bottom:16px;
+}
+.mvv__titulo{margin:0;font-size:1.3rem}
+.carrossel__setas{display:flex;gap:8px}
+.carrossel__seta{
+  width:var(--alvo);height:var(--alvo);border-radius:50%;   /* [FITTS] */
+  display:grid;place-items:center;cursor:pointer;padding:0;
+  background:var(--painel);border:1px solid var(--painel-borda);
+  color:var(--creme);
+  transition:background .25s ease,transform .25s ease,opacity .25s ease;
+}
+.carrossel__seta svg{width:20px;height:20px}
+.carrossel__seta:hover:not(:disabled){background:var(--verde);transform:scale(1.08)}
+.carrossel__seta:disabled{opacity:.3;cursor:default}
 
-.valores{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:14px}
-.valores li{
-  display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
-  padding:18px 20px;border-radius:var(--r);
+.carrossel__palco{
+  overflow:hidden;perspective:1300px;
+  padding:10px 0 14px;
+  cursor:grab;touch-action:pan-y;
+}
+.carrossel__palco.arrastando{cursor:grabbing}
+.carrossel__trilho{
+  display:flex;gap:18px;list-style:none;margin:0;padding:0;
+  transform-style:preserve-3d;
+  transition:transform .85s cubic-bezier(.22,1,.36,1);
+  will-change:transform;
+}
+.carrossel__palco.arrastando .carrossel__trilho{transition:none}
+.valor{flex:0 0 86%;min-width:0}
+
+/* o repouso é o estado afastado; o ativo volta ao plano */
+.valor__caixa{
+  height:100%;display:grid;grid-template-columns:auto 1fr;gap:18px;
+  align-items:start;padding:26px 24px;border-radius:var(--r);
   background:var(--creme);border:1px solid var(--borda-creme);
+  transform-origin:center center;
+  transition:transform .85s cubic-bezier(.22,1,.36,1),
+             opacity .6s ease, filter .6s ease, box-shadow .6s ease;
 }
-.valores__n{
-  font-family:var(--mono);font-size:1.05rem;font-weight:600;
-  color:var(--verde);line-height:1.4;
+.valor[data-pos="antes"] .valor__caixa{transform:translateZ(-130px) rotateY(16deg);opacity:.3;filter:blur(2.5px)}
+.valor[data-pos="depois"] .valor__caixa{transform:translateZ(-130px) rotateY(-16deg);opacity:.3;filter:blur(2.5px)}
+.valor[data-pos="ativo"] .valor__caixa{transform:none;opacity:1;filter:none;box-shadow:0 10px 26px rgba(0,0,0,.12)}
+
+/* o número entra depois da caixa, deslizando: é ele que dá o
+   sabor de "virou a página" */
+.valor__n{
+  font-family:var(--mono);font-size:2.3rem;font-weight:600;line-height:1;
+  color:var(--verde);
+  transition:transform .85s cubic-bezier(.22,1,.36,1),opacity .5s ease;
 }
-.valores strong{display:block;color:var(--verde-escuro);margin-bottom:3px}
-.valores li > div{color:var(--texto-2);line-height:1.6}
+.valor:not([data-pos="ativo"]) .valor__n{opacity:0}
+.valor[data-pos="antes"] .valor__n{transform:translateX(-26px) scale(.8)}
+.valor[data-pos="depois"] .valor__n{transform:translateX(26px) scale(.8)}
+.valor[data-pos="ativo"] .valor__n{transform:none;opacity:1;transition-delay:.12s}
+
+.valor__texto strong{display:block;color:var(--verde-escuro);font-size:1.08rem;margin-bottom:5px}
+.valor__texto p{margin:0;color:var(--texto-2);line-height:1.6}
+.valor__texto p,.valor__texto strong{transition:transform .85s cubic-bezier(.22,1,.36,1),opacity .5s ease}
+.valor:not([data-pos="ativo"]) .valor__texto strong{transform:translateY(10px);opacity:0}
+.valor:not([data-pos="ativo"]) .valor__texto p{transform:translateY(14px);opacity:0}
+.valor[data-pos="ativo"] .valor__texto strong{transition-delay:.16s}
+.valor[data-pos="ativo"] .valor__texto p{transition-delay:.22s}
+
+.carrossel__pontos{display:flex;justify-content:center;gap:4px;margin-top:6px}
+.carrossel__ponto{
+  width:var(--alvo);height:34px;border:0;background:transparent;  /* [FITTS] */
+  display:grid;place-items:center;cursor:pointer;padding:0;
+}
+.carrossel__ponto i{
+  display:block;width:9px;height:9px;border-radius:999px;
+  background:var(--borda-creme);
+  transition:width .5s cubic-bezier(.22,1,.36,1),background .35s ease;
+}
+.carrossel__ponto:hover i{background:var(--verde-faixa)}
+.carrossel__ponto.ativo i{width:30px;background:var(--coral-forte)}
 
 @media (min-width:720px){
-  .mvv{grid-template-columns:1fr 1fr;gap:22px}
-  .valores{grid-template-columns:1fr 1fr;gap:16px}
+  .mvv{grid-template-columns:1fr 1fr;gap:18px;align-items:start;
+       transition:grid-template-columns .75s cubic-bezier(.22,1,.36,1)}
+  .mvv[data-ativo="0"]{grid-template-columns:1.55fr 1fr}
+  .mvv[data-ativo="1"]{grid-template-columns:1fr 1.55fr}
+  .mvv__bloco{padding:28px 26px}
   .mvv__titulo{font-size:1.45rem}
+  .valor{flex:0 0 72%}
+  .valor__n{font-size:2.8rem}
+  .carrossel{max-width:860px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .valor__caixa,.valor__n,.valor__texto strong,.valor__texto p{
+    transform:none!important;opacity:1!important;filter:none!important;
+  }
+  .carrossel__trilho{transition:none}
 }

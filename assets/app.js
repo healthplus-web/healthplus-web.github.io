@@ -580,7 +580,7 @@
       var i = 0;
       (function tic() {
         saida.textContent = alvo.slice(0, i);
-        if (i++ <= alvo.length) setTimeout(tic, 22);
+        if (i++ <= alvo.length) setTimeout(tic, 45);
         else if (cursor) setTimeout(function () { cursor.remove(); }, 1000);
       })();
     }
@@ -925,6 +925,162 @@
     document.addEventListener('abertura-saiu', aoTopo);
     window.addEventListener('load', aoTopo);
     window.addEventListener('pageshow', function (e) { if (e.persisted) aoTopo(); });
+  })();
+
+
+  /* ═══════════════════════════════════════════════════════════
+     12. CARROSSEL DOS VALORES E PAINÉIS DE MISSÃO/VISÃO
+
+     O carrossel anda de quatro jeitos — arrastando, pelas setas,
+     pelos pontos e pelas setas do teclado — e a profundidade de
+     cada slide é só CSS: aqui a gente só diz quem está antes,
+     quem está ativo e quem está depois.
+
+     A conta de centralizar usa a largura REAL do slide, lida do
+     DOM, e não uma porcentagem fixa: a largura muda entre celular
+     e computador, e com gap no meio a porcentagem erraria.
+     ═══════════════════════════════════════════════════════════ */
+
+  (function carrossel() {
+    var caixa = $('#carrossel-valores');
+    if (!caixa) return;
+
+    var palco = $('.carrossel__palco', caixa);
+    var trilho = $('.carrossel__trilho', caixa);
+    var slides = $$('.valor', caixa);
+    var pontos = $$('.carrossel__ponto', caixa);
+    var setas = $$('.carrossel__seta', caixa);
+    if (!palco || !trilho || !slides.length) return;
+
+    var i = 0, arrastando = false, x0 = 0, dx = 0, base = 0, apontador = null;
+
+    function medida() {
+      var s0 = slides[0].getBoundingClientRect().width;
+      var g = parseFloat(getComputedStyle(trilho).columnGap || 0) || 0;
+      return { slide: s0, passo: s0 + g, palco: palco.clientWidth };
+    }
+
+    function deslocamento(indice) {
+      var m = medida();
+      // centraliza o slide ativo dentro do palco
+      return -(indice * m.passo) + (m.palco - m.slide) / 2;
+    }
+
+    function pinta() {
+      slides.forEach(function (s, n) {
+        s.setAttribute('data-pos', n === i ? 'ativo' : (n < i ? 'antes' : 'depois'));
+        // só o slide visível entra na ordem de tabulação
+        var alvos = s.querySelectorAll('a,button');
+        Array.prototype.forEach.call(alvos, function (a) {
+          a.tabIndex = n === i ? 0 : -1;
+        });
+      });
+      pontos.forEach(function (p, n) {
+        p.classList.toggle('ativo', n === i);
+        p.setAttribute('aria-selected', String(n === i));
+      });
+      setas.forEach(function (b) {
+        var d = Number(b.dataset.dir);
+        b.disabled = (d < 0 && i === 0) || (d > 0 && i === slides.length - 1);
+      });
+    }
+
+    function posiciona(animar) {
+      trilho.style.transform = 'translateX(' + deslocamento(i) + 'px)';
+      if (animar !== false) pinta();
+    }
+
+    function vai(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      posiciona();
+    }
+
+    setas.forEach(function (b) {
+      b.addEventListener('click', function () { vai(i + Number(b.dataset.dir)); });
+    });
+    pontos.forEach(function (p, n) {
+      p.addEventListener('click', function () { vai(n); });
+    });
+
+    // ── arrastar ──────────────────────────────────────────────
+    palco.addEventListener('pointerdown', function (e) {
+      if (e.button !== undefined && e.button !== 0) return;
+      arrastando = true; x0 = e.clientX; dx = 0;
+      base = deslocamento(i);
+      apontador = e.pointerId;
+      palco.classList.add('arrastando');
+      try { palco.setPointerCapture(apontador); } catch (err) {}
+    });
+
+    palco.addEventListener('pointermove', function (e) {
+      if (!arrastando) return;
+      dx = e.clientX - x0;
+      // resistência nas pontas, para avisar que acabou
+      if ((i === 0 && dx > 0) || (i === slides.length - 1 && dx < 0)) dx *= 0.32;
+      trilho.style.transform = 'translateX(' + (base + dx) + 'px)';
+    });
+
+    function solta() {
+      if (!arrastando) return;
+      arrastando = false;
+      palco.classList.remove('arrastando');
+      if (apontador !== null) {
+        try { palco.releasePointerCapture(apontador); } catch (err) {}
+        apontador = null;
+      }
+      var limite = Math.min(90, medida().slide * 0.18);
+      if (dx <= -limite) vai(i + 1);
+      else if (dx >= limite) vai(i - 1);
+      else posiciona();
+      dx = 0;
+    }
+    palco.addEventListener('pointerup', solta);
+    palco.addEventListener('pointercancel', solta);
+    palco.addEventListener('pointerleave', solta);
+
+    // um arrasto nao pode virar clique no que estiver embaixo
+    palco.addEventListener('click', function (e) {
+      if (Math.abs(dx) > 6) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
+
+    // ── teclado ───────────────────────────────────────────────
+    caixa.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); vai(i + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); vai(i - 1); }
+    });
+
+    var remedir = function () { posiciona(false); };
+    window.addEventListener('resize', remedir);
+    window.addEventListener('orientationchange', remedir);
+    // a largura só é confiável depois do layout e da abertura
+    aberturaPronta.then(function () { setTimeout(function () { posiciona(); }, 60); });
+    posiciona();
+  })();
+
+  (function painelMissaoVisao() {
+    var caixa = $('.mvv');
+    if (!caixa) return;
+    var blocos = $$('.mvv__bloco', caixa);
+    if (blocos.length < 2) return;
+
+    function abre(n) {
+      blocos.forEach(function (b, k) {
+        b.classList.toggle('ativa', k === n);
+        b.setAttribute('aria-expanded', String(k === n));
+      });
+      caixa.setAttribute('data-ativo', String(n));
+    }
+
+    blocos.forEach(function (b, n) {
+      b.addEventListener('click', function () { abre(n); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abre(n); }
+      });
+      // no computador o mouse ja basta; no celular fica so o toque
+      if (window.matchMedia('(hover:hover)').matches) {
+        b.addEventListener('mouseenter', function () { abre(n); });
+      }
+    });
   })();
 
 })();

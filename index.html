@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css?v=dlhtv">
+<link rel="stylesheet" href="assets/estilo.css?v=eayvw">
 </head>
 <body>
 
@@ -725,64 +725,79 @@
       </p>
     </div>
 
-    <div class="mvv">
-      <div class="mvv__bloco reveal" data-rev="esq">
-        <div class="mvv__rot">Missão</div>
-        <p>
+    <div class="mvv" data-ativo="0">
+      <div class="mvv__bloco ativa" role="button" tabindex="0" aria-expanded="true">
+        <div class="mvv__rot"><i aria-hidden="true"></i>Missão</div>
+        <div class="mvv__corpo"><div><p>
           Levar a régua oficial da OMS para dentro da consulta: z-score,
           percentil e evolução calculados na hora, no próprio aparelho de
           quem atende, sem depender de conexão.
-        </p>
+        </p></div></div>
       </div>
-      <div class="mvv__bloco reveal" data-rev="dir" data-atraso="1">
-        <div class="mvv__rot">Visão</div>
-        <p>
+      <div class="mvv__bloco" role="button" tabindex="0" aria-expanded="false">
+        <div class="mvv__rot"><i aria-hidden="true"></i>Visão</div>
+        <div class="mvv__corpo"><div><p>
           Que acompanhar o crescimento de uma criança não dependa mais de
           tabela impressa, planilha solta ou conta feita à mão — e que o
           resultado seja o mesmo em qualquer consultório.
-        </p>
+        </p></div></div>
       </div>
     </div>
 
-    <h3 class="mvv__titulo reveal" data-rev="baixo">Valores</h3>
-    <ol class="valores">
-      <li class="reveal" data-rev="baixo">
-        <span class="valores__n" aria-hidden="true">01</span>
-        <div>
-          <strong>Conferir antes de afirmar.</strong>
-          Nenhum número chega à tela sem bater com a fonte oficial. Foi
-          assim com os 10.234 desvios-padrão reconstruídos e com os 933
-          casos do conjunto de teste da OMS.
-        </div>
-      </li>
-      <li class="reveal" data-rev="baixo" data-atraso="1">
-        <span class="valores__n" aria-hidden="true">02</span>
-        <div>
-          <strong>Dado de criança é dado sensível.</strong>
-          Privacidade entra como requisito de cada tela, não como aviso no
-          rodapé. A LGPD trata esse dado como categoria especial, e a maior
-          parte dos nossos pacientes é menor de idade.
-        </div>
-      </li>
-      <li class="reveal" data-rev="baixo" data-atraso="2">
-        <span class="valores__n" aria-hidden="true">03</span>
-        <div>
-          <strong>Toda estimativa diz o quanto pode errar.</strong>
-          Previsão de altura é estimativa, não diagnóstico — e aparece na
-          tela com a margem de erro declarada. Número sem margem vira
-          promessa, e promessa em saúde é perigosa.
-        </div>
-      </li>
-      <li class="reveal" data-rev="baixo" data-atraso="3">
-        <span class="valores__n" aria-hidden="true">04</span>
-        <div>
-          <strong>O paciente vê o que o profissional vê.</strong>
-          A mesma função calcula a evolução para os dois perfis. O que
-          aparece para a família e o que aparece para o nutricionista
-          nunca divergem.
-        </div>
-      </li>
-    </ol>
+    <div class="carrossel" id="carrossel-valores">
+      <div class="carrossel__topo">
+        <h3 class="mvv__titulo">Valores</h3>
+        <div class="carrossel__setas"><button class="carrossel__seta" type="button" data-dir="-1" aria-label="Valor anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="carrossel__seta" type="button" data-dir="1" aria-label="Próximo valor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>
+      </div>
+
+      <div class="carrossel__palco">
+        <ul class="carrossel__trilho">
+        <li class="valor ativo" role="group" aria-roledescription="slide" aria-label="Valor 1 de 4">
+          <div class="valor__caixa">
+            <span class="valor__n" aria-hidden="true">01</span>
+            <div class="valor__texto">
+              <strong>Conferir antes de afirmar.</strong>
+              <p>Nenhum número chega à tela sem bater com a fonte oficial. Foi assim com os 10.234 desvios-padrão reconstruídos e com os 933 casos do conjunto de teste da OMS.</p>
+            </div>
+          </div>
+        </li>
+        <li class="valor" role="group" aria-roledescription="slide" aria-label="Valor 2 de 4">
+          <div class="valor__caixa">
+            <span class="valor__n" aria-hidden="true">02</span>
+            <div class="valor__texto">
+              <strong>Dado de criança é dado sensível.</strong>
+              <p>Privacidade entra como requisito de cada tela, não como aviso no rodapé. A LGPD trata esse dado como categoria especial, e a maior parte dos nossos pacientes é menor de idade.</p>
+            </div>
+          </div>
+        </li>
+        <li class="valor" role="group" aria-roledescription="slide" aria-label="Valor 3 de 4">
+          <div class="valor__caixa">
+            <span class="valor__n" aria-hidden="true">03</span>
+            <div class="valor__texto">
+              <strong>Toda estimativa diz o quanto pode errar.</strong>
+              <p>Previsão de altura é estimativa, não diagnóstico — e aparece na tela com a margem de erro declarada. Número sem margem vira promessa, e promessa em saúde é perigosa.</p>
+            </div>
+          </div>
+        </li>
+        <li class="valor" role="group" aria-roledescription="slide" aria-label="Valor 4 de 4">
+          <div class="valor__caixa">
+            <span class="valor__n" aria-hidden="true">04</span>
+            <div class="valor__texto">
+              <strong>O paciente vê o que o profissional vê.</strong>
+              <p>A mesma função calcula a evolução para os dois perfis. O que aparece para a família e o que aparece para o nutricionista nunca divergem.</p>
+            </div>
+          </div>
+        </li>
+        </ul>
+      </div>
+
+      <div class="carrossel__pontos" role="tablist" aria-label="Escolher valor">
+        <button class="carrossel__ponto ativo" type="button" role="tab" aria-selected="true" aria-label="Valor 1: Conferir antes de afirmar."><i aria-hidden="true"></i></button>
+        <button class="carrossel__ponto" type="button" role="tab" aria-selected="false" aria-label="Valor 2: Dado de criança é dado sensível."><i aria-hidden="true"></i></button>
+        <button class="carrossel__ponto" type="button" role="tab" aria-selected="false" aria-label="Valor 3: Toda estimativa diz o quanto pode errar."><i aria-hidden="true"></i></button>
+        <button class="carrossel__ponto" type="button" role="tab" aria-selected="false" aria-label="Valor 4: O paciente vê o que o profissional vê."><i aria-hidden="true"></i></button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -890,7 +905,7 @@
 </dialog>
 
 
-<script src="assets/oms-imc.js?v=dlhtv"></script>
-<script src="assets/app.js?v=dlhtv" defer></script>
+<script src="assets/oms-imc.js?v=eayvw"></script>
+<script src="assets/app.js?v=eayvw" defer></script>
 </body>
 </html>
