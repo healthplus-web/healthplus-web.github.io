@@ -881,21 +881,50 @@
      no meio da página mostrava a animação de entrada atrás de uma
      seção do meio — o visitante via o fim antes do começo.
 
-     Um endereço com #secao continua valendo: ali a altura foi
-     pedida de propósito, por um link ou pelo menu.
+     Num recarregamento o topo vale sempre, inclusive com #secao no
+     endereço. Num link de fora com #secao, não: ali alguém pediu
+     aquela altura de propósito.
      ═══════════════════════════════════════════════════════════ */
 
   (function recarregaNoTopo() {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+    // F5 e Ctrl+R sao "reload"; abrir um link de fora nao e.
+    var recarregou = (function () {
+      try {
+        var nav = performance.getEntriesByType('navigation')[0];
+        if (nav && nav.type) return nav.type === 'reload';
+        return performance.navigation && performance.navigation.type === 1;
+      } catch (e) { return false; }
+    })();
+
     var temAncora = function () {
       var h = location.hash;
       return h.length > 1 && !!document.getElementById(h.slice(1));
     };
-    if (temAncora()) return;
-    window.scrollTo(0, 0);
-    window.addEventListener('load', function () {
-      if (!temAncora()) window.scrollTo(0, 0);
-    });
+
+    // Num recarregamento o topo vale SEMPRE, inclusive com #secao no
+    // endereco: senao bastava ter clicado no menu uma vez para a
+    // pagina voltar no meio. Fora isso, um link com #secao mandou ir
+    // ate la de proposito e continua valendo.
+    if (!recarregou && temAncora()) return;
+    if (recarregou && location.hash) {
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    }
+
+    var aoTopo = function () { window.scrollTo(0, 0); };
+
+    // Varios pontos porque cada um resolve um caso: o imediato pega a
+    // restauracao do proprio navegador; o 'load' pega o que chegou
+    // depois das imagens; 'abertura-saiu' pega a hora em que o
+    // body.travado solta o overflow:hidden, que e quando a altura
+    // antiga costumava voltar; e 'pageshow' com persisted pega a
+    // volta pelo botao Voltar, que nem roda o script de novo.
+    aoTopo();
+    document.addEventListener('DOMContentLoaded', aoTopo);
+    document.addEventListener('abertura-saiu', aoTopo);
+    window.addEventListener('load', aoTopo);
+    window.addEventListener('pageshow', function (e) { if (e.persisted) aoTopo(); });
   })();
 
 })();
