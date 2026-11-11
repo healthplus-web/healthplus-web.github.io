@@ -1249,7 +1249,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   transition:border-color .5s ease,box-shadow .5s ease;
 }
 .mvv__bloco:focus-visible{outline:3px solid var(--verde-faixa);outline-offset:3px}
-.mvv__bloco.ativa{border-color:var(--verde-faixa);box-shadow:0 10px 26px rgba(0,0,0,.22)}
+.mvv__bloco.ativa{border-color:var(--verde-faixa)}
 .mvv__rot{
   display:flex;align-items:center;gap:10px;
   font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;
@@ -1315,11 +1315,12 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   background:var(--creme);border:1px solid var(--borda-creme);
   transform-origin:center center;
   transition:transform .85s cubic-bezier(.22,1,.36,1),
-             opacity .6s ease, filter .6s ease, box-shadow .6s ease;
+             opacity .6s ease, filter .6s ease, box-shadow .6s ease,
+             border-color .6s ease;
 }
 .valor[data-pos="antes"] .valor__caixa{transform:translateZ(-130px) rotateY(16deg);opacity:.3;filter:blur(2.5px)}
 .valor[data-pos="depois"] .valor__caixa{transform:translateZ(-130px) rotateY(-16deg);opacity:.3;filter:blur(2.5px)}
-.valor[data-pos="ativo"] .valor__caixa{transform:none;opacity:1;filter:none;box-shadow:0 10px 26px rgba(0,0,0,.12)}
+.valor[data-pos="ativo"] .valor__caixa{transform:none;opacity:1;filter:none;border-color:transparent;box-shadow:0 8px 20px rgba(0,0,0,.14)}
 
 /* o número entra depois da caixa, deslizando: é ele que dá o
    sabor de "virou a página" */
@@ -1334,7 +1335,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 .valor[data-pos="ativo"] .valor__n{transform:none;opacity:1;transition-delay:.12s}
 
 .valor__texto strong{display:block;color:var(--verde-escuro);font-size:1.08rem;margin-bottom:5px}
-.valor__texto p{margin:0;color:var(--texto-2);line-height:1.6}
+.valor__texto p{margin:0;color:var(--texto);line-height:1.6}
 .valor__texto p,.valor__texto strong{transition:transform .85s cubic-bezier(.22,1,.36,1),opacity .5s ease}
 .valor:not([data-pos="ativo"]) .valor__texto strong{transform:translateY(10px);opacity:0}
 .valor:not([data-pos="ativo"]) .valor__texto p{transform:translateY(14px);opacity:0}
