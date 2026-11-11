@@ -15,7 +15,11 @@
 
 :root{
   /* três profundidades de creme, nenhuma delas branca */
-  --creme:#FFF8C9;          /* superfícies: cartões, campos */
+  --creme:#FFF8C9;
+  /* Fundo das telinhas do app. O aplicativo de verdade usa o mesmo
+     creme do site (fundo: '#FFF8C9' em app/tema/index.js); aqui ele
+     e trocado de proposito, para a tela nao se dissolver na pagina. */
+  --tela-app:#DCE9DE;          /* superfícies: cartões, campos */
   --creme-fundo:#FAF0B8;    /* fundo da página */
   --creme-alt:#F3E6A2;      /* seções alternadas */
 
@@ -387,7 +391,7 @@ a:hover{text-decoration:underline}
   border-radius:28px;padding:8px;box-shadow:0 12px 22px rgba(0,0,0,.26);
 }
 .fone-tela{
-  background:var(--creme);border-radius:21px;overflow:hidden;
+  background:var(--tela-app);border-radius:21px;overflow:hidden;
   height:406px;display:flex;flex-direction:column;
   font-size:10px;line-height:1.35;color:var(--texto);
 }
@@ -409,7 +413,7 @@ a:hover{text-decoration:underline}
 /* o esmaecido embaixo avisa que tem mais conteúdo */
 .fone-tela::after{
   content:"";position:absolute;left:8px;right:8px;bottom:0;height:34px;
-  background:linear-gradient(rgba(255,248,201,0),var(--creme));
+  background:linear-gradient(rgba(220,233,222,0),var(--tela-app));
   pointer-events:none;border-radius:0 0 18px 18px;
 }
 .fone-rolar{
@@ -1154,6 +1158,13 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   transition:opacity .22s ease,transform .22s ease,visibility .22s;
 }
 .dica__balao strong{color:#FFD9A8}
+.dica__balao::before{
+  content:"";position:absolute;top:18px;
+  border:8px solid transparent;
+}
+.dica[data-lado="dir"] .dica__balao::before{right:100%;border-right-color:var(--verde-escuro)}
+.dica[data-lado="esq"] .dica__balao::before{left:100%;border-left-color:var(--verde-escuro)}
+
 .dica[data-lado="dir"] .dica__balao{left:42px}
 .dica[data-lado="esq"] .dica__balao{right:42px;transform-origin:top right}
 .dica.aberta .dica__balao{opacity:1;visibility:visible;pointer-events:auto;transform:none}
@@ -1162,14 +1173,35 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 }
 /* No celular não há espaço ao lado do aparelho: o balão vira uma
    folha no pé da tela, acima da barra do menu. */
+/* No celular nao ha espaco ao lado do aparelho, entao o balao
+   desce para baixo do pino.
+
+   Aqui NAO se usa position:fixed. O .reveal fica com um transform
+   enquanto a animacao de entrada roda, e qualquer ancestral com
+   transform vira o bloco de contencao do fixed: o balao sairia do
+   lugar se alguem tocasse no pino antes de a animacao acabar. Com
+   absolute o unico ancestral que conta e o proprio .dica, que nao
+   se mexe, e as contas abaixo centram o balao no aparelho:
+   .fone tem 218px, o pino 30px, e ele mora a 15px da borda.
+   dir: 109 - 125 - 203 = -219   |   esq: 109 - 125 + 15 = -1 */
 @media (max-width:719px){
-  .dica[data-lado="dir"] .dica__balao,
-  .dica[data-lado="esq"] .dica__balao{
-    position:fixed;left:16px;right:16px;width:auto;
-    top:auto;bottom:92px;font-size:13.5px;
-    transform:translateY(12px);transform-origin:center bottom;
+  .dica__balao{
+    position:absolute;width:250px;
+    top:46px;bottom:auto;right:auto;
+    font-size:13px;transform:translateY(10px);transform-origin:top center;
   }
+  .dica[data-lado="dir"] .dica__balao{left:-219px}
+  .dica[data-lado="esq"] .dica__balao{left:-1px}
   .dica.aberta .dica__balao{transform:none}
+
+  /* a seta passa a apontar para cima, para o pino */
+  .dica__balao::before{display:block;top:-16px}
+  .dica[data-lado="dir"] .dica__balao::before{
+    left:auto;right:8px;border-right-color:transparent;border-bottom-color:var(--verde-escuro);
+  }
+  .dica[data-lado="esq"] .dica__balao::before{
+    left:8px;right:auto;border-left-color:transparent;border-bottom-color:var(--verde-escuro);
+  }
 }
 
 /* ── L, M e S: cada letra explica a si mesma ───────────────────
