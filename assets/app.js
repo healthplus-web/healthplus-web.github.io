@@ -531,6 +531,24 @@
   })();
 
   /* ═══════════════════════════════════════════════════════════
+     7.2 PRIVACIDADE QUE ABRE
+     Cada item mostra só a afirmação; o detalhe abre no clique.
+     Vários podem ficar abertos: é conteúdo para ler, não um menu.
+     ═══════════════════════════════════════════════════════════ */
+
+  (function privacidade() {
+    $$('.priv__botao').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var item = b.closest('.priv');
+        if (!item) return;
+        var abrindo = !item.classList.contains('aberto');
+        item.classList.toggle('aberto', abrindo);
+        b.setAttribute('aria-expanded', String(abrindo));
+      });
+    });
+  })();
+
+  /* ═══════════════════════════════════════════════════════════
      8. TÍTULOS SENDO DIGITADOS
      O texto inteiro fica no aria-label, então leitor de tela lê o
      título de uma vez só — a digitação é só para o olho. A altura

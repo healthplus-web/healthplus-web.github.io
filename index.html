@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css?v=iknxn">
+<link rel="stylesheet" href="assets/estilo.css?v=in2bm">
 </head>
 <body>
 
@@ -477,29 +477,53 @@
     </div>
 
     <ul class="lista reveal" data-rev="esq" data-atraso="1">
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 118 0v3"/></svg>
-        <span><strong>Nenhuma senha em texto simples.</strong> Todas passam por hash com bcrypt, e a sessão usa JSON Web Token sobre HTTPS/TLS.</span>
+      <li class="priv">
+        <button class="priv__botao" type="button" aria-expanded="false">
+          <span class="priv__ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 118 0v3"/></svg></span>
+          <span class="priv__titulo">Nenhuma senha em texto simples.</span>
+          <span class="priv__seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="priv__corpo"><div><p>Todas passam por hash com bcrypt, e a sessão usa JSON Web Token sobre HTTPS/TLS.</p></div></div>
       </li>
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-        <span><strong>Consentimento registrado, não presumido.</strong> O paciente, ou o responsável se for menor, aceita os termos no primeiro acesso, e cada versão nova dos termos pede aceite de novo.</span>
+      <li class="priv">
+        <button class="priv__botao" type="button" aria-expanded="false">
+          <span class="priv__ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
+          <span class="priv__titulo">Consentimento registrado, não presumido.</span>
+          <span class="priv__seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="priv__corpo"><div><p>O paciente, ou o responsável se for menor, aceita os termos no primeiro acesso, e cada versão nova dos termos pede aceite de novo.</p></div></div>
       </li>
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>
-        <span><strong>O titular leva os dados dele embora.</strong> Exportação e exclusão a pedido, mais um histórico de acessos que o próprio paciente abre e lê.</span>
+      <li class="priv">
+        <button class="priv__botao" type="button" aria-expanded="false">
+          <span class="priv__ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg></span>
+          <span class="priv__titulo">O titular leva os dados dele embora.</span>
+          <span class="priv__seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="priv__corpo"><div><p>Exportação e exclusão a pedido, mais um histórico de acessos que o próprio paciente abre e lê.</p></div></div>
       </li>
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span><strong>Força bruta não passa.</strong> A conta trava sozinha depois de poucas tentativas erradas, e há limite por endereço de IP.</span>
+      <li class="priv">
+        <button class="priv__botao" type="button" aria-expanded="false">
+          <span class="priv__ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          <span class="priv__titulo">Força bruta não passa.</span>
+          <span class="priv__seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="priv__corpo"><div><p>A conta trava sozinha depois de poucas tentativas erradas, e há limite por endereço de IP.</p></div></div>
       </li>
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-        <span><strong>Tudo que acontece fica registrado.</strong> Log de auditoria no banco, com a tela de histórico de acessos aberta aos dois perfis.</span>
+      <li class="priv">
+        <button class="priv__botao" type="button" aria-expanded="false">
+          <span class="priv__ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <span class="priv__titulo">Tudo que acontece fica registrado.</span>
+          <span class="priv__seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="priv__corpo"><div><p>Log de auditoria no banco, com a tela de histórico de acessos aberta aos dois perfis.</p></div></div>
       </li>
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
-        <span><strong>Acessível de verdade.</strong> Todos os pares de cor das telas passam no WCAG 2.1 nível AA (4,5:1), e há paleta de alto contraste e controle de tamanho de texto nas configurações.</span>
+      <li class="priv">
+        <button class="priv__botao" type="button" aria-expanded="false">
+          <span class="priv__ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></span>
+          <span class="priv__titulo">Acessível de verdade.</span>
+          <span class="priv__seta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="priv__corpo"><div><p>Todos os pares de cor das telas passam no WCAG 2.1 nível AA (4,5:1), e há paleta de alto contraste e controle de tamanho de texto nas configurações.</p></div></div>
       </li>
     </ul>
   </div>
@@ -779,7 +803,7 @@
 </dialog>
 
 
-<script src="assets/oms-imc.js?v=iknxn"></script>
-<script src="assets/app.js?v=iknxn" defer></script>
+<script src="assets/oms-imc.js?v=in2bm"></script>
+<script src="assets/app.js?v=in2bm" defer></script>
 </body>
 </html>
