@@ -882,24 +882,20 @@ body.modal-aberto{overflow:hidden}
   .convite{left:auto;right:92px;bottom:28px;width:min(400px,calc(100vw - 120px))}
 }
 
-/* ── explosão de corações ──
-   A caixa cobre a tela inteira, não só a seção: os corações saem
-   de dentro do coração grande, espalham para todo lado e só então
-   caem. O JS passa a origem e o destino de cada um. */
-.chuva{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden}
+/* ── chuva de corações ──
+   Caem de cima da seção, com desvio e giro sorteados. A versão que
+   os lançava em todas as direções ficou confusa; esta é a simples. */
+.chuva{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden}
 .chuva i{
-  position:fixed;display:block;color:#FF4D6D;opacity:0;
-  will-change:transform,opacity;
-  animation:estourar var(--dur,2.1s) cubic-bezier(.22,.6,.4,1) forwards;
+  position:absolute;top:-28px;display:block;color:#FF4D6D;opacity:0;
+  animation:cair var(--dur,2s) cubic-bezier(.35,.1,.7,1) forwards;
 }
 .chuva svg{width:100%;height:100%;display:block;fill:currentColor;stroke:none}
-
-@keyframes estourar{
-  0%   {opacity:0;transform:translate(0,0) scale(.2) rotate(0deg)}
-  10%  {opacity:1;transform:translate(calc(var(--ex) * .5),calc(var(--ey) * .5)) scale(1.1) rotate(calc(var(--giro) * .15))}
-  26%  {opacity:1;transform:translate(var(--ex),var(--ey)) scale(1) rotate(calc(var(--giro) * .35))}
-  88%  {opacity:.95}
-  100% {opacity:0;transform:translate(calc(var(--ex) + var(--desvio)),var(--queda)) scale(.8) rotate(var(--giro))}
+@keyframes cair{
+  0%{opacity:0;transform:translate(0,0) scale(.4) rotate(0deg)}
+  14%{opacity:1}
+  85%{opacity:1}
+  100%{opacity:0;transform:translate(var(--desvio,0px),var(--queda,320px)) scale(1) rotate(var(--giro,120deg))}
 }
 
 .meta{position:relative;overflow:hidden;background:#0B0A07;color:var(--creme);padding:72px 0;text-align:center}
