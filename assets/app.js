@@ -444,6 +444,12 @@
     // deixava dois abertos ao mesmo tempo.
     modal.addEventListener('close', function () {
       document.body.classList.remove('modal-aberto');
+      // O <dialog> devolve o foco ao botão que o abriu, que está
+      // dentro do painel. Tirar o foco dali é o que faz o cartão
+      // voltar mesmo ao estado inicial, com a foto à mostra.
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
       fecharTodos();
     });
   })();
