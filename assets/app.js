@@ -662,24 +662,45 @@
     var CORACAO = '<svg viewBox="0 0 24 24"><path d="M12 20.6S3.4 15 3.4 9.2C3.4 6.3 5.7 4 8.5 4c1.9 0 ' +
                   '3.1 1 3.5 1.9C12.4 5 13.6 4 15.5 4c2.8 0 5.1 2.3 5.1 5.2 0 5.8-8.6 11.4-8.6 11.4z"/></svg>';
 
+    // Explosão: os corações nascem todos dentro do coração grande,
+    // são lançados em todas as direções e então caem pela tela.
     function chover() {
       if (!chuva || menosMovimento) return;
-      var altura = chuva.getBoundingClientRect().height || 420;
-      for (var i = 0; i < 24; i++) {
-        setTimeout(function () {
-          var c = document.createElement('i');
-          var tam = 13 + Math.random() * 24;
-          c.innerHTML = CORACAO;
-          c.style.left = (Math.random() * 96) + '%';
-          c.style.width = tam + 'px';
-          c.style.height = tam + 'px';
-          c.style.setProperty('--queda', Math.round(altura + 70) + 'px');
-          c.style.setProperty('--desvio', Math.round((Math.random() - 0.5) * 130) + 'px');
-          c.style.setProperty('--giro', Math.round((Math.random() - 0.5) * 340) + 'deg');
-          c.style.setProperty('--dur', (1.5 + Math.random() * 0.8).toFixed(2) + 's');
-          chuva.appendChild(c);
-          setTimeout(function () { c.remove(); }, 2800);
-        }, i * 50);
+
+      var grande = $('.meta-coracao');
+      var r = grande ? grande.getBoundingClientRect() : null;
+      var ox = r ? r.left + r.width / 2 : window.innerWidth / 2;
+      var oy = r ? r.top + r.height * 0.45 : window.innerHeight / 2;
+      var alturaTela = window.innerHeight;
+
+      var quantos = 84;
+      for (var i = 0; i < quantos; i++) {
+        (function (i) {
+          // quase todos saem juntos; um resto vem atrás, para o
+          // estouro ter cauda em vez de acabar seco
+          var atraso = i < 56 ? i * 5 : 280 + (i - 56) * 22;
+          setTimeout(function () {
+            var c = document.createElement('i');
+            var tam = 10 + Math.random() * 26;
+            var angulo = Math.random() * Math.PI * 2;
+            var forca = 70 + Math.random() * 320;
+
+            c.innerHTML = CORACAO;
+            c.style.left = (ox - tam / 2) + 'px';
+            c.style.top = (oy - tam / 2) + 'px';
+            c.style.width = tam + 'px';
+            c.style.height = tam + 'px';
+            c.style.setProperty('--ex', Math.round(Math.cos(angulo) * forca) + 'px');
+            c.style.setProperty('--ey', Math.round(Math.sin(angulo) * forca * 0.75) + 'px');
+            c.style.setProperty('--queda', Math.round(alturaTela - oy + 120) + 'px');
+            c.style.setProperty('--desvio', Math.round((Math.random() - 0.5) * 180) + 'px');
+            c.style.setProperty('--giro', Math.round((Math.random() - 0.5) * 540) + 'deg');
+            c.style.setProperty('--dur', (1.7 + Math.random() * 0.9).toFixed(2) + 's');
+
+            chuva.appendChild(c);
+            setTimeout(function () { c.remove(); }, 2900);
+          }, atraso);
+        })(i);
       }
     }
 
