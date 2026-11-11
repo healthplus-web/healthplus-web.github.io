@@ -415,18 +415,65 @@ a:hover{text-decoration:underline}
    7. Cartões e lista
    ══════════════════════════════════════════════════════════════ */
 
-.cartoes{display:grid;gap:14px;margin-top:28px}
+/* Cards que viram: a frente dá o título, o verso dá o detalhe.
+   Clicar (ou Enter/Espaço) gira. */
+.cartoes{display:grid;gap:16px;margin-top:28px}
+.cartao-env{min-height:230px}
 .cartao{
-  background:var(--creme);border:1px solid var(--borda-creme);
-  border-radius:var(--r);padding:20px;
-  display:grid;grid-template-columns:auto 1fr;gap:0 11px;align-items:center;
-  transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease;
+  position:absolute;inset:0;cursor:pointer;
+  transform-style:preserve-3d;
+  transition:transform .75s cubic-bezier(.22,1,.36,1);
 }
-.cartao:hover{border-color:var(--verde-faixa);transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,.12)}
-.cartao .ico{grid-row:1}
+/* O invólucro cuida da entrada ao rolar e o cartão cuida do giro:
+   antes os dois disputavam a mesma propriedade transform, e a
+   revelação zerava a rotação. */
+.cartao-env{perspective:1400px}
+.cartao.virado{transform:rotateY(180deg)}
+
+.cartao__face{
+  position:absolute;inset:0;border-radius:var(--r);
+  padding:22px 20px;display:grid;align-content:start;gap:12px;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;
+  transition:border-color .25s ease,box-shadow .25s ease;
+}
+.cartao__frente{
+  background:var(--creme);border:1px solid var(--borda-creme);
+  align-content:space-between;
+}
+.cartao:hover .cartao__frente{border-color:var(--verde-faixa);box-shadow:0 10px 22px rgba(0,0,0,.12)}
+.cartao__verso{
+  transform:rotateY(180deg);
+  background:var(--verde-escuro);border:1px solid var(--painel-borda);
+  align-content:center;
+}
+
+/* a face da frente: ícone num quadro técnico, título e a dica */
+.cartao .ico{
+  width:46px;height:46px;border-radius:12px;
+  display:grid;place-items:center;
+  background:var(--verde-suave);border:1px solid var(--borda);
+}
 .cartao .ico svg{width:22px;height:22px;display:block;stroke:var(--verde)}
-.cartao h3{grid-row:1;margin-bottom:0}
-.cartao p{grid-column:1 / -1;font-size:.91rem;margin-top:11px}
+.cartao h3{margin:0;font-size:1.1rem}
+.cartao__numero{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;
+  color:var(--texto-3);text-transform:uppercase;
+}
+.cartao__dica{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;
+  color:var(--verde-link);text-transform:uppercase;
+}
+.cartao__dica svg{width:14px;height:14px;transition:transform .3s ease}
+.cartao:hover .cartao__dica svg{transform:rotate(180deg)}
+
+.cartao__verso p{color:rgba(255,248,201,.86);font-size:.9rem;margin:0}
+.cartao__verso .voltar{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;
+  color:var(--verde-faixa);text-transform:uppercase;margin-top:4px;
+}
+
+@media (min-width:720px){.cartao,.cartao-env{min-height:210px}}
 
 .lista{list-style:none;display:grid;gap:13px;margin-top:24px}
 .lista li{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;font-size:.93rem;color:var(--texto-2)}

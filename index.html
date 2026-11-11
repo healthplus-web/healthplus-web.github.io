@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css?v=hzv4a">
+<link rel="stylesheet" href="assets/estilo.css?v=i6mm6">
 </head>
 <body>
 
@@ -387,33 +387,60 @@
     </div>
 
     <div class="cartoes">
-      <div class="cartao reveal" data-rev="esq">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
-        <h3>Curvas oficiais</h3>
-        <p>
-          WHO Child Growth Standards 2006 para 0 a 5 anos e WHO Growth
+      <div class="cartao-env reveal" data-rev="esq">
+        <div class="cartao" role="button" tabindex="0" aria-expanded="false">
+        <div class="cartao__face cartao__frente">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
+          <div>
+            <div class="cartao__numero">01 de 03</div>
+            <h3>Curvas oficiais</h3>
+          </div>
+          <span class="cartao__dica">ver o detalhe <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+        <div class="cartao__face cartao__verso">
+          <p>WHO Child Growth Standards 2006 para 0 a 5 anos e WHO Growth
           Reference 2007 para 5 a 19 anos, convertidas direto das planilhas
-          publicadas pela OMS. São 17 tabelas de referência.
-        </p>
+          publicadas pela OMS. São 17 tabelas de referência.</p>
+          <div class="voltar">toque para voltar</div>
+        </div>
       </div>
-      <div class="cartao reveal" data-rev="baixo" data-atraso="1">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-        <h3>10.234 valores reconstruídos</h3>
-        <p>
-          A partir dos parâmetros L, M e S refizemos todos os desvios-padrão
+      </div>
+      <div class="cartao-env reveal" data-rev="baixo">
+        <div class="cartao" data-atraso="1" role="button" tabindex="0" aria-expanded="false">
+        <div class="cartao__face cartao__frente">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div>
+            <div class="cartao__numero">02 de 03</div>
+            <h3>10.234 valores reconstruídos</h3>
+          </div>
+          <span class="cartao__dica">ver o detalhe <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+        <div class="cartao__face cartao__verso">
+          <p>A partir dos parâmetros L, M e S refizemos todos os desvios-padrão
           que a própria OMS publica. Todos caíram dentro da precisão com que
-          ela os divulga.
-        </p>
+          ela os divulga.</p>
+          <div class="voltar">toque para voltar</div>
+        </div>
       </div>
-      <div class="cartao reveal" data-rev="dir" data-atraso="2">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg></div>
-        <h3>933 casos do WHO AnthroPlus</h3>
-        <p>
-          Rodamos o conjunto de teste oficial do WHO AnthroPlus, a ferramenta
+      </div>
+      <div class="cartao-env reveal" data-rev="dir">
+        <div class="cartao" data-atraso="2" role="button" tabindex="0" aria-expanded="false">
+        <div class="cartao__face cartao__frente">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg></div>
+          <div>
+            <div class="cartao__numero">03 de 03</div>
+            <h3>933 casos do WHO AnthroPlus</h3>
+          </div>
+          <span class="cartao__dica">ver o detalhe <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+        <div class="cartao__face cartao__verso">
+          <p>Rodamos o conjunto de teste oficial do WHO AnthroPlus, a ferramenta
           da OMS para 5 a 19 anos. Os z-scores de estatura, peso e IMC por
           idade saem idênticos aos publicados, e as marcações de medida
-          implausível batem em todos os casos.
-        </p>
+          implausível batem em todos os casos.</p>
+          <div class="voltar">toque para voltar</div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -735,7 +762,7 @@
 
 <div class="chuva" id="chuva" aria-hidden="true"></div>
 
-<script src="assets/oms-imc.js?v=hzv4a"></script>
-<script src="assets/app.js?v=hzv4a" defer></script>
+<script src="assets/oms-imc.js?v=i6mm6"></script>
+<script src="assets/app.js?v=i6mm6" defer></script>
 </body>
 </html>

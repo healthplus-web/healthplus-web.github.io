@@ -505,6 +505,32 @@
   })();
 
   /* ═══════════════════════════════════════════════════════════
+     7.1 CARDS DA PRECISÃO QUE VIRAM
+     A frente dá o título, o verso dá o detalhe. Clique, Enter ou
+     Espaço giram — é um role="button", então teclado funciona.
+     ═══════════════════════════════════════════════════════════ */
+
+  (function cartoesViram() {
+    var cartoes = $$('.cartao');
+    if (!cartoes.length) return;
+
+    cartoes.forEach(function (c) {
+      function virar() {
+        var aberto = !c.classList.contains('virado');
+        cartoes.forEach(function (o) {
+          if (o !== c) { o.classList.remove('virado'); o.setAttribute('aria-expanded', 'false'); }
+        });
+        c.classList.toggle('virado', aberto);
+        c.setAttribute('aria-expanded', String(aberto));
+      }
+      c.addEventListener('click', virar);
+      c.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); virar(); }
+      });
+    });
+  })();
+
+  /* ═══════════════════════════════════════════════════════════
      8. TÍTULOS SENDO DIGITADOS
      O texto inteiro fica no aria-label, então leitor de tela lê o
      título de uma vez só — a digitação é só para o olho. A altura
