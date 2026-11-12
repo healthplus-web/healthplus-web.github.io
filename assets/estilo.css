@@ -22,16 +22,17 @@
      de superfície grande sem cansar. Contrastes medidos com
      --verde-escuro por cima: 6,57:1 na faixa, 10,96:1 no corpo e
      9,83:1 nos campos. */
-  /* Calculadora: painel quente, nem escuro nem lavado. O pêssego
-     é vizinho do coral da marca, os campos são o creme, e a barra
-     de título é o mesmo verde-escuro do menu e do rodapé — assim
-     ela amarra com o site em vez de ser mais uma cor avulsa.
-     Medidos: 10,64:1 no fundo, 11,55:1 nos campos, 10,06:1 na
-     barra, 6,35:1 no rótulo e 6,67:1 no placeholder. */
-  --calc-faixa:#163B28;
-  --calc-fundo:#FFE9E0;
-  --calc-campo:#FFF8C9;
-  --calc-borda:#F3C8B6;
+  /* Calculadora. As tentativas anteriores erravam pelo mesmo motivo:
+     tom pálido sobre página pálida some, e tom escuro pesa. Aqui a
+     presença vem de UMA faixa saturada — o coral da marca — e o
+     corpo fica claro. Os campos são um creme mais fundo que o
+     painel, então leem como campo e não como papel.
+     Medidos: 11,55:1 no corpo, 10,16:1 nos campos, 7,02:1 na faixa,
+     6,89:1 no rótulo e 5,87:1 no placeholder. */
+  --calc-faixa:#FF7452;
+  --calc-fundo:#FFF8C9;
+  --calc-campo:#F7E9A8;
+  --calc-borda:#E0C98A;
   --calc-tinta:#163B28;
   --calc-rotulo:#9A3209;
   --calc-fraco:#6B5248;
@@ -275,32 +276,32 @@ a:hover{text-decoration:underline}
   margin-top:26px;
   /* moldura de 2px: é um painel de instrumento, não um cartão.
      Fio de 1px com sombra larga é assinatura de interface gerada. */
-  background:var(--calc-fundo);border:2px solid var(--calc-borda);
+  background:var(--calc-fundo);border:2px solid var(--calc-faixa);
   border-radius:var(--r);overflow:hidden;
   box-shadow:0 10px 20px rgba(0,0,0,.12);
 }
 .demo-cabeca{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
   padding:12px 16px;border-bottom:1px solid var(--calc-faixa);
-  background:var(--calc-faixa);color:var(--creme);
+  background:var(--calc-faixa);color:#13120E;           /* 7,02:1 */
 }
-.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--verde-faixa);flex:none}
-.demo-cabeca .mono{min-width:0;color:rgba(255,248,201,.82)}
+.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:#14482C;flex:none}
+.demo-cabeca .mono{min-width:0;color:#13120E}
 
 /* [ZEIGARNIK] + [META] — mostra o que falta para o resultado ficar
    pronto; a barra enchendo puxa para terminar e vira coral ao fechar. */
 .progresso{
   margin-left:auto;display:flex;align-items:center;gap:9px;
-  font-family:var(--mono);font-size:.7rem;color:rgba(255,248,201,.82);white-space:nowrap;
+  font-family:var(--mono);font-size:.7rem;color:#13120E;white-space:nowrap;
 }
-.progresso .trilho{width:58px;height:4px;border-radius:999px;background:rgba(255,248,201,.2);overflow:hidden}
+.progresso .trilho{width:58px;height:4px;border-radius:999px;background:rgba(19,18,14,.24);overflow:hidden}
 /* scaleX em vez de width: animar largura recalcula layout a cada quadro */
 .progresso .trilho i{
-  display:block;height:100%;width:100%;border-radius:999px;background:var(--coral-forte);
+  display:block;height:100%;width:100%;border-radius:999px;background:#13120E;
   transform:scaleX(0);transform-origin:left center;
   transition:transform .45s cubic-bezier(.22,1,.36,1);
 }
-.progresso.completo{font-weight:600;color:#A9E8C4}
+.progresso.completo{font-weight:600;color:#14482C}
 .progresso.completo .trilho i{background:var(--calc-rotulo)}
 
 .demo-corpo{display:grid}
