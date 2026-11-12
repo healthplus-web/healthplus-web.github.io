@@ -389,7 +389,19 @@
           botao.setAttribute('aria-expanded', String(abrindo));
           // enquanto um painel está travado por clique, o hover não abre
           document.body.classList.toggle('trava-clique', abrindo);
+          // Fechou no clique? O ponteiro ainda está em cima do botão, e
+          // sem isto o :hover reabriria o painel no mesmo instante — era
+          // o que fazia o segundo clique parecer que não fazia nada.
+          // Numa tela de toque o :hover grudado dava no mesmo.
+          card.classList.toggle('sem-hover', !abrindo);
         });
+      });
+    });
+
+    // O bloqueio do hover vale só enquanto o ponteiro não saiu dali.
+    cards.forEach(function (card) {
+      ['pointerleave', 'mouseleave'].forEach(function (ev) {
+        card.addEventListener(ev, function () { card.classList.remove('sem-hover'); });
       });
     });
 
@@ -761,7 +773,22 @@
         // Quem manda é o total que o banco devolve.
         chamar('curtir', { p_dispositivo: aparelho() })
           .then(comemorar)
-          .catch(function (e) { console.warn(e); });
+          .catch(function (e) {
+            // Antes isto so ia para o console: o botao dizia "Voce
+            // curtiu" e o numero nao mexia, e de fora parecia que o
+            // site tinha engolido o toque. Costuma ser bloqueador de
+            // anuncios, extensao de privacidade ou a rede da empresa
+            // barrando o endereco do banco.
+            console.warn(e);
+            jaCurtiu = false;
+            guardar('healthplus:curtiu', '');
+            marcarEstado();
+            if (recado) {
+              recado.textContent = 'Não consegui registrar daqui — alguma ' +
+                'extensão ou a rede deste computador bloqueou o pedido. ' +
+                'Tente por outra rede ou pelo celular.';
+            }
+          });
       });
     });
 

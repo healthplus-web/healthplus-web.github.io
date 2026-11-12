@@ -640,10 +640,18 @@ a:hover{text-decoration:underline}
    fechava ao passar o mouse em outro — ficavam dois abertos. Com
    um painel travado por clique, o hover para de abrir. */
 .info--redes{clip-path:circle(22px at calc(100% - 36px) 36px)}
-body:not(.trava-clique) .pessoa__clip:hover ~ .info--redes,
-body:not(.trava-clique) .info--redes:hover,
 .info--redes:focus-within,
 .pessoa.aberta .info--redes{clip-path:circle(150% at calc(100% - 36px) 36px)}
+/* O hover é atalho de mouse, e só. Numa tela de toque o :hover
+   fica GRUDADO depois do toque, e era por isso que o segundo
+   clique parecia não fechar: fechava e o hover reabria na hora.
+   O .sem-hover segura o mouse parado em cima até ele sair. */
+@media (hover:hover) and (pointer:fine){
+  body:not(.trava-clique) .pessoa:not(.sem-hover) .pessoa__clip:hover ~ .info--redes,
+  body:not(.trava-clique) .pessoa:not(.sem-hover) .info--redes:hover{
+    clip-path:circle(150% at calc(100% - 36px) 36px);
+  }
+}
 
 /* painel das contribuições: nasce do botão "Contribuições". O
    centro dele vem do JS em --cx/--cy, porque a altura do cartão
@@ -658,17 +666,25 @@ body:not(.trava-clique) .info--redes:hover,
 }
 /* e o botão das redes some enquanto as contribuições estão abertas,
    para não ficar espiando por baixo do painel */
-body:not(.trava-clique) .pessoa__contrib:hover ~ .pessoa__clip,
 .pessoa.aberta-contrib .pessoa__clip{opacity:0;pointer-events:none}
+@media (hover:hover) and (pointer:fine){
+  body:not(.trava-clique) .pessoa:not(.sem-hover) .pessoa__contrib:hover ~ .pessoa__clip{
+    opacity:0;pointer-events:none;
+  }
+}
 .pessoa__clip{transition:transform .35s cubic-bezier(.16,1,.3,1),background .25s ease,box-shadow .3s ease,opacity .3s ease}
 /* Sem :focus-within e sem :focus-visible aqui. O <dialog> devolve o
    foco para o "Ver mais", que vive DENTRO deste painel — com
    :focus-within ele reabria sozinho assim que o modal fechava.
    Para teclado quem abre é o clique no botão, que põe a classe
    .aberta-contrib; não falta caminho nenhum. */
-body:not(.trava-clique) .pessoa__contrib:hover ~ .info--contrib,
-body:not(.trava-clique) .info--contrib:hover,
 .pessoa.aberta-contrib .info--contrib{clip-path:circle(150% at var(--cx,50%) var(--cy,78%))}
+@media (hover:hover) and (pointer:fine){
+  body:not(.trava-clique) .pessoa:not(.sem-hover) .pessoa__contrib:hover ~ .info--contrib,
+  body:not(.trava-clique) .pessoa:not(.sem-hover) .info--contrib:hover{
+    clip-path:circle(150% at var(--cx,50%) var(--cy,78%));
+  }
+}
 
 .info--contrib .titulo{
   font-family:var(--mono);font-size:.7rem;letter-spacing:.09em;
