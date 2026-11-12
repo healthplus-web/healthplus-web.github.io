@@ -1476,6 +1476,10 @@ footer p{
   text-align:justify;
   hyphens:auto;-webkit-hyphens:auto;
   text-wrap:pretty;
+  /* A hifenizacao faz caber MAIS caracteres por linha, e linha longa
+     cansa o olho na volta. O limite de medida entra junto com ela:
+     sem isto, as colunas largas passavam de 100 caracteres. */
+  max-width:62ch;
 }
 /* O que NÃO deve ser justificado, mesmo caindo nos seletores acima.
    Aqui o !important é proposital: os seletores de cima são largos
@@ -1485,6 +1489,7 @@ footer p{
    de ler do que esta exceção declarada. */
 .nota-demo,.v-nota,.explica .formula,
 .fcard p,.dica__balao,.sigla__balao{text-align:left!important;hyphens:manual}
+.nota-demo{max-width:none!important}
 .legenda,.meta p{text-align:center!important;hyphens:manual}
 
 /* ══════════════════════════════════════════════════════════════
