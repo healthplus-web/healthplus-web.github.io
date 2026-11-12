@@ -267,7 +267,7 @@ a:hover{text-decoration:underline}
      Fio de 1px com sombra larga é assinatura de interface gerada. */
   background:var(--calc-fundo);border:2px solid var(--calc-borda);
   border-radius:var(--r);overflow:hidden;
-  box-shadow:0 10px 20px rgba(22,59,40,.12);
+  box-shadow:0 10px 20px rgba(0,0,0,.12);
 }
 .demo-cabeca{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
@@ -375,7 +375,7 @@ a:hover{text-decoration:underline}
 .expl__botao{
   width:100%;min-height:var(--alvo);                 /* [FITTS] */
   display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:0 14px;border:0;background:transparent;cursor:pointer;
+  padding:12px 14px;border:0;background:transparent;cursor:pointer;
   font:inherit;text-align:left;color:var(--verde-escuro);
 }
 .expl__botao svg{
@@ -395,8 +395,9 @@ a:hover{text-decoration:underline}
   transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1);
 }
 .expl.aberta .expl__corpo{grid-template-rows:1fr}
-.expl__corpo > div{overflow:hidden;padding:0 14px}
-.expl.aberta .expl__corpo > div{padding-bottom:14px}
+.expl__corpo > div{overflow:hidden}
+.expl__corpo p{padding:0 14px}
+.expl__corpo > div > :last-child{padding-bottom:14px}
 .explica p{font-size:.87rem;color:var(--texto);line-height:1.5;margin:0 0 6px}
 .explica p:last-child{margin-bottom:0}
 .explica code{
