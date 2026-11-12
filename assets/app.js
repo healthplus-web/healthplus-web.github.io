@@ -248,12 +248,22 @@
     var selo = $('#v-classe'), nota = $('#v-nota');
     var prog = $('#progresso'), progBarra = $('#prog-barra'), progTexto = $('#prog-texto');
 
+    // A pastilha que desliza é CSS; aqui só se diz a ela onde parar,
+    // por um data-sexo no grupo. Assim a animação não depende de
+    // JavaScript rodando a cada quadro.
+    var grupo = $('.alternador', raiz);
+    function marcarSexo() {
+      if (grupo) grupo.setAttribute('data-sexo', sexo);
+    }
+    marcarSexo();
+
     $$('.alternador button', raiz).forEach(function (b) {
       b.addEventListener('click', function () {
         sexo = b.dataset.sexo;
         $$('.alternador button', raiz).forEach(function (o) {
           o.setAttribute('aria-pressed', String(o === b));
         });
+        marcarSexo();
         recalcular();
       });
     });
