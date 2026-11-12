@@ -23,9 +23,10 @@
      --verde-escuro por cima: 6,57:1 na faixa, 10,96:1 no corpo e
      9,83:1 nos campos. */
   --calc-faixa:#7DCCAD;
-  --calc-fundo:#E6F4EC;
-  --calc-campo:#D3EADF;
-  --calc-borda:#A8D8C2;
+  --calc-fundo:#D9F1E6;   /* era #E6F4EC: cromacidade baixa demais, lia cinza */
+  --calc-campo:#FFF8C9;   /* o creme da marca, quente, tira o ar de cinza */
+  --calc-borda:#8FD4B6;
+  --ico-info:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M12 2a10 10 0 100 20 10 10 0 000-20zm0 5a1.4 1.4 0 110 2.8A1.4 1.4 0 0112 7zm1.3 11h-2.6v-7h2.6z'/%3E%3C/svg%3E");
   --creme-fundo:#FAF0B8;    /* fundo da página */
   --creme-alt:#F3E6A2;      /* seções alternadas */
 
@@ -286,12 +287,12 @@ a:hover{text-decoration:underline}
 .progresso .trilho{width:58px;height:4px;border-radius:999px;background:rgba(22,59,40,.22);overflow:hidden}
 /* scaleX em vez de width: animar largura recalcula layout a cada quadro */
 .progresso .trilho i{
-  display:block;height:100%;width:100%;border-radius:999px;background:var(--verde-escuro);
+  display:block;height:100%;width:100%;border-radius:999px;background:var(--coral-forte);
   transform:scaleX(0);transform-origin:left center;
   transition:transform .45s cubic-bezier(.22,1,.36,1);
 }
-.progresso.completo{color:var(--coral-txt)}
-.progresso.completo .trilho i{background:var(--coral-forte)}
+.progresso.completo{font-weight:600}
+.progresso.completo .trilho i{background:var(--verde)}
 
 .demo-corpo{display:grid}
 .controles{padding:16px;display:grid;gap:13px;align-content:start;border-bottom:1px solid var(--calc-borda)}
@@ -409,8 +410,18 @@ a:hover{text-decoration:underline}
 .explica .formula{margin-top:6px}
 
 .nota-demo{
-  padding:13px 16px;border-top:1px solid var(--painel-borda);
-  font-size:.82rem;color:rgba(255,248,201,.62);background:var(--painel);
+  margin:14px 0 0;padding:13px 15px;
+  display:flex;gap:10px;align-items:flex-start;
+  background:var(--creme);border:1px solid var(--borda-creme);
+  border-radius:10px;
+  font-size:.82rem;line-height:1.5;color:var(--texto-2);   /* 7,04:1 */
+  text-align:left;
+}
+.nota-demo::before{
+  content:"";flex:0 0 auto;width:16px;height:16px;margin-top:2px;
+  border-radius:50%;background:var(--verde);
+  -webkit-mask:var(--ico-info) center/12px no-repeat;
+          mask:var(--ico-info) center/12px no-repeat;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1090,7 +1101,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 @media (min-width:1000px){
   .tela-bloco{grid-template-columns:250px 1fr;gap:46px}
   .tela-bloco.espelho{grid-template-columns:1fr 250px}
-  .legenda{text-align:left}
+  .legenda{text-align:center}
 }
 
 @media (min-width:980px){
@@ -1444,3 +1455,56 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   background:var(--verde-faixa);
 }
 .dica-campo[hidden]{display:none}
+
+
+/* ══════════════════════════════════════════════════════════════
+   12. Texto justificado
+   ══════════════════════════════════════════════════════════════
+   Só o corpo de leitura. Linha curta justificada abre "rios" de
+   espaço no meio do parágrafo, então legenda, nota, rótulo e tudo
+   que já é centralizado ficam de fora. A hifenização entra junto:
+   sem ela, justificar em português estica demais as linhas. */
+.heroi .lede,
+.secao > .env > div > p,
+.secao > .env > p,
+.tela-bloco p,
+.mvv__corpo p,
+.valor__texto p,
+.expl__corpo p,
+.priv__corpo p,
+footer p{
+  text-align:justify;
+  hyphens:auto;-webkit-hyphens:auto;
+  text-wrap:pretty;
+}
+/* O que NÃO deve ser justificado, mesmo caindo nos seletores acima.
+   Aqui o !important é proposital: os seletores de cima são largos
+   (.tela-bloco p, .secao > .env > div > p) e ganham por
+   especificidade de qualquer lista curta que eu escrevesse aqui.
+   Subir a especificidade só para empatar deixaria o arquivo pior
+   de ler do que esta exceção declarada. */
+.nota-demo,.v-nota,.explica .formula,
+.fcard p,.dica__balao,.sigla__balao{text-align:left!important;hyphens:manual}
+.legenda,.meta p{text-align:center!important;hyphens:manual}
+
+/* ══════════════════════════════════════════════════════════════
+   13. Rodapé em duas colunas no computador
+   ══════════════════════════════════════════════════════════════
+   Numa tela larga os parágrafos travavam em 48ch e a metade
+   direita ficava vazia. Agora a marca fica de um lado e as notas
+   do outro, usando a largura inteira. */
+@media (min-width:860px){
+  footer .env{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);
+    column-gap:56px;align-items:start;
+  }
+  footer .nome{grid-column:1;grid-row:1}
+  footer > .env > p:nth-of-type(1){grid-column:1;grid-row:2}
+  footer > .env > p:nth-of-type(2){grid-column:1;grid-row:3}
+  footer > .env > p{max-width:none}
+  .rodape-fim{
+    grid-column:2;grid-row:1 / span 3;
+    margin-top:0;padding-top:0;border-top:0;
+  }
+  .rodape-fim p{max-width:none}
+}
