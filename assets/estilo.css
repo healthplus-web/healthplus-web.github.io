@@ -16,6 +16,16 @@
 :root{
   /* três profundidades de creme, nenhuma delas branca */
   --creme:#FFF8C9;          /* superfícies: cartões, campos */
+
+  /* Calculadora clara. O #7DCCAD é o verde que o Bruno escolheu;
+     os outros dois tons são o mesmo matiz rebaixado, para servirem
+     de superfície grande sem cansar. Contrastes medidos com
+     --verde-escuro por cima: 6,57:1 na faixa, 10,96:1 no corpo e
+     9,83:1 nos campos. */
+  --calc-faixa:#7DCCAD;
+  --calc-fundo:#E6F4EC;
+  --calc-campo:#D3EADF;
+  --calc-borda:#A8D8C2;
   --creme-fundo:#FAF0B8;    /* fundo da página */
   --creme-alt:#F3E6A2;      /* seções alternadas */
 
@@ -255,61 +265,61 @@ a:hover{text-decoration:underline}
   margin-top:26px;
   /* moldura de 2px: é um painel de instrumento, não um cartão.
      Fio de 1px com sombra larga é assinatura de interface gerada. */
-  background:var(--verde-escuro);border:2px solid var(--painel-borda);
+  background:var(--calc-fundo);border:2px solid var(--calc-borda);
   border-radius:var(--r);overflow:hidden;
-  box-shadow:0 10px 20px rgba(0,0,0,.2);
+  box-shadow:0 10px 20px rgba(22,59,40,.12);
 }
 .demo-cabeca{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  padding:12px 16px;border-bottom:1px solid var(--painel-borda);
-  background:var(--painel);
+  padding:12px 16px;border-bottom:1px solid var(--calc-borda);
+  background:var(--calc-faixa);color:var(--verde-escuro);
 }
-.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--verde-faixa);flex:none}
-.demo-cabeca .mono{min-width:0;color:rgba(255,248,201,.65)}
+.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--verde-escuro);flex:none}
+.demo-cabeca .mono{min-width:0;color:var(--verde-escuro)}
 
 /* [ZEIGARNIK] + [META] — mostra o que falta para o resultado ficar
    pronto; a barra enchendo puxa para terminar e vira coral ao fechar. */
 .progresso{
   margin-left:auto;display:flex;align-items:center;gap:9px;
-  font-family:var(--mono);font-size:.7rem;color:rgba(255,248,201,.65);white-space:nowrap;
+  font-family:var(--mono);font-size:.7rem;color:var(--verde-escuro);white-space:nowrap;
 }
-.progresso .trilho{width:58px;height:4px;border-radius:999px;background:rgba(255,248,201,.2);overflow:hidden}
+.progresso .trilho{width:58px;height:4px;border-radius:999px;background:rgba(22,59,40,.22);overflow:hidden}
 /* scaleX em vez de width: animar largura recalcula layout a cada quadro */
 .progresso .trilho i{
-  display:block;height:100%;width:100%;border-radius:999px;background:var(--verde-faixa);
+  display:block;height:100%;width:100%;border-radius:999px;background:var(--verde-escuro);
   transform:scaleX(0);transform-origin:left center;
   transition:transform .45s cubic-bezier(.22,1,.36,1);
 }
-.progresso.completo{color:#FFB199}
-.progresso.completo .trilho i{background:var(--coral)}
+.progresso.completo{color:var(--coral-txt)}
+.progresso.completo .trilho i{background:var(--coral-forte)}
 
 .demo-corpo{display:grid}
-.controles{padding:16px;display:grid;gap:13px;align-content:start;border-bottom:1px solid var(--painel-borda)}
+.controles{padding:16px;display:grid;gap:13px;align-content:start;border-bottom:1px solid var(--calc-borda)}
 
 .campo{display:grid;gap:6px;min-width:0}
 .campo > label,.campo > .rotulo{
   font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
-  color:rgba(255,248,201,.6);text-transform:uppercase;
+  color:var(--verde);text-transform:uppercase;      /* 4,91:1 */
 }
 .campo input[type=number],.campo input[type=text]{
   width:100%;min-width:0;min-height:var(--alvo);padding:0 12px;   /* [FITTS] */
   font-size:1rem;font-family:var(--mono);
-  background:var(--painel-campo);color:var(--creme);
-  border:1px solid var(--painel-borda);border-radius:9px;
+  background:var(--calc-campo);color:var(--verde-escuro);
+  border:1px solid var(--calc-borda);border-radius:9px;
 }
 /* #9AA39E dá 2,6:1 e é ilegível — o próprio app/tema/index.js já
-   marcou esse erro. Aqui o placeholder é creme a 52%. */
-.campo input[type=number]::placeholder,.campo input[type=text]::placeholder{color:rgba(255,248,201,.52);opacity:1}
-.campo input[type=number]:focus,.campo input[type=text]:focus{border-color:var(--verde-faixa);outline:none;box-shadow:0 0 0 3px rgba(93,181,130,.22)}
+   marcou esse erro. Aqui o placeholder dá 4,72:1. */
+.campo input[type=number]::placeholder,.campo input[type=text]::placeholder{color:var(--texto-3);opacity:1}
+.campo input[type=number]:focus,.campo input[type=text]:focus{border-color:var(--verde);outline:none;box-shadow:0 0 0 3px rgba(38,118,74,.22)}
 
-.alternador{display:flex;gap:5px;background:var(--painel-campo);border:1px solid var(--painel-borda);border-radius:9px;padding:4px}
+.alternador{display:flex;gap:5px;background:var(--calc-campo);border:1px solid var(--calc-borda);border-radius:9px;padding:4px}
 .alternador button{
   flex:1;min-width:0;min-height:40px;                 /* [FITTS] */
   border:0;border-radius:6px;cursor:pointer;
-  background:transparent;color:rgba(255,248,201,.72);font:inherit;font-size:.9rem;
+  background:transparent;color:var(--verde);font:inherit;font-size:.9rem;
   transition:background .18s,color .18s;
 }
-.alternador button[aria-pressed=true]{background:var(--creme);color:var(--verde-escuro);font-weight:600}
+.alternador button[aria-pressed=true]{background:var(--verde-escuro);color:var(--creme);font-weight:600}
 
 .dupla{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 
@@ -318,54 +328,82 @@ a:hover{text-decoration:underline}
 /* min-width:0 em tudo: sem isso um item de grid se recusa a
    encolher abaixo do conteúdo e o valor estoura a caixa. */
 .painel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.painel div{min-width:0;background:var(--painel);border:1px solid var(--painel-borda);border-radius:10px;padding:10px}
+.painel div{min-width:0;background:var(--calc-campo);border:1px solid var(--calc-borda);border-radius:10px;padding:10px}
 .painel .rot{
   font-family:var(--mono);font-size:.64rem;letter-spacing:.04em;
-  color:rgba(255,248,201,.6);text-transform:uppercase;
+  color:var(--verde);text-transform:uppercase;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .painel .val{
-  font-family:var(--mono);font-weight:600;color:var(--creme);
+  font-family:var(--mono);font-weight:600;color:var(--verde-escuro);
   font-size:clamp(.95rem,4.6vw,1.25rem);
   line-height:1.15;margin-top:3px;font-variant-numeric:tabular-nums;
   overflow-wrap:anywhere;
 }
 
-/* [RESTORFF] a classificação é o que a pessoa veio ver. */
+/* [RESTORFF] a classificação é o que a pessoa veio ver.
+   Em fundo claro os selos invertem: texto escuro sobre tinta leve. */
 .selo-classe{
   display:inline-flex;align-items:center;gap:8px;justify-self:start;
   min-height:42px;padding:0 16px;border-radius:999px;
   font-weight:600;font-size:.93rem;border:1px solid;max-width:100%;
 }
-.selo-classe.adequado{background:rgba(93,181,130,.2);border-color:#5DB582;color:#A9E8C4}
-.selo-classe.atencao{background:rgba(255,200,90,.16);border-color:#C9A64A;color:#FFD079}
-.selo-classe.risco{background:rgba(255,116,82,.2);border-color:var(--coral);color:#FFB199}
-.selo-classe.vazio{background:transparent;border-color:var(--painel-borda);color:rgba(255,248,201,.6);font-weight:400}
+.selo-classe.adequado{background:#CDEBDA;border-color:var(--verde);color:#14482C}
+.selo-classe.atencao{background:#FFEFB3;border-color:#B9872A;color:#6B4A00}
+.selo-classe.risco{background:#FFDCD1;border-color:var(--coral-forte);color:#8C2D0B}
+.selo-classe.vazio{background:transparent;border-color:var(--calc-borda);color:var(--texto-2);font-weight:400}
 
 /* nota de referência: diz qual curva foi usada, ou por que não há */
 .v-nota{
-  font-size:.82rem;line-height:1.45;color:rgba(255,248,201,.68);
-  border-left:2px solid var(--painel-borda);padding-left:12px;
+  font-size:.82rem;line-height:1.45;color:var(--texto-2);
+  border-left:2px solid var(--calc-borda);padding-left:12px;
 }
 
 /* ── o que cada número significa ──
    Entrou no lugar do gráfico: para quem testa com os próprios
-   dados, saber o que é um z-score vale mais do que ver a curva. */
+   dados, saber o que é um z-score vale mais do que ver a curva.
+   Fechado por padrão — três blocos abertos faziam a calculadora
+   não acabar nunca no celular. Abre um, fecha o outro. */
 .explica{
-  padding:0 16px 18px;display:grid;gap:14px;
-  border-top:1px solid var(--painel-borda);margin-top:2px;padding-top:16px;
+  padding:16px;display:grid;gap:8px;
+  border-top:1px solid var(--calc-borda);
 }
-.explica > div{display:grid;gap:4px}
-.explica dt,.explica .termo{
-  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--verde-faixa);
+.expl{
+  background:var(--calc-campo);border:1px solid var(--calc-borda);
+  border-radius:10px;overflow:hidden;
 }
-.explica dd,.explica p{font-size:.87rem;color:rgba(255,248,201,.78);line-height:1.5;margin:0}
+.expl__botao{
+  width:100%;min-height:var(--alvo);                 /* [FITTS] */
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:0 14px;border:0;background:transparent;cursor:pointer;
+  font:inherit;text-align:left;color:var(--verde-escuro);
+}
+.expl__botao svg{
+  width:18px;height:18px;flex:none;color:var(--verde);
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+.expl.aberta .expl__botao svg{transform:rotate(180deg)}
+.expl__botao:hover{background:rgba(38,118,74,.07)}
+.expl__botao:focus-visible{outline:3px solid var(--verde);outline-offset:-3px}
+.expl .termo{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--verde);
+}
+/* linha 0fr -> 1fr: dá para animar, display:none não dá */
+.expl__corpo{
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1);
+}
+.expl.aberta .expl__corpo{grid-template-rows:1fr}
+.expl__corpo > div{overflow:hidden;padding:0 14px}
+.expl.aberta .expl__corpo > div{padding-bottom:14px}
+.explica p{font-size:.87rem;color:var(--texto);line-height:1.5;margin:0 0 6px}
+.explica p:last-child{margin-bottom:0}
 .explica code{
   font-family:var(--mono);font-size:.82rem;
-  background:var(--painel-campo);color:var(--creme);
+  background:var(--creme);color:var(--verde-escuro);
   padding:2px 7px;border-radius:5px;display:inline-block;
-  border:1px solid var(--painel-borda);
+  border:1px solid var(--borda-creme);
 }
 .explica .formula{margin-top:6px}
 
@@ -1040,7 +1078,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   /* No PC o campo não precisa ser alto: o mouse acerta 40px sem
      esforço, e campo gigante empurra o resultado para fora da vista. */
   .demo-corpo{grid-template-columns:300px 1fr}
-  .controles{border-bottom:0;border-right:1px solid var(--painel-borda);gap:12px;padding:18px}
+  .controles{border-bottom:0;border-right:1px solid var(--calc-borda);gap:12px;padding:18px}
   .controles .campo input[type=number],.controles .campo input[type=text]{min-height:40px;font-size:.95rem}
   .controles .alternador button{min-height:34px}
   .painel .val{font-size:1.25rem}

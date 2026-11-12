@@ -281,21 +281,9 @@
        Ninguém tem 2,4 cm nem 300 m: abaixo de 3 só pode ser metro. */
     function alturaEmCm() {
       var n = numero(altura.value);
-      if (!isFinite(n)) return { cm: NaN, convertido: false };
-      if (n > 0 && n < 3) return { cm: n * 100, convertido: true };
-      return { cm: n, convertido: false };
-    }
-
-    function avisarAltura(med) {
-      var dica = $('#dica-altura');
-      if (!dica) return;
-      if (med.convertido) {
-        dica.textContent = 'Entendi ' + altura.value.trim() + ' m, ou seja ' +
-          (Math.round(med.cm * 10) / 10).toString().replace('.', ',') + ' cm.';
-        dica.hidden = false;
-      } else {
-        dica.hidden = true;
-      }
+      if (!isFinite(n)) return { cm: NaN };
+      // calcula direto, com vírgula ou sem: abaixo de 3 só pode ser metro
+      return { cm: n > 0 && n < 3 ? n * 100 : n };
     }
 
     // [ZEIGARNIK] + [GRADIENTE DE META]
@@ -326,10 +314,7 @@
 
       var a = numero(anos.value), mm = numero(meses.value) || 0;
       var p = numero(peso.value);
-      var med = alturaEmCm();
-      var h = med.cm;
-
-      avisarAltura(med);
+      var h = alturaEmCm().cm;
 
       if (!isFinite(a) || !isFinite(p) || !isFinite(h) || p <= 0 || h <= 0) {
         return vazio('Preencha os campos');
@@ -676,12 +661,21 @@
        contrário. Então o coração enche até o PRÓXIMO marco, e o alvo
        final de 300 aparece no texto. Nada disto toca o banco: é
        constante de navegador, as curtidas continuam todas lá. */
-    var MARCOS = [100, 150, 300];
-    var META = MARCOS[MARCOS.length - 1];
+    var MARCOS = [
+      { n: 100, nome: 'a primeira marca' },
+      { n: 150, nome: 'a segunda marca' },
+      { n: 300, nome: 'a meta' }
+    ];
+    var META = MARCOS[MARCOS.length - 1].n;
 
     function proximoMarco(n) {
-      for (var i = 0; i < MARCOS.length; i++) if (n < MARCOS[i]) return MARCOS[i];
-      return META;
+      for (var i = 0; i < MARCOS.length; i++) if (n < MARCOS[i].n) return MARCOS[i];
+      return MARCOS[MARCOS.length - 1];
+    }
+    function marcoAnterior(n) {
+      var ultimo = null;
+      for (var i = 0; i < MARCOS.length; i++) if (n >= MARCOS[i].n) ultimo = MARCOS[i];
+      return ultimo;
     }
 
     var botoes = $$('.curtir');
@@ -733,14 +727,17 @@
       numeros.forEach(function (el) { el.textContent = n.toLocaleString('pt-BR'); });
       if (recado) {
         var alvo = proximoMarco(n);
-        var faltam = alvo - n;
+        var atras = marcoAnterior(n);
+        var faltam = alvo.n - n;
         if (n >= META) {
-          recado.textContent = 'Meta de ' + META + ' batida. Obrigado a cada uma das ' +
+          recado.textContent = 'Meta batida! Obrigado a cada uma das ' +
             n.toLocaleString('pt-BR') + ' pessoas.';
-        } else if (alvo === MARCOS[0]) {
-          recado.textContent = 'Faltam ' + faltam + ' para a primeira marca de ' + alvo + '.';
+        } else if (atras) {
+          // já bateu um marco: celebra antes de pedir o próximo
+          recado.textContent = atras.nome.charAt(0).toUpperCase() + atras.nome.slice(1) +
+            ' batida! Só mais ' + faltam + ' para ' + alvo.nome + '.';
         } else {
-          recado.textContent = 'Faltam ' + faltam + ' para ' + alvo + '. A meta é ' + META + '.';
+          recado.textContent = 'Só mais ' + faltam + ' para ' + alvo.nome + '!';
         }
       }
     }
@@ -749,7 +746,7 @@
       if (!enchimento) return;
       var n = Number(total) || 0;
       // enche até o próximo marco, não até o número final
-      var fracao = Math.min(n / proximoMarco(n), 1);
+      var fracao = Math.min(n / proximoMarco(n).n, 1);
       // o coração enche de baixo para cima; 110 é a altura do viewBox
       enchimento.style.transform = 'translate(0,' + (110 * (1 - fracao)) + 'px)';
     }
@@ -1022,6 +1019,33 @@
     window.addEventListener('pageshow', function (e) { if (e.persisted) aoTopo(); });
   })();
 
+
+  /* ═══════════════════════════════════════════════════════════
+     11.1 EXPLICAÇÕES DA CALCULADORA
+     Três blocos abertos faziam a calculadora não acabar nunca no
+     celular. Agora abrem sob demanda, e abrir um fecha o outro —
+     a página não cresce sem o visitante mandar.
+     ═══════════════════════════════════════════════════════════ */
+
+  (function explicacoes() {
+    var itens = $$('.expl');
+    if (!itens.length) return;
+
+    itens.forEach(function (item) {
+      var botao = $('.expl__botao', item);
+      if (!botao) return;
+      botao.addEventListener('click', function () {
+        var abrindo = !item.classList.contains('aberta');
+        itens.forEach(function (o) {
+          o.classList.remove('aberta');
+          var b = $('.expl__botao', o);
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+        item.classList.toggle('aberta', abrindo);
+        botao.setAttribute('aria-expanded', String(abrindo));
+      });
+    });
+  })();
 
   /* ═══════════════════════════════════════════════════════════
      12. CARROSSEL DOS VALORES E PAINÉIS DE MISSÃO/VISÃO

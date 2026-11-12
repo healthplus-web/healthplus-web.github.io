@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css?v=3af4g">
+<link rel="stylesheet" href="assets/estilo.css?v=467s4">
 </head>
 <body>
 
@@ -191,8 +191,7 @@
             </div>
             <div class="campo">
               <label for="altura">Altura (cm)</label>
-              <input type="text" id="altura" value="" placeholder="ex. 124 ou 1,24" inputmode="decimal" autocomplete="off" enterkeyhint="done">
-              <small class="dica-campo" id="dica-altura" role="status" hidden></small>
+              <input type="text" id="altura" value="" placeholder="ex. 124" inputmode="decimal" autocomplete="off" enterkeyhint="done">
             </div>
           </div>
         </div>
@@ -211,30 +210,46 @@
           </div>
 
           <div class="explica">
-            <div>
-              <span class="termo">IMC</span>
-              <p>Índice de Massa Corporal: o peso dividido pela altura ao
-                 quadrado. Sozinho ele diz pouco sobre uma criança: um IMC
-                 de 15 é normal aos 5 anos e é magreza aos 19.</p>
-              <p class="formula"><code>IMC = peso ÷ altura²</code></p>
+            <div class="expl">
+              <button class="expl__botao" type="button" aria-expanded="false">
+                <span class="termo">IMC</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="expl__corpo"><div>
+                <p>Índice de Massa Corporal: o peso dividido pela altura ao
+                   quadrado. Sozinho ele diz pouco sobre uma criança: um IMC
+                   de 15 é normal aos 5 anos e é magreza aos 19.</p>
+                <p class="formula"><code>IMC = peso ÷ altura²</code></p>
+              </div></div>
             </div>
-            <div>
-              <span class="termo">z-score</span>
-              <p>Quantos desvios-padrão a medida está longe da mediana de
-                 quem tem a mesma idade e o mesmo sexo. Zero é exatamente a
-                 mediana, −1 é um desvio abaixo. É o que torna o IMC
-                 comparável entre idades diferentes.</p>
-              <p class="formula"><code>z = ((IMC ÷ M)^L − 1) ÷ (L × S)</code></p>
-              <p>L, M e S são três parâmetros que a OMS publica para cada mês
-                 de vida, separados por sexo. O cálculo interpola entre os
-                 dois meses vizinhos.</p>
+            <div class="expl">
+              <button class="expl__botao" type="button" aria-expanded="false">
+                <span class="termo">z-score</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="expl__corpo"><div>
+                <p>Quantos desvios-padrão a medida está longe da mediana de
+                   quem tem a mesma idade e o mesmo sexo. Zero é exatamente a
+                   mediana, −1 é um desvio abaixo. É o que torna o IMC
+                   comparável entre idades diferentes.</p>
+                <p class="formula"><code>z = ((IMC ÷ M)^L − 1) ÷ (L × S)</code></p>
+                <p>L, M e S são três parâmetros que a OMS publica para cada mês
+                   de vida, separados por sexo. O cálculo interpola entre os
+                   dois meses vizinhos.</p>
+              </div></div>
             </div>
-            <div>
-              <span class="termo">Percentil</span>
-              <p>A posição numa fila de cem pessoas da mesma idade e sexo.
-                 Percentil 34 quer dizer que 34 em cada 100 teriam IMC menor
-                 que este. Sai direto do z-score, pela curva normal.</p>
+            <div class="expl">
+              <button class="expl__botao" type="button" aria-expanded="false">
+                <span class="termo">Percentil</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="expl__corpo"><div>
+                <p>A posição numa fila de cem pessoas da mesma idade e sexo.
+                   Percentil 34 quer dizer que 34 em cada 100 teriam IMC menor
+                   que este. Sai direto do z-score, pela curva normal.</p>
+              </div></div>
             </div>
+          </div>
           </div>
         </div>
       </div>
@@ -906,7 +921,7 @@
 </dialog>
 
 
-<script src="assets/oms-imc.js?v=3af4g"></script>
-<script src="assets/app.js?v=3af4g" defer></script>
+<script src="assets/oms-imc.js?v=467s4"></script>
+<script src="assets/app.js?v=467s4" defer></script>
 </body>
 </html>
