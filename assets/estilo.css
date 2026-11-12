@@ -1099,8 +1099,10 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
    sentido quando sobra largura de texto de verdade. Abaixo disto
    o bloco empilha: aparelho em cima, explicação embaixo. */
 @media (min-width:1000px){
-  .tela-bloco{grid-template-columns:250px 1fr;gap:46px}
-  .tela-bloco.espelho{grid-template-columns:1fr 250px}
+  /* a coluna do texto tem o tamanho da medida; o bloco inteiro
+     fica centrado, em vez de deixar um vazio a direita */
+  .tela-bloco{grid-template-columns:250px minmax(0,470px);gap:52px;justify-content:center}
+  .tela-bloco.espelho{grid-template-columns:minmax(0,470px) 250px}
   .legenda{text-align:center}
 }
 
@@ -1478,8 +1480,10 @@ footer p{
   text-wrap:pretty;
   /* A hifenizacao faz caber MAIS caracteres por linha, e linha longa
      cansa o olho na volta. O limite de medida entra junto com ela:
-     sem isto, as colunas largas passavam de 100 caracteres. */
-  max-width:62ch;
+     sem isto, as colunas largas passavam de 100 caracteres.
+     44ch porque o ch desta fonte (0,6em) e quase o dobro da largura
+     media de um caractere (0,34em): 44ch da ~78 caracteres. */
+  max-width:44ch;
 }
 /* O que NÃO deve ser justificado, mesmo caindo nos seletores acima.
    Aqui o !important é proposital: os seletores de cima são largos
