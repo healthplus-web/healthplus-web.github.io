@@ -22,10 +22,16 @@
      de superfície grande sem cansar. Contrastes medidos com
      --verde-escuro por cima: 6,57:1 na faixa, 10,96:1 no corpo e
      9,83:1 nos campos. */
-  --calc-faixa:#7DCCAD;
-  --calc-fundo:#D9F1E6;   /* era #E6F4EC: cromacidade baixa demais, lia cinza */
-  --calc-campo:#FFF8C9;   /* o creme da marca, quente, tira o ar de cinza */
-  --calc-borda:#8FD4B6;
+  --calc-faixa:#B7B1F2;   /* o lilás escolhido pelo Bruno */
+  --calc-fundo:#E3E0FA;   /* o mesmo matiz rebaixado, para superfície grande */
+  --calc-campo:#FFF8C9;   /* o creme da marca: é ele que aquece o lilás */
+  --calc-borda:#C9C4F5;
+  /* Tinta própria: verde sobre lilás brigava. Estes são medidos —
+     10,19:1 no fundo, 12,19:1 nos campos, 6,61:1 na faixa, e o
+     rótulo dá 6,35:1 no fundo e 7,60:1 no creme. */
+  --calc-tinta:#2E2A5C;
+  --calc-rotulo:#4A3FA8;
+  --calc-fraco:#5E5885;
   --ico-info:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M12 2a10 10 0 100 20 10 10 0 000-20zm0 5a1.4 1.4 0 110 2.8A1.4 1.4 0 0112 7zm1.3 11h-2.6v-7h2.6z'/%3E%3C/svg%3E");
   --creme-fundo:#FAF0B8;    /* fundo da página */
   --creme-alt:#F3E6A2;      /* seções alternadas */
@@ -273,16 +279,16 @@ a:hover{text-decoration:underline}
 .demo-cabeca{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
   padding:12px 16px;border-bottom:1px solid var(--calc-borda);
-  background:var(--calc-faixa);color:var(--verde-escuro);
+  background:var(--calc-faixa);color:var(--calc-tinta);
 }
-.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--verde-escuro);flex:none}
-.demo-cabeca .mono{min-width:0;color:var(--verde-escuro)}
+.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--calc-tinta);flex:none}
+.demo-cabeca .mono{min-width:0;color:var(--calc-tinta)}
 
 /* [ZEIGARNIK] + [META] — mostra o que falta para o resultado ficar
    pronto; a barra enchendo puxa para terminar e vira coral ao fechar. */
 .progresso{
   margin-left:auto;display:flex;align-items:center;gap:9px;
-  font-family:var(--mono);font-size:.7rem;color:var(--verde-escuro);white-space:nowrap;
+  font-family:var(--mono);font-size:.7rem;color:var(--calc-tinta);white-space:nowrap;
 }
 .progresso .trilho{width:58px;height:4px;border-radius:999px;background:rgba(22,59,40,.22);overflow:hidden}
 /* scaleX em vez de width: animar largura recalcula layout a cada quadro */
@@ -292,7 +298,7 @@ a:hover{text-decoration:underline}
   transition:transform .45s cubic-bezier(.22,1,.36,1);
 }
 .progresso.completo{font-weight:600}
-.progresso.completo .trilho i{background:var(--verde)}
+.progresso.completo .trilho i{background:var(--calc-rotulo)}
 
 .demo-corpo{display:grid}
 .controles{padding:16px;display:grid;gap:13px;align-content:start;border-bottom:1px solid var(--calc-borda)}
@@ -300,27 +306,27 @@ a:hover{text-decoration:underline}
 .campo{display:grid;gap:6px;min-width:0}
 .campo > label,.campo > .rotulo{
   font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
-  color:var(--verde);text-transform:uppercase;      /* 4,91:1 */
+  color:var(--calc-rotulo);text-transform:uppercase;      /* 4,91:1 */
 }
 .campo input[type=number],.campo input[type=text]{
   width:100%;min-width:0;min-height:var(--alvo);padding:0 12px;   /* [FITTS] */
   font-size:1rem;font-family:var(--mono);
-  background:var(--calc-campo);color:var(--verde-escuro);
+  background:var(--calc-campo);color:var(--calc-tinta);
   border:1px solid var(--calc-borda);border-radius:9px;
 }
 /* #9AA39E dá 2,6:1 e é ilegível — o próprio app/tema/index.js já
    marcou esse erro. Aqui o placeholder dá 4,72:1. */
-.campo input[type=number]::placeholder,.campo input[type=text]::placeholder{color:var(--texto-3);opacity:1}
-.campo input[type=number]:focus,.campo input[type=text]:focus{border-color:var(--verde);outline:none;box-shadow:0 0 0 3px rgba(38,118,74,.22)}
+.campo input[type=number]::placeholder,.campo input[type=text]::placeholder{color:var(--calc-fraco);opacity:1}
+.campo input[type=number]:focus,.campo input[type=text]:focus{border-color:var(--calc-rotulo);outline:none;box-shadow:0 0 0 3px rgba(74,63,168,.26)}
 
 .alternador{display:flex;gap:5px;background:var(--calc-campo);border:1px solid var(--calc-borda);border-radius:9px;padding:4px}
 .alternador button{
   flex:1;min-width:0;min-height:40px;                 /* [FITTS] */
   border:0;border-radius:6px;cursor:pointer;
-  background:transparent;color:var(--verde);font:inherit;font-size:.9rem;
+  background:transparent;color:var(--calc-rotulo);font:inherit;font-size:.9rem;
   transition:background .18s,color .18s;
 }
-.alternador button[aria-pressed=true]{background:var(--verde-escuro);color:var(--creme);font-weight:600}
+.alternador button[aria-pressed=true]{background:var(--calc-tinta);color:var(--creme);font-weight:600}
 
 .dupla{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 
@@ -332,11 +338,11 @@ a:hover{text-decoration:underline}
 .painel div{min-width:0;background:var(--calc-campo);border:1px solid var(--calc-borda);border-radius:10px;padding:10px}
 .painel .rot{
   font-family:var(--mono);font-size:.64rem;letter-spacing:.04em;
-  color:var(--verde);text-transform:uppercase;
+  color:var(--calc-rotulo);text-transform:uppercase;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .painel .val{
-  font-family:var(--mono);font-weight:600;color:var(--verde-escuro);
+  font-family:var(--mono);font-weight:600;color:var(--calc-tinta);
   font-size:clamp(.95rem,4.6vw,1.25rem);
   line-height:1.15;margin-top:3px;font-variant-numeric:tabular-nums;
   overflow-wrap:anywhere;
@@ -349,14 +355,14 @@ a:hover{text-decoration:underline}
   min-height:42px;padding:0 16px;border-radius:999px;
   font-weight:600;font-size:.93rem;border:1px solid;max-width:100%;
 }
-.selo-classe.adequado{background:#CDEBDA;border-color:var(--verde);color:#14482C}
+.selo-classe.adequado{background:#CDEBDA;border-color:var(--calc-rotulo);color:#14482C}
 .selo-classe.atencao{background:#FFEFB3;border-color:#B9872A;color:#6B4A00}
 .selo-classe.risco{background:#FFDCD1;border-color:var(--coral-forte);color:#8C2D0B}
-.selo-classe.vazio{background:transparent;border-color:var(--calc-borda);color:var(--texto-2);font-weight:400}
+.selo-classe.vazio{background:transparent;border-color:var(--calc-borda);color:var(--calc-fraco);font-weight:400}
 
 /* nota de referência: diz qual curva foi usada, ou por que não há */
 .v-nota{
-  font-size:.82rem;line-height:1.45;color:var(--texto-2);
+  font-size:.82rem;line-height:1.45;color:var(--calc-fraco);
   border-left:2px solid var(--calc-borda);padding-left:12px;
 }
 
@@ -377,18 +383,18 @@ a:hover{text-decoration:underline}
   width:100%;min-height:var(--alvo);                 /* [FITTS] */
   display:flex;align-items:center;justify-content:space-between;gap:10px;
   padding:12px 14px;border:0;background:transparent;cursor:pointer;
-  font:inherit;text-align:left;color:var(--verde-escuro);
+  font:inherit;text-align:left;color:var(--calc-tinta);
 }
 .expl__botao svg{
-  width:18px;height:18px;flex:none;color:var(--verde);
+  width:18px;height:18px;flex:none;color:var(--calc-rotulo);
   transition:transform .4s cubic-bezier(.22,1,.36,1);
 }
 .expl.aberta .expl__botao svg{transform:rotate(180deg)}
-.expl__botao:hover{background:rgba(38,118,74,.07)}
-.expl__botao:focus-visible{outline:3px solid var(--verde);outline-offset:-3px}
+.expl__botao:hover{background:rgba(74,63,168,.08)}
+.expl__botao:focus-visible{outline:3px solid var(--calc-rotulo);outline-offset:-3px}
 .expl .termo{
   font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--verde);
+  text-transform:uppercase;color:var(--calc-rotulo);
 }
 /* linha 0fr -> 1fr: dá para animar, display:none não dá */
 .expl__corpo{
@@ -399,11 +405,11 @@ a:hover{text-decoration:underline}
 .expl__corpo > div{overflow:hidden}
 .expl__corpo p{padding:0 14px}
 .expl__corpo > div > :last-child{padding-bottom:14px}
-.explica p{font-size:.87rem;color:var(--texto);line-height:1.5;margin:0 0 6px}
+.explica p{font-size:.87rem;color:var(--calc-tinta);line-height:1.5;margin:0 0 6px}
 .explica p:last-child{margin-bottom:0}
 .explica code{
   font-family:var(--mono);font-size:.82rem;
-  background:var(--creme);color:var(--verde-escuro);
+  background:#FFFDF0;color:var(--calc-tinta);
   padding:2px 7px;border-radius:5px;display:inline-block;
   border:1px solid var(--borda-creme);
 }
