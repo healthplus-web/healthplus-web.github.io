@@ -261,6 +261,43 @@
       if (c) c.addEventListener('input', recalcular);
     });
 
+    /* Quem digita em português escreve 23,5 — e o campo era
+       type="number", que simplesmente descarta a vírgula e devolve
+       string vazia. O placeholder do peso dizia "ex. 23,5": quem
+       seguia o exemplo não recebia resultado nenhum. Agora os dois
+       campos são texto e a leitura é feita aqui. */
+    function numero(v) {
+      if (v == null) return NaN;
+      var s = String(v).trim().replace(/\s/g, '').replace(',', '.');
+      if (!s) return NaN;
+      // sobrou mais de um ponto? era separador de milhar: 1.234,5
+      var partes = s.split('.');
+      if (partes.length > 2) s = partes.slice(0, -1).join('') + '.' + partes[partes.length - 1];
+      var n = parseFloat(s);
+      return isFinite(n) ? n : NaN;
+    }
+
+    /* Altura aceita centímetros (169) e metros (1,69 ou 1.69).
+       Ninguém tem 2,4 cm nem 300 m: abaixo de 3 só pode ser metro. */
+    function alturaEmCm() {
+      var n = numero(altura.value);
+      if (!isFinite(n)) return { cm: NaN, convertido: false };
+      if (n > 0 && n < 3) return { cm: n * 100, convertido: true };
+      return { cm: n, convertido: false };
+    }
+
+    function avisarAltura(med) {
+      var dica = $('#dica-altura');
+      if (!dica) return;
+      if (med.convertido) {
+        dica.textContent = 'Entendi ' + altura.value.trim() + ' m, ou seja ' +
+          (Math.round(med.cm * 10) / 10).toString().replace('.', ',') + ' cm.';
+        dica.hidden = false;
+      } else {
+        dica.hidden = true;
+      }
+    }
+
     // [ZEIGARNIK] + [GRADIENTE DE META]
     // Quatro medidas: sexo (já escolhido), idade, peso e altura.
     // Enquanto falta uma, a barra fica curta e o contador mostra o
@@ -268,9 +305,9 @@
     function atualizarProgresso() {
       if (!prog) return;
       var feitas = 1;
-      if (isFinite(parseFloat(anos.value))) feitas++;
-      if (parseFloat(peso.value) > 0) feitas++;
-      if (parseFloat(altura.value) > 0) feitas++;
+      if (isFinite(numero(anos.value))) feitas++;
+      if (numero(peso.value) > 0) feitas++;
+      if (alturaEmCm().cm > 0) feitas++;
 
       progBarra.style.transform = 'scaleX(' + (feitas / 4) + ')';
       progTexto.textContent = feitas + '/4 medidas';
@@ -287,13 +324,23 @@
     function recalcular() {
       atualizarProgresso();
 
-      var a = parseFloat(anos.value), mm = parseFloat(meses.value || '0');
-      var p = parseFloat(peso.value), h = parseFloat(altura.value);
+      var a = numero(anos.value), mm = numero(meses.value) || 0;
+      var p = numero(peso.value);
+      var med = alturaEmCm();
+      var h = med.cm;
+
+      avisarAltura(med);
 
       if (!isFinite(a) || !isFinite(p) || !isFinite(h) || p <= 0 || h <= 0) {
         return vazio('Preencha os campos');
       }
       if (a < 0 || a > 120) return vazio('Idade fora do possível');
+      // Antes isto não existia: quem digitava 1,69 recebia um IMC
+      // altíssimo e saía "sobrepeso" sem desconfiar de nada. Agora
+      // 1,69 vira 169 cm, e o que sobrar de absurdo é barrado aqui
+      // em vez de virar diagnóstico.
+      if (h < 40 || h > 230) return vazio('Altura fora do esperado', 'A altura vai de 40 cm a 2,30 m. Pode escrever em centímetros (169) ou em metros (1,69).');
+      if (p < 1 || p > 400) return vazio('Peso fora do esperado', 'O peso vai de 1 kg a 400 kg.');
 
       var imc = p / Math.pow(h / 100, 2);
       if (!isFinite(imc) || imc <= 0) return vazio('Medidas improváveis');
@@ -623,7 +670,19 @@
   (function curtidas() {
     var API = 'https://mfcumktqaglnkbtrxynt.supabase.co/rest/v1/rpc/';
     var CHAVE = 'sb_publishable_fhk3WiDfq941ftyUaeOgeg_F8I5qFyO';
-    var META = 100;
+    /* Marcos em vez de uma meta só. Trocar 100 por 300 de uma vez
+       faria o coração despencar de 85% para 28% da noite para o dia,
+       e meta que parece longe desanima — é o [GRADIENTE DE META] ao
+       contrário. Então o coração enche até o PRÓXIMO marco, e o alvo
+       final de 300 aparece no texto. Nada disto toca o banco: é
+       constante de navegador, as curtidas continuam todas lá. */
+    var MARCOS = [100, 150, 300];
+    var META = MARCOS[MARCOS.length - 1];
+
+    function proximoMarco(n) {
+      for (var i = 0; i < MARCOS.length; i++) if (n < MARCOS[i]) return MARCOS[i];
+      return META;
+    }
 
     var botoes = $$('.curtir');
     var numeros = $$('[data-curtidas]');
@@ -673,15 +732,24 @@
       var n = Number(total) || 0;
       numeros.forEach(function (el) { el.textContent = n.toLocaleString('pt-BR'); });
       if (recado) {
-        recado.textContent = n >= META
-          ? 'Meta batida. Obrigado a cada uma das ' + n.toLocaleString('pt-BR') + ' pessoas.'
-          : 'Faltam ' + (META - n) + ' para encher o coração.';
+        var alvo = proximoMarco(n);
+        var faltam = alvo - n;
+        if (n >= META) {
+          recado.textContent = 'Meta de ' + META + ' batida. Obrigado a cada uma das ' +
+            n.toLocaleString('pt-BR') + ' pessoas.';
+        } else if (alvo === MARCOS[0]) {
+          recado.textContent = 'Faltam ' + faltam + ' para a primeira marca de ' + alvo + '.';
+        } else {
+          recado.textContent = 'Faltam ' + faltam + ' para ' + alvo + '. A meta é ' + META + '.';
+        }
       }
     }
 
     function pintaCoracao(total) {
       if (!enchimento) return;
-      var fracao = Math.min((Number(total) || 0) / META, 1);
+      var n = Number(total) || 0;
+      // enche até o próximo marco, não até o número final
+      var fracao = Math.min(n / proximoMarco(n), 1);
       // o coração enche de baixo para cima; 110 é a altura do viewBox
       enchimento.style.transform = 'translate(0,' + (110 * (1 - fracao)) + 'px)';
     }

@@ -291,7 +291,7 @@ a:hover{text-decoration:underline}
   font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
   color:rgba(255,248,201,.6);text-transform:uppercase;
 }
-.campo input[type=number]{
+.campo input[type=number],.campo input[type=text]{
   width:100%;min-width:0;min-height:var(--alvo);padding:0 12px;   /* [FITTS] */
   font-size:1rem;font-family:var(--mono);
   background:var(--painel-campo);color:var(--creme);
@@ -299,8 +299,8 @@ a:hover{text-decoration:underline}
 }
 /* #9AA39E dá 2,6:1 e é ilegível — o próprio app/tema/index.js já
    marcou esse erro. Aqui o placeholder é creme a 52%. */
-.campo input[type=number]::placeholder{color:rgba(255,248,201,.52);opacity:1}
-.campo input[type=number]:focus{border-color:var(--verde-faixa);outline:none;box-shadow:0 0 0 3px rgba(93,181,130,.22)}
+.campo input[type=number]::placeholder,.campo input[type=text]::placeholder{color:rgba(255,248,201,.52);opacity:1}
+.campo input[type=number]:focus,.campo input[type=text]:focus{border-color:var(--verde-faixa);outline:none;box-shadow:0 0 0 3px rgba(93,181,130,.22)}
 
 .alternador{display:flex;gap:5px;background:var(--painel-campo);border:1px solid var(--painel-borda);border-radius:9px;padding:4px}
 .alternador button{
@@ -1041,7 +1041,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
      esforço, e campo gigante empurra o resultado para fora da vista. */
   .demo-corpo{grid-template-columns:300px 1fr}
   .controles{border-bottom:0;border-right:1px solid var(--painel-borda);gap:12px;padding:18px}
-  .controles .campo input[type=number]{min-height:40px;font-size:.95rem}
+  .controles .campo input[type=number],.controles .campo input[type=text]{min-height:40px;font-size:.95rem}
   .controles .alternador button{min-height:34px}
   .painel .val{font-size:1.25rem}
 }
@@ -1392,3 +1392,16 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   }
   .carrossel__trilho{transition:none}
 }
+
+
+/* Aviso de que a altura foi lida em metros. Aparece só quando a
+   conversão acontece — quem digita 169 nunca vê. */
+.dica-campo{
+  font-size:.78rem;line-height:1.4;color:var(--verde-claro);
+  display:flex;align-items:center;gap:6px;
+}
+.dica-campo::before{
+  content:"";flex:0 0 auto;width:6px;height:6px;border-radius:50%;
+  background:var(--verde-faixa);
+}
+.dica-campo[hidden]{display:none}
