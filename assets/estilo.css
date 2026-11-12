@@ -22,16 +22,19 @@
      de superfície grande sem cansar. Contrastes medidos com
      --verde-escuro por cima: 6,57:1 na faixa, 10,96:1 no corpo e
      9,83:1 nos campos. */
-  --calc-faixa:#B7B1F2;   /* o lilás escolhido pelo Bruno */
-  --calc-fundo:#E3E0FA;   /* o mesmo matiz rebaixado, para superfície grande */
-  --calc-campo:#FFF8C9;   /* o creme da marca: é ele que aquece o lilás */
-  --calc-borda:#C9C4F5;
-  /* Tinta própria: verde sobre lilás brigava. Estes são medidos —
-     10,19:1 no fundo, 12,19:1 nos campos, 6,61:1 na faixa, e o
-     rótulo dá 6,35:1 no fundo e 7,60:1 no creme. */
-  --calc-tinta:#2E2A5C;
-  --calc-rotulo:#4A3FA8;
-  --calc-fraco:#5E5885;
+  /* Calculadora: painel quente, nem escuro nem lavado. O pêssego
+     é vizinho do coral da marca, os campos são o creme, e a barra
+     de título é o mesmo verde-escuro do menu e do rodapé — assim
+     ela amarra com o site em vez de ser mais uma cor avulsa.
+     Medidos: 10,64:1 no fundo, 11,55:1 nos campos, 10,06:1 na
+     barra, 6,35:1 no rótulo e 6,67:1 no placeholder. */
+  --calc-faixa:#163B28;
+  --calc-fundo:#FFE9E0;
+  --calc-campo:#FFF8C9;
+  --calc-borda:#F3C8B6;
+  --calc-tinta:#163B28;
+  --calc-rotulo:#9A3209;
+  --calc-fraco:#6B5248;
   --ico-info:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M12 2a10 10 0 100 20 10 10 0 000-20zm0 5a1.4 1.4 0 110 2.8A1.4 1.4 0 0112 7zm1.3 11h-2.6v-7h2.6z'/%3E%3C/svg%3E");
   --creme-fundo:#FAF0B8;    /* fundo da página */
   --creme-alt:#F3E6A2;      /* seções alternadas */
@@ -278,26 +281,26 @@ a:hover{text-decoration:underline}
 }
 .demo-cabeca{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  padding:12px 16px;border-bottom:1px solid var(--calc-borda);
-  background:var(--calc-faixa);color:var(--calc-tinta);
+  padding:12px 16px;border-bottom:1px solid var(--calc-faixa);
+  background:var(--calc-faixa);color:var(--creme);
 }
-.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--calc-tinta);flex:none}
-.demo-cabeca .mono{min-width:0;color:var(--calc-tinta)}
+.demo-cabeca .ponto-vivo{width:7px;height:7px;border-radius:50%;background:var(--verde-faixa);flex:none}
+.demo-cabeca .mono{min-width:0;color:rgba(255,248,201,.82)}
 
 /* [ZEIGARNIK] + [META] — mostra o que falta para o resultado ficar
    pronto; a barra enchendo puxa para terminar e vira coral ao fechar. */
 .progresso{
   margin-left:auto;display:flex;align-items:center;gap:9px;
-  font-family:var(--mono);font-size:.7rem;color:var(--calc-tinta);white-space:nowrap;
+  font-family:var(--mono);font-size:.7rem;color:rgba(255,248,201,.82);white-space:nowrap;
 }
-.progresso .trilho{width:58px;height:4px;border-radius:999px;background:rgba(22,59,40,.22);overflow:hidden}
+.progresso .trilho{width:58px;height:4px;border-radius:999px;background:rgba(255,248,201,.2);overflow:hidden}
 /* scaleX em vez de width: animar largura recalcula layout a cada quadro */
 .progresso .trilho i{
   display:block;height:100%;width:100%;border-radius:999px;background:var(--coral-forte);
   transform:scaleX(0);transform-origin:left center;
   transition:transform .45s cubic-bezier(.22,1,.36,1);
 }
-.progresso.completo{font-weight:600}
+.progresso.completo{font-weight:600;color:#A9E8C4}
 .progresso.completo .trilho i{background:var(--calc-rotulo)}
 
 .demo-corpo{display:grid}
@@ -1105,10 +1108,8 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
    sentido quando sobra largura de texto de verdade. Abaixo disto
    o bloco empilha: aparelho em cima, explicação embaixo. */
 @media (min-width:1000px){
-  /* a coluna do texto tem o tamanho da medida; o bloco inteiro
-     fica centrado, em vez de deixar um vazio a direita */
-  .tela-bloco{grid-template-columns:250px minmax(0,470px);gap:52px;justify-content:center}
-  .tela-bloco.espelho{grid-template-columns:minmax(0,470px) 250px}
+  .tela-bloco{grid-template-columns:250px 1fr;gap:46px}
+  .tela-bloco.espelho{grid-template-columns:1fr 250px}
   .legenda{text-align:center}
 }
 
@@ -1464,43 +1465,6 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 }
 .dica-campo[hidden]{display:none}
 
-
-/* ══════════════════════════════════════════════════════════════
-   12. Texto justificado
-   ══════════════════════════════════════════════════════════════
-   Só o corpo de leitura. Linha curta justificada abre "rios" de
-   espaço no meio do parágrafo, então legenda, nota, rótulo e tudo
-   que já é centralizado ficam de fora. A hifenização entra junto:
-   sem ela, justificar em português estica demais as linhas. */
-.heroi .lede,
-.secao > .env > div > p,
-.secao > .env > p,
-.tela-bloco p,
-.mvv__corpo p,
-.valor__texto p,
-.expl__corpo p,
-.priv__corpo p,
-footer p{
-  text-align:justify;
-  hyphens:auto;-webkit-hyphens:auto;
-  text-wrap:pretty;
-  /* A hifenizacao faz caber MAIS caracteres por linha, e linha longa
-     cansa o olho na volta. O limite de medida entra junto com ela:
-     sem isto, as colunas largas passavam de 100 caracteres.
-     44ch porque o ch desta fonte (0,6em) e quase o dobro da largura
-     media de um caractere (0,34em): 44ch da ~78 caracteres. */
-  max-width:44ch;
-}
-/* O que NÃO deve ser justificado, mesmo caindo nos seletores acima.
-   Aqui o !important é proposital: os seletores de cima são largos
-   (.tela-bloco p, .secao > .env > div > p) e ganham por
-   especificidade de qualquer lista curta que eu escrevesse aqui.
-   Subir a especificidade só para empatar deixaria o arquivo pior
-   de ler do que esta exceção declarada. */
-.nota-demo,.v-nota,.explica .formula,
-.fcard p,.dica__balao,.sigla__balao{text-align:left!important;hyphens:manual}
-.nota-demo{max-width:none!important}
-.legenda,.meta p{text-align:center!important;hyphens:manual}
 
 /* ══════════════════════════════════════════════════════════════
    13. Rodapé em duas colunas no computador
