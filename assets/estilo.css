@@ -1570,11 +1570,18 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 }
 .faixas tbody td:not([colspan]){border-right:0}
 .faixas tbody tr td:last-child{border-right:1px solid var(--calc-borda);border-radius:0 8px 8px 0}
-/* a faixa que vale para as duas idades */
-.faixas td.igual{color:var(--calc-tinta)}
-.faixas td.igual::after{
-  content:" · nas duas idades";
-  font-family:var(--mono);font-size:.68rem;color:var(--calc-fraco);
+/* "=" quer dizer "o mesmo nome da coluna ao lado". Traço nao serve:
+   nesta calculadora o "—" ja significa "nao ha valor", que e o que
+   o z-score mostra acima de 19 anos. */
+.faixas td.mesmo{
+  font-family:var(--mono);font-size:1rem;color:var(--calc-fraco);
+}
+
+/* texto so para leitor de tela: um "=" sozinho nao diz nada a quem
+   ouve a tabela celula por celula */
+.oculto{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;
 }
 
 @media (max-width:520px){
@@ -1582,7 +1589,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   .faixas th,.faixas td{padding:7px 8px}
   .faixas thead th{font-size:.64rem;letter-spacing:.04em}
   .faixas tbody th{font-size:.7rem}
-  .faixas td.igual::after{content:""}
+  .faixas td.mesmo{font-size:.95rem}
 }
 
 
