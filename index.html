@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css?v=7y8rm">
+<link rel="stylesheet" href="assets/estilo.css?v=87a68">
 </head>
 <body>
 
@@ -257,17 +257,28 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
               </button>
               <div class="expl__corpo"><div>
-                <p>O nome no selo vem da faixa em que o z-score caiu. As três
-                   primeiras valem para qualquer idade de 0 a 19 anos; nas três
-                   de cima a OMS muda o nome conforme a idade.</p>
-                <ul class="faixas">
-                  <li><span class="z">abaixo de −3</span><span class="nome">Magreza acentuada</span></li>
-                  <li><span class="z">−3 a −2</span><span class="nome">Magreza</span></li>
-                  <li><span class="z">−2 a +1</span><span class="nome">Eutrofia</span></li>
-                  <li><span class="z">+1 a +2</span><span class="nome">Risco de sobrepeso <i>0 a 5</i> · Sobrepeso <i>5 a 19</i></span></li>
-                  <li><span class="z">+2 a +3</span><span class="nome">Sobrepeso <i>0 a 5</i> · Obesidade <i>5 a 19</i></span></li>
-                  <li><span class="z">acima de +3</span><span class="nome">Obesidade <i>0 a 5</i> · Obesidade grave <i>5 a 19</i></span></li>
-                </ul>
+                <p>O nome no selo vem da faixa em que o z-score caiu. Onde a
+                   linha atravessa as duas colunas, o nome é o mesmo em
+                   qualquer idade.</p>
+                <div class="faixas-rolo">
+                <table class="faixas">
+                  <thead>
+                    <tr>
+                      <th scope="col">z-score</th>
+                      <th scope="col">0 a 5 anos</th>
+                      <th scope="col">5 a 19 anos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row">abaixo de −3</th><td colspan="2" class="igual">Magreza acentuada</td></tr>
+                    <tr><th scope="row">−3 a −2</th><td colspan="2" class="igual">Magreza</td></tr>
+                    <tr><th scope="row">−2 a +1</th><td colspan="2" class="igual">Eutrofia</td></tr>
+                    <tr><th scope="row">+1 a +2</th><td>Risco de sobrepeso</td><td>Sobrepeso</td></tr>
+                    <tr><th scope="row">+2 a +3</th><td>Sobrepeso</td><td>Obesidade</td></tr>
+                    <tr><th scope="row">acima de +3</th><td>Obesidade</td><td>Obesidade grave</td></tr>
+                  </tbody>
+                </table>
+                </div>
                 <p><b>Eutrofia</b> é o resultado esperado: peso adequado para a
                    idade. Acima de 19 anos não existe curva de crescimento, e
                    vale a tabela de IMC para adultos — eutrofia de 18,5 a 25,
@@ -945,7 +956,7 @@
 </dialog>
 
 
-<script src="assets/oms-imc.js?v=7y8rm"></script>
-<script src="assets/app.js?v=7y8rm" defer></script>
+<script src="assets/oms-imc.js?v=87a68"></script>
+<script src="assets/app.js?v=87a68" defer></script>
 </body>
 </html>

@@ -1539,27 +1539,50 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 }
 .v-significado[hidden]{display:none}
 
-/* Uma tabela só. A coluna da esquerda é a faixa de z, que é o que
-   manda; o nome vem à direita. Quando o nome muda com a idade, os
-   dois aparecem na mesma linha com a idade em etiqueta — duplicar a
-   tabela inteira dobrava a altura para repetir metade das linhas. */
-.faixas{list-style:none;margin:10px 0;padding:0;display:grid;gap:4px}
-.faixas li{
-  display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:baseline;
-  padding:7px 10px;border-radius:8px;
-  background:var(--calc-fundo);border:1px solid var(--calc-borda);
+/* Tabela de verdade, porque é dado tabular: cada idade tem a sua
+   coluna e o leitor desce a que lhe interessa. As três faixas que
+   não mudam com a idade atravessam as duas colunas — assim dá para
+   ver de olho quais dependem da idade, sem precisar comparar
+   palavra por palavra. */
+.faixas-rolo{margin:10px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.faixas{
+  width:100%;border-collapse:separate;border-spacing:0 4px;
+  font-size:.84rem;
 }
-.faixas .z{
-  font-family:var(--mono);font-size:.74rem;color:var(--calc-fraco);
+.faixas th,.faixas td{text-align:left;padding:8px 10px;vertical-align:middle}
+.faixas thead th{
+  padding:0 10px 2px;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--calc-fraco);font-weight:400;
   white-space:nowrap;
 }
-.faixas .nome{font-size:.85rem;color:var(--calc-tinta);line-height:1.4}
-.faixas i{
-  font-style:normal;font-family:var(--mono);font-size:.68rem;
+.faixas tbody th{
+  font-family:var(--mono);font-size:.74rem;font-weight:400;
   color:var(--calc-fraco);white-space:nowrap;
+  background:var(--calc-fundo);
+  border:1px solid var(--calc-borda);border-right:0;
+  border-radius:8px 0 0 8px;
 }
-@media (max-width:460px){
-  .faixas li{grid-template-columns:84px 1fr;gap:8px;padding:6px 9px}
-  .faixas .z{font-size:.7rem}
+.faixas tbody td{
+  color:var(--calc-tinta);
+  background:var(--calc-fundo);
+  border:1px solid var(--calc-borda);border-left:0;
 }
+.faixas tbody td:not([colspan]){border-right:0}
+.faixas tbody tr td:last-child{border-right:1px solid var(--calc-borda);border-radius:0 8px 8px 0}
+/* a faixa que vale para as duas idades */
+.faixas td.igual{color:var(--calc-tinta)}
+.faixas td.igual::after{
+  content:" · nas duas idades";
+  font-family:var(--mono);font-size:.68rem;color:var(--calc-fraco);
+}
+
+@media (max-width:520px){
+  .faixas{font-size:.8rem}
+  .faixas th,.faixas td{padding:7px 8px}
+  .faixas thead th{font-size:.64rem;letter-spacing:.04em}
+  .faixas tbody th{font-size:.7rem}
+  .faixas td.igual::after{content:""}
+}
+
 
