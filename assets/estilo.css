@@ -1539,7 +1539,14 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 }
 .v-significado[hidden]{display:none}
 
-.faixas{list-style:none;margin:8px 0;padding:0;display:grid;gap:5px}
+/* As duas tabelas da OMS entram com o mesmo peso: a de 0 a 5 anos
+   nao e nota de rodape da outra. */
+.faixas-titulo{
+  margin:12px 0 6px!important;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--calc-fraco);
+}
+.faixas{list-style:none;margin:0 0 4px;padding:0;display:grid;gap:5px}
 .faixas li{
   display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;
   padding:7px 10px;border-radius:8px;
