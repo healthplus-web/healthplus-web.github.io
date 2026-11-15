@@ -1539,21 +1539,27 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 }
 .v-significado[hidden]{display:none}
 
-/* As duas tabelas da OMS entram com o mesmo peso: a de 0 a 5 anos
-   nao e nota de rodape da outra. */
-.faixas-titulo{
-  margin:12px 0 6px!important;
-  font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--calc-fraco);
-}
-.faixas{list-style:none;margin:0 0 4px;padding:0;display:grid;gap:5px}
+/* Uma tabela só. A coluna da esquerda é a faixa de z, que é o que
+   manda; o nome vem à direita. Quando o nome muda com a idade, os
+   dois aparecem na mesma linha com a idade em etiqueta — duplicar a
+   tabela inteira dobrava a altura para repetir metade das linhas. */
+.faixas{list-style:none;margin:10px 0;padding:0;display:grid;gap:4px}
 .faixas li{
-  display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;
+  display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:baseline;
   padding:7px 10px;border-radius:8px;
   background:var(--calc-fundo);border:1px solid var(--calc-borda);
 }
-.faixas b{color:var(--calc-tinta);font-size:.85rem}
-.faixas span{
-  font-family:var(--mono);font-size:.76rem;color:var(--calc-fraco);
-  margin-left:auto;text-align:right;
+.faixas .z{
+  font-family:var(--mono);font-size:.74rem;color:var(--calc-fraco);
+  white-space:nowrap;
 }
+.faixas .nome{font-size:.85rem;color:var(--calc-tinta);line-height:1.4}
+.faixas i{
+  font-style:normal;font-family:var(--mono);font-size:.68rem;
+  color:var(--calc-fraco);white-space:nowrap;
+}
+@media (max-width:460px){
+  .faixas li{grid-template-columns:84px 1fr;gap:8px;padding:6px 9px}
+  .faixas .z{font-size:.7rem}
+}
+
