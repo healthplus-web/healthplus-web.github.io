@@ -324,10 +324,46 @@
       prog.classList.toggle('completo', feitas === 4);
     }
 
+    /* O selo diz "Eutrofia" e pronto — quem não é da área fica sem
+       saber se é bom ou ruim. Esta linha traduz o nome em uma frase,
+       sempre visível: dica de mouse não existe no celular, e ali só
+       se veria o próprio resultado, nunca os outros. A lista
+       completa mora no acordeão "Classificações". */
+    var SIGNIFICADO = {
+      'Magreza acentuada': 'IMC bem abaixo do esperado para a idade. Pede avaliação.',
+      'Magreza': 'IMC abaixo do esperado para a idade.',
+      'Eutrofia': 'Peso adequado para a idade. É o resultado esperado.',
+      'Risco de sobrepeso': 'Ainda dentro do aceitável, mas perto do limite de cima.',
+      'Sobrepeso': 'IMC acima do esperado para a idade.',
+      'Obesidade': 'IMC bem acima do esperado para a idade. Pede avaliação.',
+      'Obesidade grave': 'IMC muito acima do esperado para a idade. Pede avaliação.',
+      'Magreza grave': 'IMC abaixo de 16. Pede avaliação.',
+      'Magreza moderada': 'IMC entre 16 e 17.',
+      'Magreza leve': 'IMC entre 17 e 18,5.',
+      'Obesidade grau I': 'IMC entre 30 e 35.',
+      'Obesidade grau II': 'IMC entre 35 e 40.',
+      'Obesidade grau III': 'IMC de 40 para cima. Pede avaliação.'
+    };
+    // Os mesmos nomes aparecem nos dois mundos com sentidos
+    // diferentes: acima de 19 anos não existe "para a idade", a
+    // faixa é de IMC puro.
+    var SIGNIFICADO_ADULTO = {
+      'Eutrofia': 'IMC entre 18,5 e 25, a faixa considerada adequada para adultos.',
+      'Sobrepeso': 'IMC entre 25 e 30.'
+    };
+    var elSignificado = $('#v-significado');
+    function mostrarSignificado(nome, adulto) {
+      if (!elSignificado) return;
+      var t = nome && ((adulto && SIGNIFICADO_ADULTO[nome]) || SIGNIFICADO[nome]);
+      elSignificado.textContent = t || '';
+      elSignificado.hidden = !t;
+    }
+
     function vazio(motivo, explicacao) {
       vImc.textContent = '—'; vZ.textContent = '—'; vP.textContent = '—';
       selo.className = 'selo-classe vazio';
       selo.textContent = motivo;
+      mostrarSignificado(null);
       if (nota) nota.textContent = explicacao || 'A referência usada aparece aqui depois do cálculo.';
     }
 
@@ -369,6 +405,7 @@
         vP.textContent = '—';
         selo.className = 'selo-classe ' + adulto.tom;
         selo.textContent = adulto.nome;
+        mostrarSignificado(adulto.nome, true);
         if (nota) nota.textContent =
           'A OMS só publica curva de crescimento até 19 anos, então aqui não ' +
           'existe z-score nem percentil: a classificação vem da tabela de IMC ' +
@@ -388,6 +425,7 @@
       vP.textContent = (pc < 0.1 ? '<0,1' : pc > 99.9 ? '>99,9' : pc.toFixed(1).replace('.', ',')) + '%';
       selo.className = 'selo-classe ' + cls.tom;
       selo.textContent = cls.nome;
+      mostrarSignificado(cls.nome);
 
       if (nota) nota.textContent =
         'Referência: ' +

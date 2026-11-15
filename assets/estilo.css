@@ -1524,3 +1524,29 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   }
   .rodape-fim p{max-width:66ch}
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   14. O que a classificação quer dizer
+   ══════════════════════════════════════════════════════════════
+   Uma linha logo abaixo do selo, sempre visível. Dica de mouse foi
+   descartada: não existe no celular, e mostraria só o resultado que
+   a pessoa tirou, nunca os outros. A lista inteira fica no acordeão
+   "Classificações", a um toque. */
+.v-significado{
+  margin:-4px 0 0;font-size:.86rem;line-height:1.45;
+  color:var(--calc-tinta);
+}
+.v-significado[hidden]{display:none}
+
+.faixas{list-style:none;margin:8px 0;padding:0;display:grid;gap:5px}
+.faixas li{
+  display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;
+  padding:7px 10px;border-radius:8px;
+  background:var(--calc-fundo);border:1px solid var(--calc-borda);
+}
+.faixas b{color:var(--calc-tinta);font-size:.85rem}
+.faixas span{
+  font-family:var(--mono);font-size:.76rem;color:var(--calc-fraco);
+  margin-left:auto;text-align:right;
+}
