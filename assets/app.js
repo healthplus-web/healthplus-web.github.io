@@ -257,6 +257,18 @@
     }
     marcarSexo();
 
+    // O alternador continua clicável quando fica inerte: desabilitar
+    // de verdade tiraria o foco de quem navega por teclado no meio
+    // da digitação, e a pessoa pode estar só corrigindo a idade.
+    var notaSexo = $('#nota-sexo', raiz);
+    function marcarSexoInerte(inerte) {
+      if (grupo) grupo.classList.toggle('inerte', !!inerte);
+      $$('.alternador button', raiz).forEach(function (b) {
+        b.setAttribute('aria-disabled', String(!!inerte));
+      });
+      if (notaSexo) notaSexo.hidden = !inerte;
+    }
+
     $$('.alternador button', raiz).forEach(function (b) {
       b.addEventListener('click', function () {
         sexo = b.dataset.sexo;
@@ -343,6 +355,12 @@
       vImc.textContent = imc.toFixed(1).replace('.', ',');
 
       var total = a * 12 + (isFinite(mm) ? mm : 0);
+
+      // O sexo só entra na conta enquanto existe curva da OMS. Acima
+      // de 19 anos a classificação de IMC para adultos é a mesma para
+      // todos, e o alternador fica ali sem efeito: em vez de deixá-lo
+      // parecendo que faz algo, ele esmaece e diz por quê.
+      marcarSexoInerte(total > 228);
 
       // ── 20 anos ou mais: não há curva de crescimento ──
       if (total > 228) {

@@ -356,6 +356,18 @@ a:hover{text-decoration:underline}
   .alternador::before{transition:none}
 }
 
+/* Acima de 19 anos nao ha curva da OMS e a classificacao de adulto
+   nao olha o sexo — o alternador fica ali sem efeito nenhum. Em vez
+   de escondê-lo (o que faria a interface pular quando a idade muda),
+   ele esmaece e diz por que parou de valer. */
+.alternador.inerte{opacity:.55}
+.alternador.inerte::before{background:var(--calc-fraco)}
+.nota-sexo{
+  display:block;margin-top:6px;
+  font-size:.78rem;line-height:1.4;color:var(--calc-fraco);   /* 6,67:1 */
+}
+.nota-sexo[hidden]{display:none}
+
 .dupla{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 
 .resultado{padding:16px;display:grid;gap:13px}
