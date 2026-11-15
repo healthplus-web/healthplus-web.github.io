@@ -117,6 +117,22 @@ a:hover{text-decoration:underline}
   letter-spacing:.06em;color:var(--texto-3);
 }
 
+/* Skip link. z-index acima dos 999 da abertura: quem chega pelo
+   teclado aperta Tab antes de a cortina sair, e o link tem que
+   aparecer mesmo assim. Creme sobre verde-escuro: 11,55:1. */
+.pula{
+  position:fixed;top:0;left:16px;z-index:10000;
+  transform:translateY(-110%);
+  padding:12px 22px;border-radius:0 0 10px 10px;
+  background:var(--verde-escuro);color:var(--creme);
+  font-weight:600;font-size:.95rem;text-decoration:none;
+  transition:transform .18s ease;
+}
+.pula:focus{transform:translateY(0)}
+/* o <main> recebe foco pelo tabindex="-1" e nao deve desenhar
+   contorno: quem usa teclado ja viu o link saltar */
+main:focus{outline:none}
+
 /* ══════════════════════════════════════════════════════════════
    1. Abertura animada
    ══════════════════════════════════════════════════════════════ */
@@ -1037,9 +1053,11 @@ body.modal-aberto{overflow:hidden}
 }
 .convite-ir:hover{background:#FF6880;text-decoration:none}
 .convite-fechar{
+  position:relative;                  /* [FITTS] ancora da area de toque */
   flex:none;width:36px;height:36px;border-radius:50%;border:0;cursor:pointer;
   background:transparent;color:rgba(255,248,201,.6);display:grid;place-items:center;
 }
+.convite-fechar::after{content:"";position:absolute;inset:-5px;border-radius:50%}
 .convite-fechar:hover{background:rgba(255,248,201,.12);color:var(--creme)}
 .convite-fechar svg{width:16px;height:16px}
 @media (min-width:720px){
@@ -1231,7 +1249,7 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   box-shadow:0 3px 10px rgba(0,0,0,.34);
   transition:transform .2s ease,background .2s ease;
 }
-.dica__pin::before{content:"";position:absolute;inset:-8px;border-radius:50%}
+.dica__pin::before{content:"";position:absolute;inset:-11px;border-radius:50%}
 .dica__pin:hover,.dica__pin:focus-visible{background:var(--coral-forte);transform:scale(1.12)}
 .dica.aberta .dica__pin{background:var(--coral-forte);transform:scale(1.12)}
 /* o anel que chama o olho, só enquanto ninguém abriu nenhum */
@@ -1312,7 +1330,9 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
   border:1px solid rgba(255,116,82,.45);
   border-radius:7px;padding:1px 7px;cursor:pointer;
   transition:background .2s ease,border-color .2s ease;
+  position:relative;                  /* [FITTS] ancora da area de toque */
 }
+.sigla__b::after{content:"";position:absolute;inset:-9px -6px}
 .sigla__b i{
   display:inline-block;width:4px;height:4px;margin-left:4px;
   border-radius:50%;background:var(--coral);vertical-align:middle;opacity:.8;
@@ -1456,9 +1476,13 @@ footer a{color:var(--creme);text-decoration:underline;text-underline-offset:3px}
 
 .carrossel__pontos{display:flex;justify-content:center;gap:4px;margin-top:6px}
 .carrossel__ponto{
-  width:var(--alvo);height:34px;border:0;background:transparent;  /* [FITTS] */
+  position:relative;                  /* [FITTS] ancora da area de toque */
+  width:var(--alvo);height:34px;border:0;background:transparent;
   display:grid;place-items:center;cursor:pointer;padding:0;
 }
+/* so na vertical: na horizontal ja tem os 48px do --alvo, e crescer
+   para os lados faria um ponto roubar o toque do vizinho */
+.carrossel__ponto::after{content:"";position:absolute;inset:-6px 0}
 .carrossel__ponto i{
   display:block;width:10px;height:10px;border-radius:999px;
   background:var(--borda-creme);

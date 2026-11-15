@@ -11,14 +11,54 @@
 <meta property="og:title" content="HealthPlus — Avaliação nutricional no padrão da OMS">
 <meta property="og:description" content="z-score e percentil de 0 a 19 anos pelas curvas oficiais da OMS. Experimente a calculadora na própria página.">
 <meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="HealthPlus">
+<meta property="og:url" content="https://healthplus-web.github.io/">
+<meta property="og:image" content="https://healthplus-web.github.io/assets/og-imagem.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HealthPlus — a régua da OMS, no bolso do nutricionista.">
 
-<link rel="icon" href="assets/logo-marca.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HealthPlus — Avaliação nutricional no padrão da OMS">
+<meta name="twitter:description" content="z-score e percentil de 0 a 19 anos pelas curvas oficiais da OMS. Experimente a calculadora na própria página.">
+<meta name="twitter:image" content="https://healthplus-web.github.io/assets/og-imagem.png">
+
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://healthplus-web.github.io/">
+
+<!-- 128px, nao os 495px de antes: o favicon e o logo do topo
+     baixavam 148 KB para aparecer em 28 e em 32 pixels. -->
+<link rel="icon" href="assets/logo-marca-128.png" sizes="any">
+<link rel="apple-touch-icon" href="assets/logo-marca-128.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/estilo.css?v=8t0mp">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "HealthPlus",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Android, iOS",
+  "inLanguage": "pt-BR",
+  "url": "https://healthplus-web.github.io/",
+  "image": "https://healthplus-web.github.io/assets/og-imagem.png",
+  "description": "Aplicativo de avaliação nutricional infantojuvenil que calcula z-score, percentil e evolução antropométrica de 0 a 19 anos pelas curvas oficiais da Organização Mundial da Saúde.",
+  "featureList": [
+    "z-score e percentil pelo método LMS da OMS",
+    "Curvas WHO Child Growth Standards 2006, de 0 a 5 anos",
+    "Curvas WHO Growth Reference 2007, de 5 a 19 anos",
+    "Nove indicadores antropométricos",
+    "Acompanhamento da evolução do paciente"
+  ]
+}
+</script>
+<link rel="stylesheet" href="assets/estilo.css?v=ei8w7">
 </head>
 <body>
+
+<a class="pula" href="#conteudo">Ir para o conteúdo</a>
 
 <!-- ══════════════ ABERTURA ══════════════ -->
 <div class="abertura" id="abertura" role="status" aria-label="Carregando">
@@ -52,7 +92,7 @@
      barra presa no alto. É onde todo mundo já sabe procurar. -->
 <header class="topo">
   <div class="env">
-    <a class="marca" href="#"><img src="assets/logo-marca.png" alt=""><span>Health<b>Plus</b></span></a>
+    <a class="marca" href="#"><img src="assets/logo-marca-128.png" alt="" width="28" height="28"><span>Health<b>Plus</b></span></a>
     <nav aria-label="Seções do site">
       <a href="#calcular">Calculadora</a>
       <a href="#produto">O aplicativo</a>
@@ -62,7 +102,7 @@
   </div>
 </header>
 
-<main>
+<main id="conteudo" tabindex="-1">
 
 <!-- ══════════════ HERÓI ══════════════ -->
 <section class="heroi">
@@ -969,7 +1009,7 @@
 </dialog>
 
 
-<script src="assets/oms-imc.js?v=8t0mp"></script>
-<script src="assets/app.js?v=8t0mp" defer></script>
+<script src="assets/oms-imc.js?v=ei8w7"></script>
+<script src="assets/app.js?v=ei8w7" defer></script>
 </body>
 </html>
