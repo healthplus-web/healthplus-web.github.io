@@ -587,17 +587,27 @@
   /* ═══════════════════════════════════════════════════════════
      7.2 PRIVACIDADE QUE ABRE
      Cada item mostra só a afirmação; o detalhe abre no clique.
-     Vários podem ficar abertos: é conteúdo para ler, não um menu.
+     Um aberto por vez, como nas explicações da calculadora: são
+     seis itens, e com vários abertos a seção não acabava mais no
+     celular.
      ═══════════════════════════════════════════════════════════ */
 
   (function privacidade() {
-    $$('.priv__botao').forEach(function (b) {
-      b.addEventListener('click', function () {
-        var item = b.closest('.priv');
-        if (!item) return;
+    var itens = $$('.priv');
+    if (!itens.length) return;
+
+    itens.forEach(function (item) {
+      var botao = $('.priv__botao', item);
+      if (!botao) return;
+      botao.addEventListener('click', function () {
         var abrindo = !item.classList.contains('aberto');
+        itens.forEach(function (o) {
+          o.classList.remove('aberto');
+          var b = $('.priv__botao', o);
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
         item.classList.toggle('aberto', abrindo);
-        b.setAttribute('aria-expanded', String(abrindo));
+        botao.setAttribute('aria-expanded', String(abrindo));
       });
     });
   })();
