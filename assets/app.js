@@ -741,6 +741,8 @@
        cresce sem parar. */
     var REPOUSO = 0.5;                 // meia altura, parado
     var ALTURA = 110;                  // altura do viewBox do coração
+    var ultimoTotal = null;            // o que a tela está mostrando
+    var seloPrazo = null;
 
     var botoes = $$('.curtir');
     var numeros = $$('[data-curtidas]');
@@ -795,6 +797,26 @@
     function pintaNumero(total) {
       var n = Number(total) || 0;
       numeros.forEach(function (el) { el.textContent = n.toLocaleString('pt-BR'); });
+      ultimoTotal = n;
+    }
+
+    /* O clique sempre devolve o total atual do banco, mesmo quando
+       não soma nada — é o que mantém o número fresco numa aba velha.
+       O efeito colateral era parecer que o clique tinha contado. O
+       selo separa as duas coisas: diz quanto do aumento veio de
+       outras pessoas. */
+    function mostrarSelo(quantas) {
+      var selo = $('#meta-extra');
+      if (!selo) return;
+      // nada veio de fora desta vez: o selo anterior nao pode ficar
+      // na tela dizendo o contrario
+      if (!(quantas > 0)) { selo.classList.remove('aparece'); return; }
+      selo.textContent = '+' + quantas;
+      selo.classList.remove('aparece');
+      void selo.offsetWidth;              // reinicia a transição
+      selo.classList.add('aparece');
+      clearTimeout(seloPrazo);
+      seloPrazo = setTimeout(function () { selo.classList.remove('aparece'); }, 2800);
     }
 
     // o coração enche de baixo para cima: deslocar menos é encher mais
@@ -877,6 +899,10 @@
 
     botoes.forEach(function (b) {
       b.addEventListener('click', function () {
+        // lidos ANTES de marcar: depois do clique a resposta já mudou
+        var jaEra = jaCurtiu;
+        var antes = ultimoTotal;
+
         explode(b);
         jaCurtiu = true;
         guardar('healthplus:curtiu', '1');
@@ -889,7 +915,14 @@
         // zerado para o contador travar em quem já tinha curtido.
         // Quem manda é o total que o banco devolve.
         chamar('curtir', { p_dispositivo: aparelho() })
-          .then(comemorar)
+          .then(function (total) {
+            // o que subiu menos a minha parte: se eu já tinha curtido,
+            // a minha parte é zero e todo o aumento veio de fora
+            if (antes !== null) {
+              mostrarSelo((Number(total) || 0) - antes - (jaEra ? 0 : 1));
+            }
+            comemorar(total);
+          })
           .catch(function (e) {
             // Antes isto so ia para o console: o botao dizia "Voce
             // curtiu" e o numero nao mexia, e de fora parecia que o

@@ -54,7 +54,7 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="assets/estilo.css?v=ts7hn">
+<link rel="stylesheet" href="assets/estilo.css?v=vjx5x">
 </head>
 <body>
 
@@ -914,6 +914,7 @@
   <div class="env">
     <h2 data-digita>Curtiu o que viu?</h2>
 
+    <div class="meta-coracao-caixa">
     <svg class="meta-coracao" viewBox="0 0 120 110" role="img" aria-labelledby="titulo-coracao">
       <title id="titulo-coracao">Coração que enche conforme as curtidas chegam</title>
       <defs>
@@ -924,6 +925,10 @@
       </g>
       <path class="contorno" d="M60 103 C 18 73, 2 50, 2 31 C 2 13, 16 3, 30 3 C 43 3, 53 11, 60 23 C 67 11, 77 3, 90 3 C 104 3, 118 13, 118 31 C 118 50, 102 73, 60 103 Z"/>
     </svg>
+      <!-- o aumento que NÃO veio do seu clique. aria-hidden: o número
+           grande já é a informação, o selo só explica a origem. -->
+      <span class="meta-extra" id="meta-extra" aria-hidden="true"></span>
+    </div>
 
     <div class="meta-numero" data-curtidas>—</div>
     <div class="meta-rotulo">pessoas curtiram o HealthPlus</div>
@@ -1008,7 +1013,7 @@
 </dialog>
 
 
-<script src="assets/oms-imc.js?v=ts7hn"></script>
-<script src="assets/app.js?v=ts7hn" defer></script>
+<script src="assets/oms-imc.js?v=vjx5x"></script>
+<script src="assets/app.js?v=vjx5x" defer></script>
 </body>
 </html>

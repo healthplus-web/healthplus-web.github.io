@@ -1093,6 +1093,26 @@ body.modal-aberto{overflow:hidden}
 }
 .meta-rotulo{font-size:.92rem;color:rgba(255,248,201,.74);margin-top:8px}
 .meta-recado{font-family:var(--mono);font-size:.78rem;color:rgba(255,248,201,.5);margin-top:16px}
+
+/* Selo "+N". Mesma família e mesmo peso do número grande, para
+   ler como parte dele, mas em 45% do tamanho e num rosa mais
+   claro: quem manda na cena continua sendo o total. O #FF9DB2
+   dá 10,1:1 sobre o #0B0A07 da seção. */
+.meta-coracao-caixa{position:relative;width:min(210px,54vw);margin:30px auto 0}
+.meta-coracao{margin:0}
+.meta-extra{
+  position:absolute;top:-4%;right:-15%;
+  font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums;
+  font-size:clamp(1.05rem,4.6vw,1.5rem);line-height:1;
+  color:#FF9DB2;
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transform:rotate(-15deg) scale(.62);
+  transition:opacity .25s ease,transform .5s cubic-bezier(.22,1,.36,1);
+}
+.meta-extra.aparece{opacity:1;transform:rotate(-15deg) scale(1) translateY(-7px)}
+@media (prefers-reduced-motion:reduce){
+  .meta-extra,.meta-extra.aparece{transform:rotate(-15deg);transition:opacity .2s ease}
+}
 /* texto escuro no rosa: branco da 3,21:1 e reprova; #13120E da 5,83:1 */
 .meta .btn{margin-top:26px;background:#FF4D6D;color:#13120E}
 .meta .btn:hover{background:#FF6880}
