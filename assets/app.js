@@ -721,38 +721,26 @@
   /* ═══════════════════════════════════════════════════════════
      9. CURTIDAS
      A conta é global, guardada num banco só para isto. O navegador
-     guarda apenas um identificador aleatório que ele mesmo sorteia
-     — não é dado pessoal, não é IP, e serve só para a mesma pessoa
-     não contar duas vezes. A chave abaixo é a publicável: ela é
-     feita para ficar no navegador e não abre a tabela, que só
-     responde pelas duas funções.
+     guarda apenas um identificador aleatório que ele mesmo sorteia.
+     Isso sozinho não segura ninguém: quem quiser sorteia outro, e
+     guia anônima já basta. Em 16/11 chegaram 150 curtidas em 27
+     minutos, de 6 em 6 segundos — automação. O freio de verdade
+     ficou no banco, que limita curtidas por rede e guarda só um
+     hash com sal do endereço, nunca o endereço. A chave abaixo é a
+     publicável: ela não abre a tabela, que só responde pelas duas
+     funções.
      ═══════════════════════════════════════════════════════════ */
 
   (function curtidas() {
     var API = 'https://mfcumktqaglnkbtrxynt.supabase.co/rest/v1/rpc/';
     var CHAVE = 'sb_publishable_fhk3WiDfq941ftyUaeOgeg_F8I5qFyO';
-    /* Marcos em vez de uma meta só. Trocar 100 por 300 de uma vez
-       faria o coração despencar de 85% para 28% da noite para o dia,
-       e meta que parece longe desanima — é o [GRADIENTE DE META] ao
-       contrário. Então o coração enche até o PRÓXIMO marco, e o alvo
-       final de 300 aparece no texto. Nada disto toca o banco: é
-       constante de navegador, as curtidas continuam todas lá. */
-    var MARCOS = [
-      { n: 100, nome: 'a primeira marca' },
-      { n: 150, nome: 'a segunda marca' },
-      { n: 300, nome: 'a meta' }
-    ];
-    var META = MARCOS[MARCOS.length - 1].n;
-
-    function proximoMarco(n) {
-      for (var i = 0; i < MARCOS.length; i++) if (n < MARCOS[i].n) return MARCOS[i];
-      return MARCOS[MARCOS.length - 1];
-    }
-    function marcoAnterior(n) {
-      var ultimo = null;
-      for (var i = 0; i < MARCOS.length; i++) if (n >= MARCOS[i].n) ultimo = MARCOS[i];
-      return ultimo;
-    }
+    /* Sem meta e sem teto. Meta que já foi batida vira limitador:
+       o coração chega ao fim e a curtida seguinte não tem para onde
+       ir. Agora o coração descansa pela metade e enche só no gesto
+       de curtir — ele responde à pessoa, não a um alvo. O número
+       cresce sem parar. */
+    var REPOUSO = 0.5;                 // meia altura, parado
+    var ALTURA = 110;                  // altura do viewBox do coração
 
     var botoes = $$('.curtir');
     var numeros = $$('[data-curtidas]');
@@ -790,8 +778,14 @@
         headers: { apikey: CHAVE, 'Content-Type': 'application/json' },
         body: JSON.stringify(corpo || {})
       }).then(function (r) {
-        if (!r.ok) throw new Error('curtidas: HTTP ' + r.status);
-        return r.json();
+        if (r.ok) return r.json();
+        // o banco explica o motivo no corpo; sem isso, quem bate no
+        // limite por rede só via "não consegui registrar"
+        return r.json().catch(function () { return null; }).then(function (corpo) {
+          var erro = new Error((corpo && corpo.message) || ('curtidas: HTTP ' + r.status));
+          erro.doServidor = !!(corpo && corpo.message);
+          throw erro;
+        });
       });
     }
 
@@ -801,33 +795,15 @@
     function pintaNumero(total) {
       var n = Number(total) || 0;
       numeros.forEach(function (el) { el.textContent = n.toLocaleString('pt-BR'); });
-      if (recado) {
-        var alvo = proximoMarco(n);
-        var atras = marcoAnterior(n);
-        var faltam = alvo.n - n;
-        if (n >= META) {
-          recado.textContent = 'Meta batida! Obrigado a cada uma das ' +
-            n.toLocaleString('pt-BR') + ' pessoas.';
-        } else if (atras) {
-          // já bateu um marco: celebra antes de pedir o próximo
-          recado.textContent = atras.nome.charAt(0).toUpperCase() + atras.nome.slice(1) +
-            ' batida! Só mais ' + faltam + ' para ' + alvo.nome + '.';
-        } else {
-          recado.textContent = 'Só mais ' + faltam + ' para ' + alvo.nome + '!';
-        }
-      }
     }
 
-    function pintaCoracao(total) {
+    // o coração enche de baixo para cima: deslocar menos é encher mais
+    function pintaCoracao() {
       if (!enchimento) return;
-      var n = Number(total) || 0;
-      // enche até o próximo marco, não até o número final
-      var fracao = Math.min(n / proximoMarco(n).n, 1);
-      // o coração enche de baixo para cima; 110 é a altura do viewBox
-      enchimento.style.transform = 'translate(0,' + (110 * (1 - fracao)) + 'px)';
+      enchimento.style.transform = 'translate(0,' + (ALTURA * (1 - REPOUSO)) + 'px)';
     }
 
-    function pinta(total) { pintaNumero(total); pintaCoracao(total); }
+    function pinta(total) { pintaNumero(total); pintaCoracao(); }
 
     function marcarEstado() {
       botoes.forEach(function (b) {
@@ -887,10 +863,10 @@
 
     function comemorar(total) {
       pintaNumero(total);
-      if (menosMovimento || !enchimento) { pintaCoracao(total); return; }
+      if (menosMovimento || !enchimento) { pintaCoracao(); return; }
       enchimento.style.transform = 'translate(0,0px)';     // enche por inteiro
       setTimeout(chover, 260);
-      setTimeout(function () { pintaCoracao(total); }, 2300);
+      setTimeout(pintaCoracao, 2300);                      // volta à metade
     }
 
     marcarEstado();
@@ -925,9 +901,11 @@
             guardar('healthplus:curtiu', '');
             marcarEstado();
             if (recado) {
-              recado.textContent = 'Não consegui registrar daqui — alguma ' +
-                'extensão ou a rede deste computador bloqueou o pedido. ' +
-                'Tente por outra rede ou pelo celular.';
+              recado.textContent = e.doServidor
+                ? e.message
+                : 'Não consegui registrar daqui — alguma extensão ou a rede ' +
+                  'deste computador bloqueou o pedido. Tente por outra rede ' +
+                  'ou pelo celular.';
             }
           });
       });

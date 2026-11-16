@@ -54,7 +54,7 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="assets/estilo.css?v=f8xlk">
+<link rel="stylesheet" href="assets/estilo.css?v=tbexg">
 </head>
 <body>
 
@@ -907,7 +907,8 @@
 
 <!-- ══════════════ META DE CURTIDAS ══════════════
      O número vem de um banco só para isto. O navegador guarda
-     apenas um identificador aleatório que ele mesmo sorteia. -->
+     apenas um identificador aleatório que ele mesmo sorteia, e o
+     banco limita quantas curtidas saem da mesma rede por hora. -->
 <section class="meta" id="meta">
   <div class="chuva" id="chuva" aria-hidden="true"></div>
   <div class="env">
@@ -963,9 +964,11 @@
       </p>
       <p>
         Esta página não usa cookies e não rastreia quem a visita. Se você
-        curtir, o navegador guarda um identificador aleatório que ele
-        mesmo sorteia, sem nome, sem e-mail e sem IP, só para a mesma
-        pessoa não contar duas vezes.
+        curtir, o navegador guarda um identificador aleatório que ele mesmo
+        sorteia, sem nome e sem e-mail. Do seu endereço de rede o servidor
+        guarda só um código embaralhado, que não volta a ser endereço,
+        por no máximo dois dias — é o que impede uma mesma origem de
+        curtir centenas de vezes.
       </p>
     </div>
   </div>
@@ -1009,7 +1012,7 @@
 </dialog>
 
 
-<script src="assets/oms-imc.js?v=f8xlk"></script>
-<script src="assets/app.js?v=f8xlk" defer></script>
+<script src="assets/oms-imc.js?v=tbexg"></script>
+<script src="assets/app.js?v=tbexg" defer></script>
 </body>
 </html>
